@@ -1,0 +1,26 @@
+{
+  "name": "restaurantportafolio",
+  "version": "1.0.0",
+  "description": "Este es nuestro repositorio donde trabajaremos sobre el portafolio 2022 \r Azure Dev0ps : https://dev.azure.com/PortafolioRestaurant21/",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Paoduoc/RestaurantPortafolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Paoduoc/RestaurantPortafolio/issues"
+  },
+  "homepage": "https://github.com/Paoduoc/RestaurantPortafolio#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1"
+  }
+}
