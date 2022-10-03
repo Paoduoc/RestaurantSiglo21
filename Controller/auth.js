@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 class Auth{
     
 
-    login = async (  req, res ) => {
+    login = async (  req=request, res=response ) => {
 
         try {
 

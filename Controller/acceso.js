@@ -1,76 +1,71 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const rolModel = require("../Model/rol");
+const accesoModel = require("../Model/acceso");
 
-class Rol
+class Acceso
 {
     //maneras de obtener datos del request
     //1 - una manera es con request.body
     //2 - request.params (URL)
     //3 - request.query (URL) 
-    getRol = async ( req=request, res=response ) => {
+    getAcceso = async ( req=request, res=response ) => {
 
         try {
-            
             let {id} = req.params
-            const rol = await rolModel.findById(id);
+            const acceso = await accesoModel.findById(id);
             res.status(200).json({
                 status:200,
-                msg:rol
+                msg:acceso
             })
 
-        } catch (error) {
 
+        } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontro el rol'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro el acceso'
             }); 
-
         }
 
     }
-    getAllRol = async ( req=request, res=response ) => {
+    getAllAccesos = async ( req=request, res=response ) => {
         
         try {
-            
-            const roles = await rolModel.find();
+            const accesos = await accesoModel.find();
             res.status(200).json({
                 status:200,
-                msg:roles
+                msg:accesos
             })
-
         } catch (error) {
-            
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron roles'
-            });
-
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron accesos'
+            }); 
         }
 
     }
-    postRol = async ( req=request, res=response ) => {
+    postAcceso = async ( req=request, res=response ) => {
         
         try {
+            let {ruta} = req.body
+            let acceso = new accesoModel({ruta})
 
-            let {nombre} = req.body
-            let rol = new rolModel({nombre})
-
-            await rol.save();
-            res.status( 200 ).json( { status: 201,msg: 'Rol creado' } );
+            await acceso.save();
+            res.status( 200 ).json( { 
+                status: 201,
+                msg: 'Acceso creado' 
+            });
             
         } catch (error) {
-
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se añadieron roles'
+                descripcion:'Ha ocurrido un error en el servidor, no se añadieron accesos'
             });
         }
     
@@ -80,12 +75,12 @@ class Rol
         try {
 
             let {id} = req.params
-            let {nombre} = req.body
-            let rol = await rolModel.findByIdAndUpdate(id, {nombre});
-            rol.nombre = nombre
+            let {ruta} = req.body
+            let acceso = await accesoModel.findByIdAndUpdate(id, {ruta});
+            acceso.ruta = ruta
             res.status(200).json({
                 status:200,
-                msg:rol
+                msg:acceso
             })
 
         } catch (error) {
@@ -94,7 +89,7 @@ class Rol
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se modifico el rol'
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico el acceso'
             });
 
         }
@@ -106,7 +101,7 @@ class Rol
             
             let {id} = req.params
             let update = {}
-            let est 
+            let est
             let {estado = false} = req.query
             if (estado == "true") {
                 update = {estado:true}
@@ -115,26 +110,24 @@ class Rol
                 update = {estado:false}
                 est= false
             }
-            let rol = await rolModel.findByIdAndUpdate(id, update);
-            rol.estado = est
+            let acceso = await accesoModel.findByIdAndUpdate(id, update);
+            acceso.estado = est
             res.status(200).json({
                 status:200,
-                msg:rol
+                msg:estado
             })
 
         } catch (error) {
-            
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el rol'
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino el acceso'
             });
-
         }
 
     }
 
 }
 
-module.exports = Rol;
+module.exports = Acceso;

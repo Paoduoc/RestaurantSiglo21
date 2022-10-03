@@ -1,17 +1,28 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
-//const { generarJWT, googleVerify, generatePassword } = require('../../helpers/auth');
 const jwt = require("jsonwebtoken");
-const userModel = require("../Model/usuario");
+const usuarioModel = require("../Model/usuario");
+const { update } = require('../Model/rol');
 
 class User
 {
     
-    getUsuario = async ( res, req ) => {
+    getUsuario = async ( req=request, res=response ) => {
 
         try {
+            let {id} = req.params
+            const usuario = await usuarioModel.findById(id);
+            res.status(200).json({
+                status:200,
+                msg:usuario
+            })
         } catch (error) {
-            
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro el usuario'
+            }); 
         }
 
     }
@@ -19,7 +30,7 @@ class User
         
         try {
 
-            const usuario = await userModel.find();
+            const usuario = await usuarioModel.find();
             res.status(200).json({
                 status:200,
                 msg:usuario
@@ -34,30 +45,89 @@ class User
         }
 
     }
-    postUsuario = async ( res, req ) => {
+    postUsuario = async ( req=request, res=response ) => {
         
         try {
-            
+
+            let {nombre, apellido, rut, contresanna, correo, celular, fechaCumpleannos, rol, estatus, genero} = req.body
+            let usuario = new usuarioModel({nombre, apellido, rut, contresanna, correo, celular, fechaCumpleannos, rol, estatus, genero})
+            const salt = bcryptjs.genSaltSync();
+            usuario.contrasenna = bcryptjs.hashSync( contresanna, salt );
+            await usuario.save();
+            res.status( 200 ).json({ 
+                status: 201,
+                msg: 'Usuario creado' 
+            });
+
         } catch (error) {
             
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se añadio el usuario'
+            });
+
         }
 
     }
-    putUsuario = async ( res, req ) => {
+    putUsuario = async ( req=request, res=response ) => {
         
         try {
             
+            let {id} = req.params
+            let { contresanna, rut, estatus, ...update} = req.body
+            if (contrasenna) {
+                const salt = bcryptjs.genSaltSync();
+                update.contrasenna = bcryptjs.hashSync( contresanna, salt);
+            }
+            let usuario = await usuarioModel.findByIdAndUpdate(id, update);
+            res.status(200).json({
+                status:200,
+                msg:usuario
+            })
+
         } catch (error) {
-            
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico el usuario'
+            });
         }
 
     }
-    deleteUsuario = async ( res, req ) => {
+    deleteUsuario = async ( req=request, res=response ) => {
         
         try {
-            
+
+            let {id} = req.params
+            let update = {}
+            let est 
+            let {estatus = false} = req.query
+            if (estatus == "true") {
+                update = {estatus:true}
+                est = true
+            } else {
+                update = {estatus:false}
+                est= false
+            }
+            let usuario = await usuarioModel.findByIdAndUpdate(id, update);
+            usuario.estatus = est
+            res.status(200).json({
+                status:200,
+                msg:usuario
+            })
+
         } catch (error) {
             
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino el usuario'
+            });
+
         }
 
     }

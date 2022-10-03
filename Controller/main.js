@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 class Main{
     
 
-    index = async (  req, res ) => {
+    index = async (  req=request, res=response ) => {
 
         try {
 

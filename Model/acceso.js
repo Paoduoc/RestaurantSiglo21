@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const accesoSchema = Schema({
-    path: {
+    ruta: {
         type: String
     },
     estado: {
