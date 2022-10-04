@@ -3,122 +3,53 @@ const bcryptjs = require('bcryptjs');
 //const { generarJWT, googleVerify, generatePassword } = require('../../helpers/auth');
 const jwt = require("jsonwebtoken");
 
+const Usuario = require('../Model/usuario.js');
+
 class Auth{
-    
 
+<<<<<<< HEAD
     login = async (  req=request, res=response ) => {
+=======
+    registerForm = async (  req, res ) => {
+        res.render("../public/signup");
+    }
+>>>>>>> 7fab138c548e3cb9a0b746b68094755f426cfcbe
 
+    register = async (  req, res ) => {
+        const {username, password} = req.body;
         try {
+            let User = await Usuario.findOne({username:username});
+            if(User) throw new Error('Ya existe ese usuario');
 
-            let { email, password } = req.body;
+            User  = new Usuario({username, password});
 
-            /* let user = await UserModel.findOne({ email: email });
-
-            if (user === null) {
-
-                res.status(404).json({
-                    status: 404, 
-                    msg: 'Not Found',
-                    description: 'No existe ningun usuario relacionado con este correo'
-                });
-
-            } else {
-                
-                if ( !user.status ) {
-                    return res.status( 400 ).json({
-                        status: 400,
-                        msg: 'Bad Request',
-                        description: 'Usuario o Contraseña no son correctos'
-                    });
-                }
-
-                const validPassword = bcryptjs.compareSync( password, user.password )
-
-                if ( !validPassword ) {
-                    return res.status( 400 ).json({
-                        status: 400,
-                        msg: 'Bad Request',
-                        description: 'Usuario o Contraseña no son correctos'
-                    });
-                }
-
-                const token = await generarJWT( user.id ); */
-
-                /* res.status( 200 ).json({
-                    status: 200,
-                    msg: {
-                        "name": `${user.name} ${user.lastName}`,
-                        "email": user.email,
-                        token }
-                });
-            }
- */
-            res.status( 200 ).json({
-                status: 200,
-                msg: "OK"
-            });
-        } catch (error) {
+            await User.save();
+            res.json(User);
             
-            console.log(error);
-
+        } catch (error) {
+            res.json({error: error.message});
         }
+        res.json(req.body);
     }
 
-    /* googleSignIn = async ( req = request,res = response ) => {
+    loginForm = async (  req, res ) => {
+        res.render("../public/signin");
+    }
 
-        const { id_token } = req.body;
+    login = async (  req, res ) => {
+        const {username, password} = req.body;
         try {
+            let User = await Usuario.findOne({username:username});
+            if(!User) throw new Error('Error! usuario no existe');
 
-            const { email, name, lastName } = await googleVerify( id_token );
-            
-            let user = await UserModel.findOne({ 
-                where: { email: email } 
-            });
-            
-            if( user === null ) {
+            if(await User.comparePassword(password)) throw new Error('Error! contraseña incorrecta');
 
-                const password = generatePassword();
-                const data = {
-                    email: email, password: password , name: name, lastName: lastName, google: 1, role: 2
-                }
-
-                let user = await UserModel.create(data);
-
-                const token = await generarJWT( user.id );
-            
-                res.status( 201 ).json({
-                    status: 201,
-                    msg: { name: name, lastName: lastName, email: email, token }
-                });
-
-            } else {
-
-                if( !user.status ) {
-                    console.log(user.status)
-                    return res.status( 401 ).json({ status: 401,  msg: "Unauthorized", description: 'Sin autorización' });
-    
-                }
-    
-                const token = await generarJWT( user.id );
-                
-                res.status( 200 ).json({
-                    status: 200,
-                    msg: { name: name, lastName: lastName, email: email, token}
-                });
-
-            }
-
-            
-            
-
+            res.redirect('/');
         } catch (error) {
             console.log(error);
-            res.status( 400 ).json({ status: 500, msg: "Internal Server Error", description:'No se pudo verificar el token' })
+            res.send(error.message);
         }
-
-    } */
-
-
+    }
 }
 
-module.exports = Auth;
+module.exports = Auth
