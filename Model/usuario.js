@@ -6,18 +6,18 @@ const {Schema, now} = mongoose
 const saltRounds = 10; 
 
 const usuarioSchema = new Schema({
-    /* nombre: {
+    nombre: {
         type: String,
         default: "Default"
     },
     apellido: {
         type: String,
         default: "Default"
-    }, */
-    /* rut: {
+    },
+    rut: {
         type: String,
-    }, */
-    username: {
+    },
+    /* username: {
         type: String,
         lowerCase: true,
         required: true
@@ -25,8 +25,12 @@ const usuarioSchema = new Schema({
     password: {
         type: String,
         required: true
+    } */
+    contrasenna: {
+        type: String,
+        default: "Default"
     },
-    /* correo: {
+    correo: {
         type: String,
         default: "Default"
     },
@@ -49,11 +53,11 @@ const usuarioSchema = new Schema({
     genero: {
         type:String,
         default: "Default"
-    } */
+    }
 })
 
 //encrypt
-usuarioSchema.pre('save', function(next){
+/* usuarioSchema.pre('save', function(next){
     if(this.isNew || this.isModified('password')){
         
         const document = this;
@@ -69,13 +73,13 @@ usuarioSchema.pre('save', function(next){
     }else {
         next();
     }
-});
+}); */
 
 
 //corroborar si la contra del user esta bien
-usuarioSchema.methods.comparePassword = async function(candidatePassword){
+/* usuarioSchema.methods.comparePassword = async function(candidatePassword){
     return await bcrypt.compare(candidatePassword, this.password)
-};
+}; */
 
 const Usuario = mongoose.model('Usuario', usuarioSchema)
 module.exports = Usuario;

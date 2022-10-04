@@ -1,49 +1,60 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
-//const { generarJWT, googleVerify, generatePassword } = require('../../helpers/auth');
 const jwt = require("jsonwebtoken");
 
-const Usuario = require('../Model/usuario.js');
+const usuarioModel = require('../Model/usuario.js');
 
 class Auth{
 
+<<<<<<< HEAD
     registerForm = async (  req, res ) => {
         res.render("../public/signup");
     }
 
     register = async (  req, res ) => {
         const {username, password} = req.body;
+=======
+    login = async ( req = request,res = response ) => {
+>>>>>>> 69d82e02021f56bbd6b4586d25a9b46eda3fc016
         try {
-            let User = await Usuario.findOne({username:username});
-            if(User) throw new Error('Ya existe ese usuario');
 
-            User  = new Usuario({username, password});
+            const { correo, contrasenna } = req.body;
+            const usuario = await usuarioModel.findOne( { correo } )
+            .populate({path:'rol', select: 'nombre'});
 
-            await User.save();
-            res.json(User);
+            if ( !usuario ) {
+                return res.status( 400 ).json({
+                    status: 400,
+                    msg: 'Usuario y/o contraseña incorrecta'
+                });
+            }
+
+            if ( !usuario.estatus ) {
+                return res.status( 400 ).json({
+                    status: 400,
+                    msg: 'Usuario y/o contraseña incorrecta'
+                });
+            }
+
+            const pswvalida = bcryptjs.compareSync( contrasenna, usuario.contrasenna )
+
+            if ( !pswvalida ) {
+                return res.status( 400 ).json({
+                    status: 400,
+                    msg: 'Usuario y/o contraseña incorrecta'
+                });
+            }
+
+            res.status( 200 ).json({
+                status: 200,
+                msg: {usuario}
+            });
             
         } catch (error) {
-            res.json({error: error.message});
-        }
-        res.json(req.body);
-    }
-
-    loginForm = async (  req, res ) => {
-        res.render("../public/signin");
-    }
-
-    login = async (  req, res ) => {
-        const {username, password} = req.body;
-        try {
-            let User = await Usuario.findOne({username:username});
-            if(!User) throw new Error('Error! usuario no existe');
-
-            if(await User.comparePassword(password)) throw new Error('Error! contraseña incorrecta');
-
-            res.redirect('/');
-        } catch (error) {
-            console.log(error);
-            res.send(error.message);
+            res.status( 500 ).json({
+                status: 500,
+                msg: 'Error interno del controlador auth'
+            });
         }
     }
 }
