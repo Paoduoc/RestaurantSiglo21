@@ -9,8 +9,8 @@ class Auth{
     login = async ( req = request,res = response ) => {
         try {
 
-            const { email, contrasenna } = req.body;
-            const usuario = await usuarioModel.findOne( { email } )
+            const { correo, contrasenna } = req.body;
+            const usuario = await usuarioModel.findOne( { correo } )
             .populate({path:'rol', select: 'nombre'});
 
             if ( !usuario ) {
