@@ -7,14 +7,10 @@ const Usuario = require('../Model/usuario.js');
 
 class Auth{
 
-<<<<<<< HEAD
-    login = async (  req=request, res=response ) => {
-=======
     registerForm = async (  req, res ) => {
         res.render("../public/signup");
     }
->>>>>>> 7fab138c548e3cb9a0b746b68094755f426cfcbe
-
+//hola
     register = async (  req, res ) => {
         const {username, password} = req.body;
         try {
