@@ -49,10 +49,10 @@ class User
         
         try {
 
-            let {nombre, apellido, rut, contresanna, correo, celular, fechaCumpleannos, rol, estatus, genero} = req.body
-            let usuario = new usuarioModel({nombre, apellido, rut, contresanna, correo, celular, fechaCumpleannos, rol, estatus, genero})
+            let {nombre, apellido, rut, contrasenna, correo, celular, fechaCumpleannos, rol, estatus, genero} = req.body
+            let usuario = new usuarioModel({nombre, apellido, rut, contrasenna, correo, celular, fechaCumpleannos, rol, estatus, genero})
             const salt = bcryptjs.genSaltSync();
-            usuario.contrasenna = bcryptjs.hashSync( contresanna, salt );
+            usuario.contrasenna = bcryptjs.hashSync( contrasenna, salt );
             await usuario.save();
             res.status( 200 ).json({ 
                 status: 201,
@@ -76,10 +76,10 @@ class User
         try {
             
             let {id} = req.params
-            let { contresanna, rut, estatus, ...update} = req.body
+            let { contrasenna, rut, estatus, ...update} = req.body
             if (contrasenna) {
                 const salt = bcryptjs.genSaltSync();
-                update.contrasenna = bcryptjs.hashSync( contresanna, salt);
+                update.contrasenna = bcryptjs.hashSync( contrasenna, salt);
             }
             let usuario = await usuarioModel.findByIdAndUpdate(id, update);
             res.status(200).json({

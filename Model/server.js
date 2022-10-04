@@ -38,6 +38,8 @@ class Server {
         this.hbs.registerPartials(this.path + '/views/partials');
         this.app.use(cookieParser());
         
+        this.app.use(cors());
+
         //SETEA COSAS DE JSON
         this.app.use( express.json() );
         this.app.use( bodyParser.urlencoded({ extended: true }) );
