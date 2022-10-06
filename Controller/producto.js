@@ -75,11 +75,11 @@ class Producto
 
             let {id} = req.params
             let {nombre} = req.body
-            let plato = await platoModel.findByIdAndUpdate(id, {nombre});
-            plato.nombre = nombre
+            let producto = await productoModel.findByIdAndUpdate(id, {nombre});
+            producto.nombre = nombre
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:producto
             })
 
         } catch (error) {
@@ -88,7 +88,7 @@ class Producto
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se modifico el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico el producto'
             });
 
         }
