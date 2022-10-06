@@ -94,7 +94,7 @@ class Producto
         }
 
     }
-    deletePlato = async ( req=request, res=response ) => {
+    deleteProducto = async ( req=request, res=response ) => {
         
         try {
             let {id} = req.params
@@ -108,11 +108,11 @@ class Producto
                 update = {estado:false}
                 est = false
             }
-            let plato = await platoModel.findByIdAndUpdate(id, update);
-            plato.estado = est
+            let producto = await productoModel.findByIdAndUpdate(id, update);
+            producto.estado = est
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:producto
             })
 
         } catch (error) {
@@ -121,7 +121,7 @@ class Producto
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto'
             });
         }
     }
