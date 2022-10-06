@@ -81,5 +81,7 @@ const usuarioSchema = new Schema({
     return await bcrypt.compare(candidatePassword, this.password)
 }; */
 
+//hola a todos
+
 const Usuario = mongoose.model('Usuario', usuarioSchema)
 module.exports = Usuario;
