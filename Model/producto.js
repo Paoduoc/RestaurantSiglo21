@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const productoSchema = Schema({
-    nombreProd: {
+    nombre: {
         type: String
     },
     estado: {
@@ -11,7 +11,7 @@ const productoSchema = Schema({
     cantidad: {
         type: String
     },
-    tipoProd:{
+    tipo:{
         type: String
     }
 });
