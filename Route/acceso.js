@@ -1,5 +1,4 @@
 const { Router, response } = require('express');
-const { check } = require('express-validator');
 const router = Router();
 const Rol = require('../Controller/rol');
 const rol = new Rol();

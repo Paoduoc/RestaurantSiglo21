@@ -1,8 +1,5 @@
 const { response, request } = require('express');
-const bcryptjs = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 const productoModel = require("../Model/producto");
-//const { update } = require('../Model/rol');
 
 class Producto
 {
@@ -51,14 +48,11 @@ class Producto
 
             let {nombre, estado, cantidad, tipo} = req.body
             let producto = new productoModel({nombre, estado, cantidad, tipo})
-            //const salt = bcryptjs.genSaltSync();
-            //plato.contrasenna = bcryptjs.hashSync( contrasenna, salt );
             await producto.save();
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Producto creado'
             });
-
         } catch (error) {
             
             console.log(error)
