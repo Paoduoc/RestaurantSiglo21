@@ -6,16 +6,7 @@ const usuarioModel = require('../Model/usuario.js');
 
 class Auth{
 
-<<<<<<< HEAD
-    registerForm = async (  req, res ) => {
-        res.render("../public/signup");
-    }
-
-    register = async (  req, res ) => {
-        const {username, password} = req.body;
-=======
     login = async ( req = request,res = response ) => {
->>>>>>> 69d82e02021f56bbd6b4586d25a9b46eda3fc016
         try {
 
             const { correo, contrasenna } = req.body;
