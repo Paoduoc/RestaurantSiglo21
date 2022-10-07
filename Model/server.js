@@ -62,6 +62,7 @@ class Server {
         this.app.use(this.route.routes.api.v1.user, require('../Route/user')); 
         this.app.use(this.route.routes.api.v1.main, require('../Route/main')); 
         this.app.use(this.route.routes.api.v1.roles, require('../Route/rol'));
+        this.app.use(this.route.routes.api.v1.productos, require('../Route/producto'));
     }
 
     listen() {
