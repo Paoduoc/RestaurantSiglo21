@@ -1,6 +1,4 @@
 const { response, request } = require('express');
-const bcryptjs = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 const accesoModel = require("../Model/acceso");
 
 class Acceso
@@ -70,7 +68,7 @@ class Acceso
         }
     
     }
-    putRol = async ( req=request, res=response ) => {
+    putAcceso = async ( req=request, res=response ) => {
         
         try {
 
@@ -95,7 +93,7 @@ class Acceso
         }
 
     }
-    deleteRol = async ( req=request, res=response ) => {
+    deleteAcceso = async ( req=request, res=response ) => {
         
         try {
             

@@ -1,13 +1,33 @@
 const { Router, response } = require('express');
 const { check } = require('express-validator');
+const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
-const Rol = require('../Controller/rol');
-const rol = new Rol();
+const Acceso = require('../Controller/acceso');
+const { validaAccesoToken } = require('../middlewares/jwtValidador');
+const acceso = new Acceso();
 
-router.post('/',( req , res ) =>{ rol.postRol( req, res ) });
-router.get('/:id',( req , res ) =>{ rol.getRol( req, res ) });
-router.get('/',( req , res ) =>{ rol.getAllRol( req, res ) });
-router.put('/:id',( req , res ) =>{ rol.putRol( req, res ) });
-router.delete('/:id',( req , res ) =>{ rol.deleteRol( req, res ) });
+router.use(validaAccesoToken)
+
+router.get('/',( req , res ) =>{ acceso.getAllAccesos( req, res ) });
+
+router.get('/:id',[
+    check('id','no es un id mongodb').isMongoId(),
+    validadorCampos
+    ],( req , res ) =>{ acceso.getAcceso( req, res ) });
+
+router.post('/',[
+    check('id','no es un id mongodb').isMongoId(),
+    validadorCampos
+    ],( req , res ) =>{ acceso.postAcceso( req, res ) });
+
+router.put('/:id',[
+    check('id','no es un id mongodb').isMongoId(),
+    validadorCampos
+    ],( req , res ) =>{ acceso.putAcceso( req, res ) });
+
+router.delete('/:id',[
+    check('id','no es un id mongodb').isMongoId(),
+    validadorCampos
+    ],( req , res ) =>{ acceso.deleteAcceso( req, res ) });
 
 module.exports = router;

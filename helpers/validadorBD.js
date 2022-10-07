@@ -1,5 +1,5 @@
 const usuario = require('../Model/usuario');
-const rol = require('../model/rol');
+let roles = require('../Model/rol');
 
 const idUsuarioValidador = async ( id = '' ) => {
 
@@ -20,22 +20,29 @@ const rutUsuarioValidador = async ( rut = '' ) => {
 const correoUsuarioValidador = async ( correo = '' ) => {
 
     const correoValido = await usuario.findOne( {correo:correo} );
-    if( !correoValido ){
-        throw new Error(`El usuario con el correo ${correo} no existe`);
+    if( correoValido ){
+        throw new Error(`El correo ${correo} ya esta registrado`);
     }
 
 }
 const rolValidador = async ( rol = '' ) => {
 
-    const rolValido = await rol.findById( {rol:rol} );
+    const rolValido = await roles.findById( rol );
     if( !rolValido ){
-        throw new Error(`El usuario con el correo ${correo} no existe`);
+        throw new Error(`El usuario con el rol ${rol} no existe`);
     }
 
+}
+const estadoValidor = async ( id = '' ) => {
+    const usuario = await usuario.findById( id );
+    if( !usuario.estado ){
+        throw new Error(`El usuario ya ha sido deshabilitado`);
+    }
 }
 module.exports = { 
     idUsuarioValidador, 
     rutUsuarioValidador,
     correoUsuarioValidador,
-    rolValidador
+    rolValidador,
+    estadoValidor
 };

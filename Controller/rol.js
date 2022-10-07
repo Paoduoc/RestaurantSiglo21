@@ -1,9 +1,7 @@
 const { response, request } = require('express');
-const bcryptjs = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 const rolModel = require("../Model/rol");
 
-class Rol
+class Roles
 {
     //maneras de obtener datos del request
     //1 - una manera es con request.body
@@ -137,4 +135,4 @@ class Rol
 
 }
 
-module.exports = Rol;
+module.exports = Roles;
