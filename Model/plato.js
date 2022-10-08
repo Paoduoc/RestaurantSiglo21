@@ -2,7 +2,9 @@ const { Schema, model } = require('mongoose');
 
 const platoSchema = Schema({
     nombre: {
-        type: String
+        type: String,
+        unique: true,
+        required: true
     },
     estado: {
         type: Boolean,

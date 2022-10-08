@@ -6,8 +6,10 @@
                 "user": "/api/v1/users/",
                 "main": "/",
                 "roles": "/api/v1/roles/",
-                "platos": "/api/v1/platos/",
-                "productos": "/api/v1/productos/"
+                "productos": "/api/v1/productos/",
+                "bodega": "/api/v1/bodega/",
+                "bodegaCocina": "/api/v1/bodegacocina/",                
+                "platos": "/api/v1/platos/"
             }
         }
     }
