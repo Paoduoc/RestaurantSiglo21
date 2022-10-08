@@ -8,7 +8,6 @@ class Plato
 {
     
     getPlato = async ( req=request, res=response ) => {
-
         try {
             let {id} = req.params
             const plato = await platoModel.findById(id);
@@ -24,12 +23,10 @@ class Plato
                 descripcion:'Ha ocurrido un error en el servidor, no se encontro el plato'
             }); 
         }
-
     }
     getAllPlato = async ( req=request, res=response ) => {
         
         try {
-
             const plato = await platoModel.find();
             res.status(200).json({
                 status:200,
@@ -43,7 +40,6 @@ class Plato
                 descripcion:'Ha ocurrido un error en el servidor, no se encontraron platos'
             }); 
         }
-
     }
     postPlato = async ( req=request, res=response ) => {
         
@@ -72,16 +68,14 @@ class Plato
     putPlato = async ( req=request, res=response ) => {
         
         try {
-
             let {id} = req.params
-            let {nombre} = req.body
-            let plato = await platoModel.findByIdAndUpdate(id, {nombre});
-            plato.nombre = nombre
+            let {nombre, precio} = req.body
+            let plato = await platoModel.findByIdAndUpdate(id, {nombre}, {precio});
+            //plato.nombre = nombre
             res.status(200).json({
                 status:200,
                 msg:plato
             })
-
         } catch (error) {
 
             console.log(error)

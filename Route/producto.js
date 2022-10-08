@@ -10,5 +10,3 @@ router.put('/:id',( req , res ) =>{ producto.putProducto( req, res ) });
 router.delete('/:id',( req , res ) =>{ producto.deleteProducto( req, res ) });
 
 module.exports = router;
-
-//no funcionan los routes al parecer
