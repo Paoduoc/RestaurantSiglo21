@@ -4,6 +4,7 @@ const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
 const Roles = require('../Controller/rol');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');
+const { rolRepetidoValidador } = require('../helpers/validadorBD');
 const rol = new Roles();
 
 router.use(validaAccesoToken)
@@ -17,7 +18,8 @@ router.get('/:id',[
 
 
 router.post('/',[
-    check('id','no es un id mongodb').isMongoId(),
+    check('nombre','El nombre del rol es requerido').not().isEmpty(),
+    check('nombre').custom(rolRepetidoValidador),
     validadorCampos
     ],( req , res ) =>{ rol.postRol( req, res ) });
 

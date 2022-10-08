@@ -64,6 +64,7 @@ class Server {
         this.app.use(this.route.routes.api.v1.roles, require('../Route/rol'));
         this.app.use(this.route.routes.api.v1.accesos, require('../Route/acceso'));
         this.app.use(this.route.routes.api.v1.accesoRol, require('../Route/accesoRol'));
+        this.app.use(this.route.routes.api.v1.mesa, require('../Route/mesa'));
     }
 
     listen() {

@@ -7,7 +7,8 @@
                 "main": "/",
                 "roles": "/api/v1/roles",
                 "accesos": "/api/v1/accesos",
-                "accesoRol": "/api/v1/accesoRol"
+                "accesoRol": "/api/v1/accesoRol",
+                "mesa": "/api/v1/mesas"
             }
         }
     }

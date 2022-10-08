@@ -1,5 +1,7 @@
 const usuario = require('../Model/usuario');
 let roles = require('../Model/rol');
+const acceso = require('../Model/acceso');
+const mesa = require('../Model/mesa');
 
 const idUsuarioValidador = async ( id = '' ) => {
 
@@ -39,10 +41,36 @@ const estadoValidor = async ( id = '' ) => {
         throw new Error(`El usuario ya ha sido deshabilitado`);
     }
 }
+const rutaValidador = async ( ruta = '' ) => {
+
+    const rutaValida = await acceso.findOne( {ruta:ruta} );
+    if( rutaValida ){
+        throw new Error(`La ruta ${ruta} ya esta registrada`);
+    }
+}
+const rolRepetidoValidador = async ( rol = '' ) => {
+
+    const validaRol = await roles.findOne( {rol:rol} );
+    if( validaRol ){
+        throw new Error(`El rol ${rol} ya esta registrado`);
+    }
+
+}
+const mesaValidador = async ( numMesa = '' ) => {
+
+    const validaMesa = await mesa.findOne( {numMesa:numMesa} );
+    if( validaMesa ){
+        throw new Error(`La mesa ${numMesa} ya esta registrada`);
+    }
+
+}
 module.exports = { 
     idUsuarioValidador, 
     rutUsuarioValidador,
     correoUsuarioValidador,
     rolValidador,
-    estadoValidor
+    estadoValidor,
+    rutaValidador,
+    rolRepetidoValidador,
+    mesaValidador
 };

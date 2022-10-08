@@ -2,34 +2,34 @@ const { Router, response } = require('express');
 const { check } = require('express-validator');
 const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
-const Acceso = require('../Controller/acceso');
+const Mesa = require('../Controller/mesa');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');
-const { rutaValidador } = require('../helpers/validadorBD');
-const acceso = new Acceso();
+const { mesaValidador } = require('../helpers/validadorBD');
+const mesa = new Mesa();
 
 router.use(validaAccesoToken)
 
-router.get('/',( req , res ) =>{ acceso.getAllAccesos( req, res ) });
+router.get('/',( req , res ) =>{ mesa.getAllmesas( req, res ) });
 
 router.get('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ acceso.getAcceso( req, res ) });
+    ],( req , res ) =>{ mesa.getmesa( req, res ) });
 
 router.post('/',[
-    check('ruta','El campo ruta es requerido').not().isEmpty(),
-    check('ruta').custom(rutaValidador),
+    check('numMesa','El campo número de mesa es requerido').not().isEmpty(),
+    check('numMesa').custom(mesaValidador),
     validadorCampos
-    ],( req , res ) =>{ acceso.postAcceso( req, res ) });
+    ],( req , res ) =>{ mesa.postMesa( req, res ) });
 
 router.put('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ acceso.putAcceso( req, res ) });
+    ],( req , res ) =>{ mesa.putMesa( req, res ) });
 
 router.delete('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ acceso.deleteAcceso( req, res ) });
+    ],( req , res ) =>{ mesa.deleteMesa( req, res ) });
 
 module.exports = router;
