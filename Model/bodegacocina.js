@@ -1,15 +1,10 @@
 const { Schema, model } = require('mongoose');
 
 const bodegaCocinaSchema = Schema({
-    nombre: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    /* nombreProducto: {
+    nombreProducto: {
         type: Schema.ObjectId,
         ref: 'Bodega'
-    }, */
+    },
     estado: {
         type: Boolean,
         default: true

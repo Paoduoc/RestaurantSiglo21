@@ -47,8 +47,10 @@ class Producto
         
         try {
 
-            let {nombre, estado, cantidad, tipo, gramosDispo, gramosMin, gramosMax} = req.body
-            let producto = new productoModel({nombre, estado, cantidad, tipo})
+            let {nombre, estado, tipo, gramosDispo, gramosMin, gramosMax} = req.body
+            let producto = new productoModel({nombre, estado, tipo})
+            //vamos a trabajar en gramos en vez de cantidad, por lo que se debe modificar
+            //deberia ser un form que traiga: nombre, estado, tipo, gramosDispo, gramosMin, gramosMax
             let bodega = new bodegaModel({nombre, gramosDispo, gramosMin, gramosMax})
             let bodegacocina = new bodegaCocinaModel({nombre, gramosMin, gramosMax})
             await producto.save();
@@ -73,11 +75,11 @@ class Producto
         try {
 
             let {id} = req.params
-            let {nombre, cantidad, tipo} = req.body
-            let producto = await productoModel.findByIdAndUpdate(id, {nombre}, {cantidad}, {tipo});
-            //producto.nombre = nombre
-            //producto.cantidad = cantidad
-            //producto.tipo = tipo
+            let {update} = req.body
+            // los tres puntos es para desestructurar los datos
+            let producto = await productoModel.findByIdAndUpdate(id, update);
+            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
+            let bodegacocina = await bodegaCocinaModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
                 msg:producto

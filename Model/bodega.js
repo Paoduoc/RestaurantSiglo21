@@ -1,15 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const bodegaSchema = Schema({
-    nombre: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    /* nombreProducto: {
+    //con helpers se pueden controlar que sea unico y que sea requerido
+    nombreProducto: {
         type: Schema.ObjectId,
         ref: 'Producto'
-    }, */
+    },
     estado: {
         type: Boolean,
         default: true

@@ -5,7 +5,6 @@ class BodegaCocina
 {
     
     getBodegaCocina = async ( req=request, res=response ) => {
-
         try {
             let {id} = req.params
             const bodegaCocina = await bodegaCocinaModel.findById(id);
@@ -21,7 +20,6 @@ class BodegaCocina
                 descripcion:'Ha ocurrido un error en el servidor, no se encontro el producto en la bodega de cocina'
             }); 
         }
-
     }
     getAllBodegaCocina = async ( req=request, res=response ) => {
         
@@ -70,9 +68,6 @@ class BodegaCocina
             let {id} = req.params
             let {gramosDispo, gramosMin, gramosMax} = req.body
             let bodegaCocina = await bodegaCocinaModel.findByIdAndUpdate(id, {gramosDispo}, {gramosMin}, {gramosMax});
-            //producto.nombre = nombre
-            //producto.cantidad = cantidad
-            //producto.tipo = tipo
             res.status(200).json({
                 status:200,
                 msg:bodegaCocina

@@ -64,14 +64,16 @@ class Bodega
         
         try {
             let {id} = req.params
-            let {nombreProducto, gramosDispo, gramosMin, gramosMax} = req.body
-            let bodega = await bodegaModel.findByIdAndUpdate(id, {nombreProducto}, {gramosDispo}, {gramosMin}, {gramosMin});
+            let {gramosDispo, ...update} = req.body
+            //se especifica el campo que NO quieres editar y al lado update ](que tomara todos los demas campos que enviees)
+            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
             //producto.nombre = nombre
             //producto.cantidad = cantidad
             //producto.tipo = tipo
+            //es soloo setear el cambio para que lo muestre en el msg (es solo visual)
             res.status(200).json({
                 status:200,
-                msg:bodega
+                msg: "OK"
             })
         } catch (error) {
             console.log(error)

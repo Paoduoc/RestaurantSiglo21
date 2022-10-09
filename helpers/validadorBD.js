@@ -1,5 +1,6 @@
 const usuario = require('../Model/usuario');
 const rol = require('../model/rol');
+const producto = require('../model/producto');
 
 const idUsuarioValidador = async ( id = '' ) => {
 
@@ -33,9 +34,18 @@ const rolValidador = async ( rol = '' ) => {
     }
 
 }
+const productoValidador = async ( nombre = '' ) => {
+
+    const nombreValido = await producto.findOne( {nombre} );
+    if( nombreValido ){
+        throw new Error(`El producto con el nombre ${nombre} no ya existe`);
+    }
+
+}
 module.exports = { 
     idUsuarioValidador, 
     rutUsuarioValidador,
     correoUsuarioValidador,
-    rolValidador
+    rolValidador,
+    productoValidador
 };
