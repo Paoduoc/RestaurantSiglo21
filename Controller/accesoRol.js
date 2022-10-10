@@ -82,10 +82,10 @@ class AccesoRol
             let {id} = req.params
             //Se podran modificar todos los campos menos el estado
             let {estado, ...update} = req.body
-            let accesoRol = await accesoModel.findByIdAndUpdate(id, update);
+            await accesRolModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:accesoRol
+                msg:"OK"
             })
 
         } catch (error) {

@@ -2,6 +2,7 @@ const usuario = require('../Model/usuario');
 let roles = require('../Model/rol');
 const acceso = require('../Model/acceso');
 const mesa = require('../Model/mesa');
+const accesRol = require('../Model/accesoRol');
 
 //validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {
@@ -68,6 +69,15 @@ const estatusValidador = async ( estatus = '' ) => {
         throw new Error(`El estatus no se puede modificar en este endpoint`);
     }
 }
+const accesoRolValidador = async ( rol = '' ) => {
+
+    const accesRolValida = await accesRol.findOne( {rol:rol} )
+    .populate({path:"rol",select:"nombre"})
+    let nombre = accesRolValida.rol.nombre
+    if( accesRolValida ){
+        throw new Error(`La ruta con el rol ${nombre} ya existe`);
+    }
+}
 module.exports = { 
     idUsuarioValidador, 
     correoUsuarioValidador,
@@ -76,5 +86,6 @@ module.exports = {
     rolRepetidoValidador,
     mesaValidador,
     rutValidador,
-    estatusValidador
+    estatusValidador,
+    accesoRolValidador
 };
