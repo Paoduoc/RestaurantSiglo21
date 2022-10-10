@@ -42,10 +42,8 @@ class Plato
         
         try {
 
-            let {nombre, estado, ingredientes, preparacion, tiempoPreparacion, precio} = req.body
-            let plato = new platoModel({nombre, estado, ingredientes, preparacion, tiempoPreparacion, precio})
-            //const salt = bcryptjs.genSaltSync();
-            //plato.contrasenna = bcryptjs.hashSync( contrasenna, salt );
+            let {nombrePlato, estado, ingredientes, preparacion, tiempoPreparacion, precio} = req.body
+            let plato = new platoModel({nombrePlato, estado, ingredientes, preparacion, tiempoPreparacion, precio})
             await plato.save();
             res.status( 200 ).json({ 
                 status: 201,
@@ -66,12 +64,11 @@ class Plato
         
         try {
             let {id} = req.params
-            let {nombre, precio} = req.body
-            let plato = await platoModel.findByIdAndUpdate(id, {nombre}, {precio});
-            //plato.nombre = nombre
+            let {estado, ...update} = req.body
+            let plato = await platoModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:"OK"
             })
         } catch (error) {
 
@@ -112,7 +109,7 @@ class Plato
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se deshabilitó el plato'
             });
         }
     }

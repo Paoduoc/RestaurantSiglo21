@@ -68,7 +68,7 @@ class Bodega
             let bodega = await bodegaModel.findByIdAndUpdate(id, {nombreProducto}, {gramosDispo}, {gramosMin}, {gramosMin});
             res.status(200).json({
                 status:200,
-                msg:bodega
+                msg: "OK"
             })
         } catch (error) {
             console.log(error)
@@ -79,7 +79,7 @@ class Bodega
             });
         }
     }
-    /* deleteProducto = async ( req=request, res=response ) => {
+    deleteBodega = async ( req=request, res=response ) => {
         
         try {
             let {id} = req.params
@@ -93,11 +93,11 @@ class Bodega
                 update = {estado:false}
                 est = false
             }
-            let producto = await productoModel.findByIdAndUpdate(id, update);
-            producto.estado = est
+            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
+            bodega.estado = est
             res.status(200).json({
                 status:200,
-                msg:producto
+                msg:bodega
             })
 
         } catch (error) {
@@ -106,10 +106,10 @@ class Bodega
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto'
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto en bodega'
             });
         }
-    } */
+    }
 }
 
 module.exports = Bodega;

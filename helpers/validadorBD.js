@@ -2,7 +2,9 @@ const usuario = require('../Model/usuario');
 let roles = require('../Model/rol');
 const acceso = require('../Model/acceso');
 const mesa = require('../Model/mesa');
+const producto = require('../Model/producto');
 const accesRol = require('../Model/accesoRol');
+const plato = require('../Model/plato');
 
 //validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {
@@ -78,6 +80,25 @@ const accesoRolValidador = async ( rol = '' ) => {
         throw new Error(`La ruta con el rol ${nombre} ya existe`);
     }
 }
+
+//PRODUCTOS
+//validador de duplicidad de producto
+const productoRepetidoValidador = async ( nombreProducto = '' ) => {
+    const validaProducto = await producto.findOne( {nombreProducto} );
+    if( validaProducto ){
+        throw new Error(`El producto ${nombreProducto} ya esta registrado`);
+    }
+}
+
+//PLATOS
+//validador de duplicidad de platos
+const platoRepetidoValidador = async ( nombrePlato = '' ) => {
+    const validaPlato = await plato.findOne( {nombrePlato} );
+    if( validaPlato ){
+        throw new Error(`El plato ${nombrePlato} ya esta registrado`);
+    }
+}
+
 module.exports = { 
     idUsuarioValidador, 
     correoUsuarioValidador,
@@ -87,5 +108,7 @@ module.exports = {
     mesaValidador,
     rutValidador,
     estatusValidador,
-    accesoRolValidador
+    accesoRolValidador,
+    productoRepetidoValidador,
+    platoRepetidoValidador
 };

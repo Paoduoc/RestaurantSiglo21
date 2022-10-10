@@ -1,18 +1,15 @@
 const { Schema, model } = require('mongoose');
 
 const platoSchema = Schema({
-    nombre: {
-        type: String,
-        unique: true,
-        required: true
+    nombrePlato: {
+        type: String
     },
     estado: {
         type: Boolean,
         default: true
     },
     ingredientes: {
-        type: Schema.ObjectId,
-        ref: 'BodegaCocina'
+        type: Array
     },
     preparacion: {
         type: String

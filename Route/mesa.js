@@ -22,6 +22,8 @@ router.post('/',[
     validadorCampos
     ],( req , res ) =>{ mesa.postMesa( req, res ) });
 
+//esta mal que vaya con mongo id, es decir, en los post esta validacion no va
+
 router.put('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos

@@ -47,10 +47,12 @@ class Producto
         
         try {
 
-            let {nombre, estado, cantidad, tipo, gramosDispo, gramosMin, gramosMax} = req.body
-            let producto = new productoModel({nombre, estado, cantidad, tipo})
-            let bodega = new bodegaModel({nombre, gramosDispo, gramosMin, gramosMax})
-            let bodegacocina = new bodegaCocinaModel({nombre, gramosMin, gramosMax})
+            let {nombreProducto, estado, tipo, gramosDispo, gramosMin, gramosMax} = req.body
+            let producto = new productoModel({nombreProducto, estado, tipo})
+            //vamos a trabajar en gramos en vez de cantidad, por lo que se debe modificar
+            //deberia ser un form que traiga: nombre, estado, tipo, gramosDispo, gramosMin, gramosMax
+            let bodega = new bodegaModel({nombreProducto, gramosDispo, gramosMin, gramosMax})
+            let bodegacocina = new bodegaCocinaModel({nombreProducto, gramosMin, gramosMax})
             await producto.save();
             await bodega.save();
             await bodegacocina.save();
@@ -73,14 +75,14 @@ class Producto
         try {
 
             let {id} = req.params
-            let {nombre, cantidad, tipo} = req.body
-            let producto = await productoModel.findByIdAndUpdate(id, {nombre}, {cantidad}, {tipo});
-            //producto.nombre = nombre
-            //producto.cantidad = cantidad
-            //producto.tipo = tipo
+            let {estado, gramosDispo, ...update} = req.body
+            // los tres puntos es para desestructurar los datos
+            await productoModel.findByIdAndUpdate(id, update);
+            await bodegaModel.findByIdAndUpdate(id, update);
+            await bodegaCocinaModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:producto
+                msg:"OK"
             })
 
         } catch (error) {
@@ -96,7 +98,8 @@ class Producto
 
     }
     deleteProducto = async ( req=request, res=response ) => {
-        
+        //este delete deberia ser en cada modelo, esto porque el id de productos y el de bodega opr ej, son diferentes
+        //asi que no se puede hacer en la misma request el delete para los 3 (bodega, bcocina y prod)
         try {
             let {id} = req.params
             let update = {}
@@ -113,7 +116,7 @@ class Producto
             producto.estado = est
             res.status(200).json({
                 status:200,
-                msg:producto
+                msg:"OK"
             })
 
         } catch (error) {
