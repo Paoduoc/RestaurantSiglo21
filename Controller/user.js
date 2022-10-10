@@ -5,7 +5,7 @@ const usuarioModel = require("../Model/usuario");
 
 class User
 {
-    
+    //Obtiene usuario según mondoID
     getUsuario = async ( req=request, res=response ) => {
 
         try {
@@ -26,6 +26,7 @@ class User
         }
 
     }
+    //Obtiene todos los usuarios
     getAllUsuario = async ( req=request, res=response ) => {
         
         try {
@@ -47,12 +48,13 @@ class User
         }
 
     }
+    //Genera nuevos usuarios
     postUsuario = async ( req=request, res=response ) => {
         
         try {
 
-            let {nombre, apellido, rut, contrasenna, correo, celular, fechaCumpleannos, rol, estatus, genero} = req.body
-            let usuario = new usuarioModel({nombre, apellido, rut, contrasenna, correo, celular, fechaCumpleannos, rol, estatus, genero})
+            let {nombre, apellido, rut, contrasenna, correo, celular, fechaCumpleannos, rol, genero} = req.body
+            let usuario = new usuarioModel({nombre, apellido, rut, contrasenna, correo, celular, fechaCumpleannos, rol, genero})
             const salt = bcryptjs.genSaltSync();
             usuario.contrasenna = bcryptjs.hashSync( contrasenna, salt );
             await usuario.save();
@@ -73,6 +75,7 @@ class User
         }
 
     }
+    //Modifica los usuarios según mongoID
     putUsuario = async ( req=request, res=response ) => {
         
         try {
@@ -99,6 +102,7 @@ class User
         }
 
     }
+    //Deshabilita usuario según mongoID
     deleteUsuario = async ( req=request, res=response ) => {
         
         try {

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+//conexion a la BD
 const dbConnection = async () => {
     try {
         mongoose.connect( process.env.MONGODB_CNN ,{

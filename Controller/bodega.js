@@ -3,7 +3,7 @@ const bodegaModel = require("../Model/bodega");
 
 class Bodega
 {
-    
+    //Obtiene bodega segun mongoID
     getBodega = async ( req=request, res=response ) => {
 
         try {
@@ -66,9 +66,6 @@ class Bodega
             let {id} = req.params
             let {nombreProducto, gramosDispo, gramosMin, gramosMax} = req.body
             let bodega = await bodegaModel.findByIdAndUpdate(id, {nombreProducto}, {gramosDispo}, {gramosMin}, {gramosMin});
-            //producto.nombre = nombre
-            //producto.cantidad = cantidad
-            //producto.tipo = tipo
             res.status(200).json({
                 status:200,
                 msg:bodega

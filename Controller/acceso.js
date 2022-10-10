@@ -7,6 +7,8 @@ class Acceso
     //1 - una manera es con request.body
     //2 - request.params (URL)
     //3 - request.query (URL) 
+
+    //obtiene un acceso mediante mongoID
     getAcceso = async ( req=request, res=response ) => {
 
         try {
@@ -16,7 +18,6 @@ class Acceso
                 status:200,
                 msg:acceso
             })
-
 
         } catch (error) {
             console.log(error)
@@ -28,6 +29,7 @@ class Acceso
         }
 
     }
+    //Obtiene todos los accesos
     getAllAccesos = async ( req=request, res=response ) => {
         
         try {
@@ -46,6 +48,7 @@ class Acceso
         }
 
     }
+    //Genera nuevos accesos
     postAcceso = async ( req=request, res=response ) => {
         
         try {
@@ -68,6 +71,7 @@ class Acceso
         }
     
     }
+    //Modifica los accesos mediante mongoID
     putAcceso = async ( req=request, res=response ) => {
         
         try {
@@ -80,6 +84,7 @@ class Acceso
                 status:200,
                 msg:acceso
             })
+            //Se envia msg acceso solo para ver el que el acceso haya cambiado realmente, evidencias para BACK
 
         } catch (error) {
 
@@ -93,6 +98,7 @@ class Acceso
         }
 
     }
+    //Deshabilita el acceso mediante mongo ID
     deleteAcceso = async ( req=request, res=response ) => {
         
         try {
@@ -101,6 +107,7 @@ class Acceso
             let update = {}
             let est
             let {estado = false} = req.query
+            //Se realiza validación si es que se requiere volver a habilitar 
             if (estado == "true") {
                 update = {estado:true}
                 est = true

@@ -1,9 +1,5 @@
-const bcrypt = require('bcryptjs/dist/bcrypt');
-const async = require('hbs/lib/async');
 const mongoose = require('mongoose')
 const {Schema, now} = mongoose
-
-const saltRounds = 10; 
 
 const usuarioSchema = new Schema({
     nombre: {
@@ -17,15 +13,6 @@ const usuarioSchema = new Schema({
     rut: {
         type: String,
     },
-    /* username: {
-        type: String,
-        lowerCase: true,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    } */
     contrasenna: {
         type: String,
         default: "Default"
@@ -55,33 +42,6 @@ const usuarioSchema = new Schema({
         default: "Default"
     }
 })
-
-//encrypt
-/* usuarioSchema.pre('save', function(next){
-    if(this.isNew || this.isModified('password')){
-        
-        const document = this;
-
-        bcrypt.hash(document.password, saltRounds, (err, hashedPassword) => {
-            if(err){
-                next(err);
-            }else {
-                document.password = hashedPassword;
-                next();
-            }
-        });
-    }else {
-        next();
-    }
-}); */
-
-
-//corroborar si la contra del user esta bien
-/* usuarioSchema.methods.comparePassword = async function(candidatePassword){
-    return await bcrypt.compare(candidatePassword, this.password)
-}; */
-
-//hola a todos
 
 const Usuario = mongoose.model('Usuario', usuarioSchema)
 module.exports = Usuario;

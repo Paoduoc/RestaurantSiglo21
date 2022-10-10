@@ -2,7 +2,9 @@ const usuario = require('../Model/usuario');
 let roles = require('../Model/rol');
 const acceso = require('../Model/acceso');
 const mesa = require('../Model/mesa');
+const accesRol = require('../Model/accesoRol');
 
+//validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {
 
     const idValido = await usuario.findById( id );
@@ -11,14 +13,7 @@ const idUsuarioValidador = async ( id = '' ) => {
     }
 
 }
-const rutUsuarioValidador = async ( rut = '' ) => {
-
-    const rutValido = await usuario.findOne( {rut:rut} );
-    if( !rutValido ){
-        throw new Error(`El usuario con el rut ${rut} no existe`);
-    }
-
-}
+//Validador de duplicidad de correo
 const correoUsuarioValidador = async ( correo = '' ) => {
 
     const correoValido = await usuario.findOne( {correo:correo} );
@@ -27,6 +22,7 @@ const correoUsuarioValidador = async ( correo = '' ) => {
     }
 
 }
+//Validador de existencia de rol
 const rolValidador = async ( rol = '' ) => {
 
     const rolValido = await roles.findById( rol );
@@ -35,12 +31,7 @@ const rolValidador = async ( rol = '' ) => {
     }
 
 }
-const estadoValidor = async ( id = '' ) => {
-    const usuario = await usuario.findById( id );
-    if( !usuario.estado ){
-        throw new Error(`El usuario ya ha sido deshabilitado`);
-    }
-}
+//Validador de duplicidad de ruta
 const rutaValidador = async ( ruta = '' ) => {
 
     const rutaValida = await acceso.findOne( {ruta:ruta} );
@@ -48,14 +39,16 @@ const rutaValidador = async ( ruta = '' ) => {
         throw new Error(`La ruta ${ruta} ya esta registrada`);
     }
 }
-const rolRepetidoValidador = async ( rol = '' ) => {
+//validador de duplicidad de rol
+const rolRepetidoValidador = async ( nombre = '' ) => {
 
-    const validaRol = await roles.findOne( {rol:rol} );
+    const validaRol = await roles.findOne( {nombre:nombre} );
     if( validaRol ){
-        throw new Error(`El rol ${rol} ya esta registrado`);
+        throw new Error(`El rol ${nombre} ya esta registrado`);
     }
 
 }
+//validador de duplicidad de mesa
 const mesaValidador = async ( numMesa = '' ) => {
 
     const validaMesa = await mesa.findOne( {numMesa:numMesa} );
@@ -64,13 +57,35 @@ const mesaValidador = async ( numMesa = '' ) => {
     }
 
 }
+const rutValidador = async ( rut = '' ) => {
+
+    if( rut != '' ){
+        throw new Error(`El rut no se puede modificar`);
+    }
+}
+const estatusValidador = async ( estatus = '' ) => {
+
+    if( estatus != '' ){
+        throw new Error(`El estatus no se puede modificar en este endpoint`);
+    }
+}
+const accesoRolValidador = async ( rol = '' ) => {
+
+    const accesRolValida = await accesRol.findOne( {rol:rol} )
+    .populate({path:"rol",select:"nombre"})
+    let nombre = accesRolValida.rol.nombre
+    if( accesRolValida ){
+        throw new Error(`La ruta con el rol ${nombre} ya existe`);
+    }
+}
 module.exports = { 
     idUsuarioValidador, 
-    rutUsuarioValidador,
     correoUsuarioValidador,
     rolValidador,
-    estadoValidor,
     rutaValidador,
     rolRepetidoValidador,
-    mesaValidador
+    mesaValidador,
+    rutValidador,
+    estatusValidador,
+    accesoRolValidador
 };

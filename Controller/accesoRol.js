@@ -3,7 +3,7 @@ const accesRolModel = require("../Model/accesoRol");
 
 class AccesoRol
 {
-    
+    //Obtiene un acceso según rol mediante mongoID
     getAccesRol = async ( req=request, res=response ) => {
 
         try {
@@ -11,6 +11,7 @@ class AccesoRol
             const accesoRol = await accesRolModel.findById(id)
             .populate({path:"rol",select:"nombre"})
             .populate({path:"acceso",select:"ruta"})
+            //Se concatenan el rol y el acceso para una mejor visualizacion de lo que se trae
             res.status(200).json({
                 status:200,
                 msg:accesoRol
@@ -25,6 +26,7 @@ class AccesoRol
         }
 
     }
+    //Obtiene todos los accesos según rol
     getAllAccesRol = async ( req=request, res=response ) => {
         
         try {
@@ -47,10 +49,11 @@ class AccesoRol
         }
 
     }
+    //Genera nuevos accesos según rol
     postAccesRol = async ( req=request, res=response ) => {
         
         try {
-
+            //No se envia el estado porque viene por defecto en true
             let {acceso, rol, crear, modificar, leer, eliminar} = req.body
             let accesoRol = new accesRolModel({acceso, rol, crear, modificar, leer, eliminar})
             await accesoRol.save();
@@ -71,16 +74,18 @@ class AccesoRol
         }
 
     }
+    //Modifica los accesos según rol mediante mongoID
     putAcessRol = async ( req=request, res=response ) => {
         
         try {
             
             let {id} = req.params
-            let {crear, modificar, leer, eliminar} = req.body
-            let accesoRol = await accesoModel.findByIdAndUpdate(id, {crear, modificar, leer, eliminar});
+            //Se podran modificar todos los campos menos el estado
+            let {estado, ...update} = req.body
+            await accesRolModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:accesoRol
+                msg:"OK"
             })
 
         } catch (error) {
@@ -93,6 +98,7 @@ class AccesoRol
         }
 
     }
+    //Deshabilita el acceso según rol mediante mongo ID
     deleteAccesRol = async ( req=request, res=response ) => {
         
         try {
