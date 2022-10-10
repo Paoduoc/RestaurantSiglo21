@@ -1,7 +1,7 @@
 const { response, request } = require('express');
-const mesaModel = require("../Model/mesa");
+const reservasModel = require("../Model/reservas");
 
-class Mesa
+class Reserva
 {
     //maneras de obtener datos del request
     //1 - una manera es con request.body
@@ -133,4 +133,4 @@ class Mesa
 
 }
 
-module.exports = Mesa;
+module.exports = Reserva;
