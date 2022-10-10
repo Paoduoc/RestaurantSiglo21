@@ -82,6 +82,7 @@ class User
             
             let {id} = req.params
             let { contrasenna, rut, estatus, ...update} = req.body
+            console.log(update)
             if (contrasenna) {
                 const salt = bcryptjs.genSaltSync();
                 update.contrasenna = bcryptjs.hashSync( contrasenna, salt);
