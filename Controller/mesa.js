@@ -7,6 +7,8 @@ class Mesa
     //1 - una manera es con request.body
     //2 - request.params (URL)
     //3 - request.query (URL) 
+
+    //obtiene una mesa según mongoID
     getmesa = async ( req=request, res=response ) => {
 
         try {
@@ -28,6 +30,7 @@ class Mesa
         }
 
     }
+    //Obtiene todas las mesas
     getAllmesas = async ( req=request, res=response ) => {
         
         try {
@@ -46,6 +49,7 @@ class Mesa
         }
 
     }
+    //Genera una mesa nueva
     postMesa = async ( req=request, res=response ) => {
         
         try {
@@ -68,17 +72,17 @@ class Mesa
         }
     
     }
+    //Modifica mesa según mongoID
     putMesa = async ( req=request, res=response ) => {
         
         try {
 
             let {id} = req.params
             let {estado, ...update} = req.body
-            let mesa = await mesaModel.findByIdAndUpdate(id, {update});
-            mesa.numMesa = numMesa
+            await mesaModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:mesa
+                msg:"OK"
             })
 
         } catch (error) {
@@ -93,6 +97,7 @@ class Mesa
         }
 
     }
+    //Se deshabilita mesa según mongoID
     deleteMesa = async ( req=request, res=response ) => {
         
         try {

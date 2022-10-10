@@ -1,8 +1,5 @@
 const { response, request } = require('express');
-const bcryptjs = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 const platoModel = require("../Model/plato");
-//const { update } = require('../Model/rol');
 
 class Plato
 {
@@ -45,8 +42,8 @@ class Plato
         
         try {
 
-            let {nombrePlato, estado, ingredientes, gramos, preparacion, tiempoPreparacion, precio} = req.body
-            let plato = new platoModel({nombrePlato, estado, ingredientes, gramos, preparacion, tiempoPreparacion, precio})
+            let {nombrePlato, estado, ingredientes, preparacion, tiempoPreparacion, precio} = req.body
+            let plato = new platoModel({nombrePlato, estado, ingredientes, preparacion, tiempoPreparacion, precio})
             await plato.save();
             res.status( 200 ).json({ 
                 status: 201,
@@ -68,10 +65,10 @@ class Plato
         try {
             let {id} = req.params
             let {estado, ...update} = req.body
-            let plato = await platoModel.findByIdAndUpdate(id, {nombrePlato}, {precio});
+            let plato = await platoModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:"OK"
             })
         } catch (error) {
 
@@ -112,7 +109,7 @@ class Plato
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se deshabilitó el plato'
             });
         }
     }

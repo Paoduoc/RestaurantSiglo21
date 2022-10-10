@@ -25,7 +25,7 @@ class BodegaCocina
         
         try {
 
-            const bodegaCocina = await productoModel.find();
+            const bodegaCocina = await bodegaCocinaModel.find();
             res.status(200).json({
                 status:200,
                 msg:bodegaCocina
@@ -66,11 +66,11 @@ class BodegaCocina
         try {
 
             let {id} = req.params
-            let {gramosDispo, gramosMin, gramosMax} = req.body
-            let bodegaCocina = await bodegaCocinaModel.findByIdAndUpdate(id, {gramosDispo}, {gramosMin}, {gramosMax});
+            let {nombreProducto, estado, gramosMin, gramosMax, ...update} = req.body
+            await bodegaCocinaModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:bodegaCocina
+                msg:"OK"
             })
 
         } catch (error) {
@@ -85,7 +85,7 @@ class BodegaCocina
         }
 
     }
-    /* deleteProducto = async ( req=request, res=response ) => {
+    deleteBodegaCocina = async ( req=request, res=response ) => {
         
         try {
             let {id} = req.params
@@ -99,11 +99,11 @@ class BodegaCocina
                 update = {estado:false}
                 est = false
             }
-            let producto = await productoModel.findByIdAndUpdate(id, update);
-            producto.estado = est
+            let bodegaCocina = await bodegaCocinaModel.findByIdAndUpdate(id, update);
+            bodegaCocina.estado = est
             res.status(200).json({
                 status:200,
-                msg:producto
+                msg:bodegaCocina
             })
 
         } catch (error) {
@@ -112,10 +112,10 @@ class BodegaCocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto'
+                descripcion:'Ha ocurrido un error en el servidor, no se deshabilitó el producto en la bodega de cocina'
             });
         }
-    } */
+    }
 }
 
 module.exports = BodegaCocina;

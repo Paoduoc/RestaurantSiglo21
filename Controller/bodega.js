@@ -3,7 +3,7 @@ const bodegaModel = require("../Model/bodega");
 
 class Bodega
 {
-    
+    //Obtiene bodega segun mongoID
     getBodega = async ( req=request, res=response ) => {
 
         try {
@@ -64,13 +64,8 @@ class Bodega
         
         try {
             let {id} = req.params
-            let {gramosDispo, ...update} = req.body
-            //se especifica el campo que NO quieres editar y al lado update ](que tomara todos los demas campos que enviees)
-            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
-            //producto.nombre = nombre
-            //producto.cantidad = cantidad
-            //producto.tipo = tipo
-            //es soloo setear el cambio para que lo muestre en el msg (es solo visual)
+            let {nombreProducto, gramosDispo, gramosMin, gramosMax} = req.body
+            let bodega = await bodegaModel.findByIdAndUpdate(id, {nombreProducto}, {gramosDispo}, {gramosMin}, {gramosMin});
             res.status(200).json({
                 status:200,
                 msg: "OK"
@@ -84,7 +79,7 @@ class Bodega
             });
         }
     }
-    /* deleteProducto = async ( req=request, res=response ) => {
+    deleteBodega = async ( req=request, res=response ) => {
         
         try {
             let {id} = req.params
@@ -98,11 +93,11 @@ class Bodega
                 update = {estado:false}
                 est = false
             }
-            let producto = await productoModel.findByIdAndUpdate(id, update);
-            producto.estado = est
+            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
+            bodega.estado = est
             res.status(200).json({
                 status:200,
-                msg:producto
+                msg:bodega
             })
 
         } catch (error) {
@@ -111,10 +106,10 @@ class Bodega
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto'
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto en bodega'
             });
         }
-    } */
+    }
 }
 
 module.exports = Bodega;

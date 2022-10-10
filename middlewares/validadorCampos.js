@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator');
 
 const validadorCampos = ( req, res, next) => {
 
-    //Validación de campos
+    //Validación de campos, valida que no esten vacios
     const errores = validationResult(req);
     if( !errores.isEmpty() ){
         return res.status( 400 ).json( {  

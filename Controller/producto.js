@@ -77,12 +77,12 @@ class Producto
             let {id} = req.params
             let {estado, gramosDispo, ...update} = req.body
             // los tres puntos es para desestructurar los datos
-            let producto = await productoModel.findByIdAndUpdate(id, update);
-            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
-            let bodegacocina = await bodegaCocinaModel.findByIdAndUpdate(id, update);
+            await productoModel.findByIdAndUpdate(id, update);
+            await bodegaModel.findByIdAndUpdate(id, update);
+            await bodegaCocinaModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg:producto, bodega, bodegacocina
+                msg:"OK"
             })
 
         } catch (error) {
@@ -98,7 +98,8 @@ class Producto
 
     }
     deleteProducto = async ( req=request, res=response ) => {
-        
+        //este delete deberia ser en cada modelo, esto porque el id de productos y el de bodega opr ej, son diferentes
+        //asi que no se puede hacer en la misma request el delete para los 3 (bodega, bcocina y prod)
         try {
             let {id} = req.params
             let update = {}
@@ -115,7 +116,7 @@ class Producto
             producto.estado = est
             res.status(200).json({
                 status:200,
-                msg:producto
+                msg:"OK"
             })
 
         } catch (error) {

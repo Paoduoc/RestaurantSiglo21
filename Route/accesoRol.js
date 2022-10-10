@@ -1,10 +1,10 @@
 const { Router, response } = require('express');
 const { check } = require('express-validator');
 const { validadorCampos } = require('../middlewares/validadorCampos');
-const { rolValidador, estadoValidor } = require('../helpers/validadorBD');
 const router = Router();
 const AccesoRol = require('../Controller/accesoRol');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');
+const { accesoRolValidador } = require('../helpers/validadorBD');
 const accesoRol = new AccesoRol();
 
 router.use(validaAccesoToken)
@@ -19,6 +19,7 @@ router.get('/:id',[
 router.post('/',[
     check('rol','El tipo de rol es obligatorio').not().isEmpty(),
     check('rol','El tipo de rol es obligatorio').isMongoId(),
+    check('rol').custom(accesoRolValidador),
     check('acceso','El tipo de acceso es obligatorio').not().isEmpty(),
     check('acceso','El tipo de acceso es obligatorio').isMongoId(),
     validadorCampos
@@ -32,6 +33,6 @@ router.put('/:id',[
 router.delete('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-],( req , res ) =>{ accesoRol.deleteAdeleteAccesRol( req, res ) });
+],( req , res ) =>{ accesoRol.deleteAccesRol( req, res ) });
 
 module.exports = router;
