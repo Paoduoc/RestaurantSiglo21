@@ -7,6 +7,8 @@ class Roles
     //1 - una manera es con request.body
     //2 - request.params (URL)
     //3 - request.query (URL) 
+
+    //Obtiene Rol segpun mongoID
     getRol = async ( req=request, res=response ) => {
 
         try {
@@ -30,6 +32,7 @@ class Roles
         }
 
     }
+    //Obtiene todos los roles
     getAllRol = async ( req=request, res=response ) => {
         
         try {
@@ -52,13 +55,13 @@ class Roles
         }
 
     }
+    //Genera nuevos roles
     postRol = async ( req=request, res=response ) => {
         
         try {
 
             let {nombre} = req.body
             let rol = new rolModel({nombre})
-
             await rol.save();
             res.status( 200 ).json( { status: 201,msg: 'Rol creado' } );
             
@@ -73,6 +76,7 @@ class Roles
         }
     
     }
+    //Modifica rol mediante mongoID
     putRol = async ( req=request, res=response ) => {
         
         try {
@@ -98,6 +102,7 @@ class Roles
         }
 
     }
+    //Deshabilita segpun mongoID
     deleteRol = async ( req=request, res=response ) => {
         
         try {

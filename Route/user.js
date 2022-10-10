@@ -1,6 +1,6 @@
 const { Router, response } = require('express');
 const { check } = require('express-validator');
-const { idUsuarioValidador, rutUsuarioValidador, correoUsuarioValidador, rolValidador, estadoValidor } = require('../helpers/validadorBD');
+const { idUsuarioValidador, correoUsuarioValidador, rolValidador, estadoValidor, rutValidador, estatusValidador } = require('../helpers/validadorBD');
 const router = Router();
 const User = require('../Controller/user');
 const { validadorCampos } = require('../middlewares/validadorCampos');
@@ -27,8 +27,9 @@ router.post('/',[
     check('correo','El correo no es valido').isEmail(),
     check('correo').custom( correoUsuarioValidador ),
     check('contrasenna','La contraseña debe tener mínimo 8 caracteres.').isLength({ min: 8 }),
+    check('rol','no es un id mongodb').isMongoId(),
+    check('rut','El Rut es obligatorio').not().isEmpty(),
     check('rol').custom( rolValidador ),
-    check('rut').custom( rutUsuarioValidador ),
     validadorCampos
     ],( req , res ) =>{ user.postUsuario( req, res ) });
 
@@ -37,6 +38,8 @@ router.put('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     check('id').custom( idUsuarioValidador ),
     check('correo').custom( correoUsuarioValidador ),
+    check('rut','El rut no se puede modificar').custom(rutValidador),
+    check('estatus').custom(estatusValidador),
     validadorCampos
     ],( req , res ) =>{ user.putUsuario( req, res ) });
 
@@ -44,7 +47,6 @@ router.put('/:id',[
 router.delete('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     check('id').custom( idUsuarioValidador ),
-    check('id').custom( estadoValidor ),
     validadorCampos
     ],( req , res ) =>{ user.deleteUsuario( req, res ) });
 

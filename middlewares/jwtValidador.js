@@ -10,6 +10,7 @@ const validaAccesoToken = async (  req = request, res, next ) => {
     const ruta = req.baseUrl; //endpoint ej. /api/v1/accesos
     const metodo = req.method; //metodo ej. GET
 
+    //primera validación, verificacion de que el token sea correcto
     try {
 
         if ( !token ) {
@@ -26,6 +27,8 @@ const validaAccesoToken = async (  req = request, res, next ) => {
         const usuario = await usuarioModel.findById( id )
         .populate({path: 'rol', select: 'nombre'})
         
+        //Si el token es correcto busca al usuario correspondiente por el mongo ID y se procede a la segunda validación
+        //Existencia del usuario
         if ( !usuario ) {
 
             return res.status(401).json({ 
@@ -35,8 +38,9 @@ const validaAccesoToken = async (  req = request, res, next ) => {
             });
 
         }
+        //tercera validación, si el rol del usuario esta permitido para esa ruta si no es un usuario root
         if ( usuario.rol.nombre != 'Root' ) {
-
+            //cuarta validación, estado del usuario
             if (usuario.estado == false ) {
 
                 return res.status(401).json({ 
@@ -50,7 +54,7 @@ const validaAccesoToken = async (  req = request, res, next ) => {
 
                 const acceso = await accesoModel.findOne( { ruta : ruta } )
                 console.log(acceso);
-
+                //Quinta validación, se valida que el usuario tenga acceso a esa ruta con su rol
                 if (acceso) {
                     const accesoRol = await accesoRolModel.findOne( { rol: usuario.rol._id, acceso: acceso._id } )
                     .populate({path:"rol", select:"nombre"})
@@ -62,17 +66,17 @@ const validaAccesoToken = async (  req = request, res, next ) => {
                     if (accesoRol) {
                         switch (metodo) {
                             case 'GET':
-                                flag = accesoRol.read;
-                                console.log(accesoRol.read);
+                                flag = accesoRol.leer;
+                                console.log(accesoRol.leer);
                                 break;
                             case 'POST':
-                                flag = accesoRol.create;
+                                flag = accesoRol.crear;
                                 break;
                             case 'PUT':
-                                flag = accesoRol.update;
+                                flag = accesoRol.modificar;
                                 break;
                             case 'DELETE':
-                                flag = accesoRol.delete;
+                                flag = accesoRol.eliminar;
                                 break;
                             default:
                                 flag = false

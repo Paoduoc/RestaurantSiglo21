@@ -1,7 +1,6 @@
 const { Router, response } = require('express');
 const { check } = require('express-validator');
 const { validadorCampos } = require('../middlewares/validadorCampos');
-const { rolValidador, estadoValidor } = require('../helpers/validadorBD');
 const router = Router();
 const AccesoRol = require('../Controller/accesoRol');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');

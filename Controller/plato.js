@@ -1,8 +1,5 @@
 const { response, request } = require('express');
-const bcryptjs = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 const platoModel = require("../Model/plato");
-//const { update } = require('../Model/rol');
 
 class Plato
 {
