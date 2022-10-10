@@ -10,12 +10,12 @@ const platoSchema = Schema({
         type: Boolean,
         default: true
     },
-    nombre: {
-        type: Schema.ObjectId,
-        ref: 'BodegaCocina'
+    ingredientes: {
+        type: Array
     },
-    //este deberia ser una lista
-    //llama al schema bodegacocina 
+    //tener un documento de ingredientes y otro de cdantidad de gramos de este ingrediente siento que seria demasiado complejo
+    //quiza seria mejor tener ingredientes con los gramos ya especificados. ej: bolsa choclo 200g - bolsa choclo 500g
+    //asi nos ahorramos una capa de complejidad y tendriamos directamente que llamar a solo ingredientes, que serian ingredientes con los gramos listos    //llama al schema bodegacocina 
     //se llama por el object ID (es decir, llama al id de producto en bodega cocina)
     //por eso quiza es mejor ponerle nombreProducto, porque aqui por ejemplo se llamara 2 veces a nombre
     preparacion: {

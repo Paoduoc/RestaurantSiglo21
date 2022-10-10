@@ -3,8 +3,7 @@ const { Schema, model } = require('mongoose');
 const bodegaSchema = Schema({
     //con helpers se pueden controlar que sea unico y que sea requerido
     nombreProducto: {
-        type: Schema.ObjectId,
-        ref: 'Producto'
+        type: String
     },
     estado: {
         type: Boolean,
@@ -15,7 +14,7 @@ const bodegaSchema = Schema({
     },
     gramosMin: {
         type: String
-    },
+    }, 
     gramosMax: {
         type: String
     }

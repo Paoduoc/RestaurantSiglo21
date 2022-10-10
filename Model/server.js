@@ -62,10 +62,13 @@ class Server {
         this.app.use(this.route.routes.api.v1.user, require('../Route/user')); 
         this.app.use(this.route.routes.api.v1.main, require('../Route/main')); 
         this.app.use(this.route.routes.api.v1.roles, require('../Route/rol'));
-        this.app.use(this.route.routes.api.v1.productos, require('../Route/producto'));
+        this.app.use(this.route.routes.api.v1.accesos, require('../Route/acceso'));
+        this.app.use(this.route.routes.api.v1.accesoRol, require('../Route/accesoRol'));
+        this.app.use(this.route.routes.api.v1.mesa, require('../Route/mesa'));
+        this.app.use(this.route.routes.api.v1.producto, require('../Route/producto'));
         this.app.use(this.route.routes.api.v1.bodega, require('../Route/bodega'));
-        this.app.use(this.route.routes.api.v1.bodegaCocina, require('../Route/bodegaCocina'));
-        this.app.use(this.route.routes.api.v1.platos, require('../Route/plato'));
+        this.app.use(this.route.routes.api.v1.bodegacocina, require('../Route/bodegaCocina'));
+        this.app.use(this.route.routes.api.v1.plato, require('../Route/plato'));
     }
 
     listen() {

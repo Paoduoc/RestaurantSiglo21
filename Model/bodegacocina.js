@@ -2,8 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const bodegaCocinaSchema = Schema({
     nombreProducto: {
-        type: Schema.ObjectId,
-        ref: 'Bodega'
+        type: String
     },
     estado: {
         type: Boolean,

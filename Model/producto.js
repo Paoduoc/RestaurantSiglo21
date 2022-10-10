@@ -8,9 +8,6 @@ const productoSchema = Schema({
         type: Boolean,
         default: true
     },
-    /* cantidad: {
-        type: String
-    }, */
     tipo:{
         type: String
     }

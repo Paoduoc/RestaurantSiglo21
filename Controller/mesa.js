@@ -1,93 +1,102 @@
 const { response, request } = require('express');
-const bcryptjs = require('bcryptjs');
-const jwt = require("jsonwebtoken");
-const platoModel = require("../Model/plato");
-//const { update } = require('../Model/rol');
+const mesaModel = require("../Model/mesa");
 
-class Plato
+class Mesa
 {
-    
-    getPlato = async ( req=request, res=response ) => {
+    //maneras de obtener datos del request
+    //1 - una manera es con request.body
+    //2 - request.params (URL)
+    //3 - request.query (URL) 
+    getmesa = async ( req=request, res=response ) => {
+
         try {
             let {id} = req.params
-            const plato = await platoModel.findById(id);
+            const mesa = await mesaModel.findById(id);
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:mesa
             })
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({
-                status:500,
-                msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontro el plato'
-            }); 
-        }
-    }
-    getAllPlato = async ( req=request, res=response ) => {
-        
-        try {
-            const plato = await platoModel.find();
-            res.status(200).json({
-                status:200,
-                msg:plato
-            })
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({
-                status:500,
-                msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron platos'
-            }); 
-        }
-    }
-    postPlato = async ( req=request, res=response ) => {
-        
-        try {
 
-            let {nombrePlato, estado, ingredientes, gramos, preparacion, tiempoPreparacion, precio} = req.body
-            let plato = new platoModel({nombrePlato, estado, ingredientes, gramos, preparacion, tiempoPreparacion, precio})
-            await plato.save();
-            res.status( 200 ).json({ 
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro la mesa'
+            }); 
+        }
+
+    }
+    getAllmesas = async ( req=request, res=response ) => {
+        
+        try {
+            const mesa = await mesaModel.find();
+            res.status(200).json({
+                status:200,
+                msg:mesa
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron mesas'
+            }); 
+        }
+
+    }
+    postMesa = async ( req=request, res=response ) => {
+        
+        try {
+            let {numMesa,estado,cantSillas} = req.body
+            let mesa = new mesaModel({numMesa,estado,cantSillas})
+
+            await mesa.save();
+            res.status( 200 ).json( { 
                 status: 201,
-                msg: 'Plato creado' 
+                msg: 'Mesa creada' 
             });
-
-        } catch (error) {
             
+        } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se añadio el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se añadieron mesas'
             });
         }
+    
     }
-    putPlato = async ( req=request, res=response ) => {
+    putMesa = async ( req=request, res=response ) => {
         
         try {
+
             let {id} = req.params
             let {estado, ...update} = req.body
-            let plato = await platoModel.findByIdAndUpdate(id, {nombrePlato}, {precio});
+            let mesa = await mesaModel.findByIdAndUpdate(id, {update});
+            mesa.numMesa = numMesa
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:mesa
             })
+
         } catch (error) {
 
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se modifico el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico la mesa'
             });
 
         }
 
     }
-    deletePlato = async ( req=request, res=response ) => {
+    deleteMesa = async ( req=request, res=response ) => {
         
         try {
+            
             let {id} = req.params
             let update = {}
             let est
@@ -97,25 +106,26 @@ class Plato
                 est = true
             } else {
                 update = {estado:false}
-                est = false
+                est= false
             }
-            let plato = await platoModel.findByIdAndUpdate(id, update);
-            plato.estado = est
+            let mesa = await mesaModel.findByIdAndUpdate(id, update);
+            mesa.estado = est
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:estado
             })
 
         } catch (error) {
-            
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino la mesa'
             });
         }
+
     }
+
 }
 
-module.exports = Plato;
+module.exports = Mesa;

@@ -1,8 +1,8 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 
 const usuarioModel = require('../Model/usuario.js');
+const { generarJWT } = require('../helpers/token.js');
 
 class Auth{
 
@@ -36,12 +36,15 @@ class Auth{
                 });
             }
 
+            const token = await generarJWT( usuario.id );
+
             res.status( 200 ).json({
                 status: 200,
-                msg: {usuario}
+                msg: {usuario,token}
             });
             
         } catch (error) {
+            console.log(error)
             res.status( 500 ).json({
                 status: 500,
                 msg: 'Error interno del controlador auth'

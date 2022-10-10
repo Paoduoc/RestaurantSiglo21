@@ -2,7 +2,6 @@ const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const usuarioModel = require("../Model/usuario");
-const { update } = require('../Model/rol');
 
 class User
 {
@@ -11,7 +10,8 @@ class User
 
         try {
             let {id} = req.params
-            const usuario = await usuarioModel.findById(id);
+            const usuario = await usuarioModel.findById(id)
+            .populate({path:"rol",select:"nombre"})
             res.status(200).json({
                 status:200,
                 msg:usuario
@@ -30,7 +30,9 @@ class User
         
         try {
 
-            const usuario = await usuarioModel.find();
+            const usuario = await usuarioModel.find()
+            .populate({path:"rol",select:"nombre"})
+
             res.status(200).json({
                 status:200,
                 msg:usuario
