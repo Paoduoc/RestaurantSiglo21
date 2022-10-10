@@ -17,8 +17,8 @@ router.get('/:id',[
     ],( req , res ) =>{ producto.getProducto( req, res ) });
 
 router.post('/',[
-    check('nombre', 'El nombre del producto es obligatorio').not().isEmpty(),
-    check('nombre').custom(productoRepetidoValidador),
+    check('nombreProducto', 'El nombre del producto es obligatorio').not().isEmpty(),
+    check('nombreProducto').custom(productoRepetidoValidador),
     validadorCampos
     ],( req , res ) =>{ producto.postProducto( req, res ) });
 
