@@ -1,7 +1,6 @@
 const { response, request } = require('express');
 const productoModel = require("../Model/producto");
 const bodegaModel = require("../Model/bodega");
-const bodegaCocinaModel = require("../Model/bodegacocina");
 
 class Producto
 {
@@ -9,8 +8,10 @@ class Producto
     getProducto = async ( req=request, res=response ) => {
 
         try {
-            let {id} = req.params
-            const producto = await productoModel.findById(id);
+            /* let {id} = req.params
+            const producto = await productoModel.findById(id); */
+            let {nombreProducto} = req.params
+            const producto = await productoModel.findOne({nombreProducto:nombreProducto});
             res.status(200).json({
                 status:200,
                 msg:producto
@@ -27,7 +28,6 @@ class Producto
     getAllProducto = async ( req=request, res=response ) => {
         
         try {
-
             const productos = await productoModel.find();
             res.status(200).json({
                 status:200,
@@ -48,14 +48,20 @@ class Producto
         try {
 
             let {nombreProducto, estado, tipo, gramosDispo, gramosMin, gramosMax} = req.body
+            //const productos = collect([nombreProducto, gramosDispo, gramosMin, gramosMax]);
+            //console.log(productos)
             let producto = new productoModel({nombreProducto, estado, tipo})
             //vamos a trabajar en gramos en vez de cantidad, por lo que se debe modificar
             //deberia ser un form que traiga: nombre, estado, tipo, gramosDispo, gramosMin, gramosMax
+            //let bodega = new bodegaModel({productos})
+
             let bodega = new bodegaModel({nombreProducto, gramosDispo, gramosMin, gramosMax})
-            let bodegacocina = new bodegaCocinaModel({nombreProducto, gramosMin, gramosMax})
             await producto.save();
+            //await bodega.push();
             await bodega.save();
-            await bodegacocina.save();
+            //await bodega.findOneAndUpdate({
+
+            //})
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Producto creado'
@@ -74,12 +80,11 @@ class Producto
         
         try {
 
-            let {id} = req.params
+            let {nombreProducto} = req.params
             let {estado, gramosDispo, ...update} = req.body
             // los tres puntos es para desestructurar los datos
-            await productoModel.findByIdAndUpdate(id, update);
-            await bodegaModel.findByIdAndUpdate(id, update);
-            await bodegaCocinaModel.findByIdAndUpdate(id, update);
+            await productoModel.findOneAndUpdate(nombreProducto, update);
+            await bodegaModel.findOneAndUpdate(nombreProducto, update);
             res.status(200).json({
                 status:200,
                 msg:"OK"
@@ -101,7 +106,7 @@ class Producto
         //este delete deberia ser en cada modelo, esto porque el id de productos y el de bodega opr ej, son diferentes
         //asi que no se puede hacer en la misma request el delete para los 3 (bodega, bcocina y prod)
         try {
-            let {id} = req.params
+            let {nombreProducto} = req.params
             let update = {}
             let est
             let {estado = false} = req.query
@@ -112,20 +117,21 @@ class Producto
                 update = {estado:false}
                 est = false
             }
-            let producto = await productoModel.findByIdAndUpdate(id, update);
+            let producto = await productoModel.findOneAndUpdate(nombreProducto, update);
+            let productoBodega = await bodegaModel.findOneAndUpdate(nombreProducto, update);
             producto.estado = est
+            productoBodega.estado = est
             res.status(200).json({
                 status:200,
                 msg:"OK"
             })
 
         } catch (error) {
-            
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto'
+                descripcion:'Ha ocurrido un error en el servidor, no se deshabilitó el producto'
             });
         }
     }

@@ -15,7 +15,7 @@ const pedidoSchema = Schema({
     horaPedido: {
         type: String
     },
-    HoraEntrega: {
+    horaEntrega: {
         type: String
     },
     mesa: {

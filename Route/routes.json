@@ -11,8 +11,8 @@
                 "mesa": "/api/v1/mesas",
                 "producto": "/api/v1/productos",
                 "bodega": "/api/v1/bodega",
-                "bodegacocina": "/api/v1/bodegacocina",
-                "plato": "/api/v1/platos"
+                "plato": "/api/v1/platos",
+                "menu": "/api/v1/menus"
             }
         }
     }

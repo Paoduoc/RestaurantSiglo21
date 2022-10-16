@@ -1,85 +1,87 @@
 const { response, request } = require('express');
-const bodegaModel = require("../Model/bodega");
+const menuModel = require("../Model/menu");
 
-class Bodega
-{
-    //decidir si se hara como array o no
-    getBodega = async ( req=request, res=response ) => {
+class Menu {
 
+    getMenu = async ( req=request, res=response ) => {
         try {
             let {id} = req.params
-            const bodega = await bodegaModel.findById(id);
+            const menu = await menuModel.findById(id);
             res.status(200).json({
                 status:200,
-                msg:bodega
+                msg:menu
             })
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontro el producto en bodega'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro el menu'
             }); 
         }
     }
-    getAllBodega = async ( req=request, res=response ) => {
+    getAllMenu = async ( req=request, res=response ) => {
         
         try {
-            const bodega = await bodegaModel.find();
+            const menu = await menuModel.find();
             res.status(200).json({
                 status:200,
-                msg:bodega
+                msg:menu
             })
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron productos en bodega'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron menus'
             }); 
         }
     }
-    /* postProducto = async ( req=request, res=response ) => {
+    postMenu = async ( req=request, res=response ) => {
         
         try {
 
-            let {nombre, estado, cantidad, tipo} = req.body
-            let producto = new productoModel({nombre, estado, cantidad, tipo})
-            await producto.save();
-            res.status( 200 ).json({
+            let {nombreMenu, platos, estado} = req.body
+            let menu = new menuModel({nombreMenu, platos, estado})
+            await menu.save();
+            res.status( 200 ).json({ 
                 status: 201,
-                msg: 'Producto creado'
+                msg: 'Menu creado' 
             });
+
         } catch (error) {
             
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se añadio el producto'
+                descripcion:'Ha ocurrido un error en el servidor, no se añadio el menu'
             });
         }
-    } */
-    putBodega = async ( req=request, res=response ) => {
+    }
+    putMenu = async ( req=request, res=response ) => {
         
         try {
             let {id} = req.params
-            let {nombreProducto, gramosDispo, gramosMin, gramosMax} = req.body
-            let bodega = await bodegaModel.findByIdAndUpdate(id, {nombreProducto}, {gramosDispo}, {gramosMin}, {gramosMin});
+            let {update} = req.body
+            let menu = await menuModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
-                msg: "OK"
+                msg:"OK"
             })
         } catch (error) {
+
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se modifico el producto en bodega'
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico el menu'
             });
+
         }
+
     }
-    deleteBodega = async ( req=request, res=response ) => {
+    deleteMenu = async ( req=request, res=response ) => {
         
         try {
             let {id} = req.params
@@ -93,11 +95,11 @@ class Bodega
                 update = {estado:false}
                 est = false
             }
-            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
-            bodega.estado = est
+            let menu = await menuModel.findByIdAndUpdate(id, update);
+            menu.estado = est
             res.status(200).json({
                 status:200,
-                msg:bodega
+                msg:menu
             })
 
         } catch (error) {
@@ -106,10 +108,10 @@ class Bodega
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto en bodega'
+                descripcion:'Ha ocurrido un error en el servidor, no se deshabilitó el menu'
             });
         }
     }
 }
 
-module.exports = Bodega;
+module.exports = Menu;

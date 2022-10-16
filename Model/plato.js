@@ -8,6 +8,9 @@ const platoSchema = Schema({
         type: Boolean,
         default: true
     },
+    categoria: {
+        type: String
+    },
     ingredientes: {
         type: Array
     },
@@ -18,7 +21,11 @@ const platoSchema = Schema({
         type: String
     },
     precio: {
-        type: String
+        type: Number
+    },
+    imagen: {
+        data: Buffer,
+        contentType: String
     }
 });
 

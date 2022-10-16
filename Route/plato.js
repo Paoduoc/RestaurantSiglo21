@@ -7,6 +7,18 @@ const router = Router();
 const Plato = require('../Controller/plato');
 const plato = new Plato();
 
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname)
+    }
+});
+var upload = multer({ storage: storage });
+
 router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ plato.getAllPlato( req, res ) });
@@ -16,7 +28,7 @@ router.get('/:id',[
     validadorCampos
     ],( req , res ) =>{ plato.getPlato( req, res ) });
 
-router.post('/',[
+router.post('/', upload.single('imagen'), [
     check('nombrePlato','El nombre del plato es requerido').not().isEmpty(),
     check('nombrePlato').custom(platoRepetidoValidador),
     validadorCampos

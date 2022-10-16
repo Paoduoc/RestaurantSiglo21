@@ -5,6 +5,7 @@ const mesa = require('../Model/mesa');
 const producto = require('../Model/producto');
 const accesRol = require('../Model/accesoRol');
 const plato = require('../Model/plato');
+const menu = require('../Model/menu');
 
 //validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {
@@ -99,6 +100,15 @@ const platoRepetidoValidador = async ( nombrePlato = '' ) => {
     }
 }
 
+//MENUS
+//validador de duplicidad de menus
+const menuRepetidoValidador = async ( nombreMenu = '' ) => {
+    const validaMenu = await menu.findOne( {nombreMenu} );
+    if( validaMenu ){
+        throw new Error(`El menu ${nombreMenu} ya esta registrado`);
+    }
+}
+
 module.exports = { 
     idUsuarioValidador, 
     correoUsuarioValidador,
@@ -110,5 +120,6 @@ module.exports = {
     estatusValidador,
     accesoRolValidador,
     productoRepetidoValidador,
-    platoRepetidoValidador
+    platoRepetidoValidador,
+    menuRepetidoValidador
 };
