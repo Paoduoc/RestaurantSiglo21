@@ -1,14 +1,13 @@
 const { Schema, model, now } = require('mongoose');
 
-const logMesaSchema = Schema({
+const reservaSchema = Schema({
     
     fechaIngreso: {
-        type: Date,
-        default: now()
+        type: String
     },
     fechaSalida: {
-        type: Date,
-        default: now()
+        type: String,
+        default: "Pendiente"
     },
     mesa: {
         type: Schema.ObjectId,
@@ -17,8 +16,11 @@ const logMesaSchema = Schema({
     reservada: {
         type: Boolean,
         default: false
+    },
+    sobrecupo: {
+        type: Boolean,
+        default: false
     }
-    
 });
 
-module.exports = model( 'LogMesa', logMesaSchema );
+module.exports = model( 'Reserva', reservaSchema );

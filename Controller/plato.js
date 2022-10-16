@@ -41,7 +41,6 @@ class Plato
     postPlato = async ( req=request, res=response ) => {
         
         try {
-
             let {nombrePlato, estado, ingredientes, preparacion, tiempoPreparacion, precio} = req.body
             let plato = new platoModel({nombrePlato, estado, ingredientes, preparacion, tiempoPreparacion, precio})
             await plato.save();
