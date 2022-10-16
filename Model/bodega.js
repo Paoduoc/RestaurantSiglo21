@@ -13,10 +13,10 @@ const bodegaSchema = Schema({
         type: Boolean,
         default: true
     },
-    gramosDispo:{
+    cantidad:{
         type: Number
     },
-    gramosMin: {
+    cantidadMin: {
         type: Number
     }
 });
