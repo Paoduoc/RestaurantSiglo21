@@ -47,21 +47,17 @@ class Reserva
                 descripcion:'Ha ocurrido un error en el servidor, no se encontraron mesas'
             }); 
         }
-
     }
     //Genera una mesa nueva
     postMesa = async ( req=request, res=response ) => {
-        
         try {
             let {numMesa,cantSillas} = req.body
             let mesa = new mesaModel({numMesa,cantSillas})
-
             await mesa.save();
             res.status( 200 ).json( { 
                 status: 201,
                 msg: 'Mesa creada' 
             });
-            
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -70,13 +66,10 @@ class Reserva
                 descripcion:'Ha ocurrido un error en el servidor, no se añadieron mesas'
             });
         }
-    
     }
     //Modifica mesa según mongoID
     putMesa = async ( req=request, res=response ) => {
-        
         try {
-
             let {id} = req.params
             let {estado, ...update} = req.body
             await mesaModel.findByIdAndUpdate(id, update);
@@ -84,24 +77,18 @@ class Reserva
                 status:200,
                 msg:"OK"
             })
-
         } catch (error) {
-
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
                 descripcion:'Ha ocurrido un error en el servidor, no se modifico la mesa'
             });
-
         }
-
     }
     //Se deshabilita mesa según mongoID
     deleteMesa = async ( req=request, res=response ) => {
-        
         try {
-            
             let {id} = req.params
             let update = {}
             let est
@@ -119,7 +106,6 @@ class Reserva
                 status:200,
                 msg:estado
             })
-
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -128,9 +114,7 @@ class Reserva
                 descripcion:'Ha ocurrido un error en el servidor, no se elimino la mesa'
             });
         }
-
     }
-
 }
 
 module.exports = Reserva;

@@ -37,7 +37,7 @@ class Pedido
                 status:500,
                 msg:'Internal Server Error',
                 descripcion:'Ha ocurrido un error en el servidor, no se encontraron pedidos'
-            }); 
+            });
         }
 
     }

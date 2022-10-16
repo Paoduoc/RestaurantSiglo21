@@ -48,20 +48,11 @@ class Producto
         try {
 
             let {nombreProducto, estado, tipo, gramosDispo, gramosMin, gramosMax} = req.body
-            //const productos = collect([nombreProducto, gramosDispo, gramosMin, gramosMax]);
-            //console.log(productos)
             let producto = new productoModel({nombreProducto, estado, tipo})
-            //vamos a trabajar en gramos en vez de cantidad, por lo que se debe modificar
-            //deberia ser un form que traiga: nombre, estado, tipo, gramosDispo, gramosMin, gramosMax
-            //let bodega = new bodegaModel({productos})
 
             let bodega = new bodegaModel({nombreProducto, gramosDispo, gramosMin, gramosMax})
             await producto.save();
-            //await bodega.push();
             await bodega.save();
-            //await bodega.findOneAndUpdate({
-
-            //})
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Producto creado'

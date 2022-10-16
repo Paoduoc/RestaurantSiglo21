@@ -2,8 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const pedidoSchema = Schema({
     platos: {
-        type: Schema.ObjectId,
-        ref: 'Plato'
+        type: Array
     },
     estado: {
         type: Boolean,
@@ -18,9 +17,9 @@ const pedidoSchema = Schema({
     horaEntrega: {
         type: String
     },
-    mesa: {
+    reserva: {
         type: Schema.ObjectId,
-        ref: 'Mesa'
+        ref: 'Reserva'
     },
     garzon:{
         type: Schema.ObjectId,
@@ -28,6 +27,9 @@ const pedidoSchema = Schema({
     },
     comentarios: {
         type: String
+    },
+    totalPedido: {
+        type: Number
     }
 });
 

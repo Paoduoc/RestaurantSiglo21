@@ -89,14 +89,12 @@ class Plato
                 msg:"OK"
             })
         } catch (error) {
-
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
                 descripcion:'Ha ocurrido un error en el servidor, no se modifico el plato'
             });
-
         }
 
     }
