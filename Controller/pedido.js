@@ -1,55 +1,56 @@
 const { response, request } = require('express');
-const bodegaCocinaModel = require("../Model/bodegacocina");
+const pedidoModel = require("../Model/pedido");
 
-class BodegaCocina
+class Pedido
 {
     
-    getBodegaCocina = async ( req=request, res=response ) => {
+    getPedido = async ( req=request, res=response ) => {
+
         try {
             let {id} = req.params
-            const bodegaCocina = await bodegaCocinaModel.findById(id);
+            const pedido = await pedidoModel.findById(id);
             res.status(200).json({
                 status:200,
-                msg:bodegaCocina
+                msg:pedido
             })
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontro el producto en la bodega de cocina'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro el pedido'
             }); 
         }
     }
-    getAllBodegaCocina = async ( req=request, res=response ) => {
+    getAllPedido = async ( req=request, res=response ) => {
         
         try {
 
-            const bodegaCocina = await bodegaCocinaModel.find();
+            const pedido = await pedidoModel.find();
             res.status(200).json({
                 status:200,
-                msg:bodegaCocina
+                msg:pedido
             })
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron productos en la bodega de cocina'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron pedidos'
             }); 
         }
 
     }
-    /* postProducto = async ( req=request, res=response ) => {
+    postPedido = async ( req=request, res=response ) => {
         
         try {
 
-            let {nombre, estado, cantidad, tipo} = req.body
-            let producto = new productoModel({nombre, estado, cantidad, tipo})
-            await producto.save();
+            let {platos, estado, fechaPedido, horaPedido, horaEntrega, mesa, garzon, comentarios} = req.body
+            let pedido = new pedidoModel({platos, estado, fechaPedido, horaPedido, horaEntrega, mesa, garzon, comentarios})
+            await pedido.save();
             res.status( 200 ).json({
                 status: 201,
-                msg: 'Producto creado'
+                msg: 'Pedido creado'
             });
         } catch (error) {
             
@@ -57,17 +58,17 @@ class BodegaCocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se añadio el producto'
+                descripcion:'Ha ocurrido un error en el servidor, no se añadio el pedido'
             });
         }
-    } */
-    putBodegaCocina = async ( req=request, res=response ) => {
+    }
+    putPedido = async ( req=request, res=response ) => {
         
         try {
 
             let {id} = req.params
-            let {nombreProducto, estado, gramosMin, gramosMax, ...update} = req.body
-            await bodegaCocinaModel.findByIdAndUpdate(id, update);
+            let {platos, estado, fechaPedido, horaPedido, horaEntrega, ...update} = req.body
+            await pedidoModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
                 msg:"OK"
@@ -79,15 +80,14 @@ class BodegaCocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se modifico el producto en la bodega de cocina'
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico el pedido'
             });
 
         }
 
     }
-    deleteBodegaCocina = async ( req=request, res=response ) => {
-        
-        try {
+    deletePedido = async ( req=request, res=response ) => {
+       try {
             let {id} = req.params
             let update = {}
             let est
@@ -99,11 +99,11 @@ class BodegaCocina
                 update = {estado:false}
                 est = false
             }
-            let bodegaCocina = await bodegaCocinaModel.findByIdAndUpdate(id, update);
-            bodegaCocina.estado = est
+            let pedido = await pedidoModel.findByIdAndUpdate(id, update);
+            pedido.estado = est
             res.status(200).json({
                 status:200,
-                msg:bodegaCocina
+                msg:"OK"
             })
 
         } catch (error) {
@@ -112,10 +112,10 @@ class BodegaCocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se deshabilitó el producto en la bodega de cocina'
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino el pedido'
             });
         }
     }
 }
 
-module.exports = BodegaCocina;
+module.exports = Pedido;

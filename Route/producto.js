@@ -11,10 +11,12 @@ router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ producto.getAllProducto( req, res ) });
 
-router.get('/:id',[
+/* router.get('/:id',[
     check('id', 'No es un id mongoDB').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ producto.getProducto( req, res ) });
+    ],( req , res ) =>{ producto.getProducto( req, res ) }); */
+    
+router.get('/:nombreProducto', [validadorCampos], ( req , res ) =>{ producto.getProducto( req, res ) });
 
 router.post('/',[
     check('nombreProducto', 'El nombre del producto es obligatorio').not().isEmpty(),
@@ -22,14 +24,19 @@ router.post('/',[
     validadorCampos
     ],( req , res ) =>{ producto.postProducto( req, res ) });
 
-router.put('/:id',[
+/* router.put('/:id',[
     check('id','No es un id mongoDB').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ producto.putProducto( req, res ) });
+    ],( req , res ) =>{ producto.putProducto( req, res ) }); */
 
-router.delete('/:id',[
+router.put('/:nombreProducto', [validadorCampos] ,( req , res ) =>{ producto.putProducto( req, res ) });
+    
+
+/* router.delete('/:id',[
     check('id','No es un id mongoDB').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ producto.deleteProducto( req, res ) });
+    ],( req , res ) =>{ producto.deleteProducto( req, res ) }); */
+
+router.delete('/:nombreProducto', [validadorCampos] ,( req , res ) =>{ producto.deleteProducto( req, res ) });
 
 module.exports = router;
