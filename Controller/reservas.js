@@ -75,8 +75,8 @@ class Reserva
         
         try {
             let {fechaIngreso, fechaSalida, mesa, reservada, sobrecupo} = req.body
-            //ingreso=fechaIngreso
             let reserva = new reservasModel({fechaSalida, mesa, reservada, sobrecupo})
+            reserva.reservada = true
             await reserva.save();
             if ( !fechaIngreso ) {
 
@@ -104,14 +104,10 @@ class Reserva
         try {
 
             let {id} = req.params
-            let {fechaIngreso, mesa, fechaSalida, ...update} = req.body
-            if (update.sobrecupo == true) {
-                await reservasModel.findByIdAndUpdate(id, update);
-            } else {
-                update.fechaSalida= await formatoFecha(new Date())
-                update.reservada = false 
-                await reservasModel.findByIdAndUpdate(id, update);
-            }
+            let {fechaIngreso, mesa, fechaSalida, sobrecupo, ...update} = req.body
+            update.fechaSalida= await formatoFecha(new Date())
+            update.reservada = false 
+            await reservasModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,
                 msg:"OK"
@@ -124,6 +120,35 @@ class Reserva
                 status:500,
                 msg:'Internal Server Error',
                 descripcion:'Ha ocurrido un error en el servidor, no se modifico la reserva'
+            });
+
+        }
+
+    }
+    //habilitar o deshabilitar sobrecupos
+    putSobrecupo = async ( req=request, res=response ) => {
+        
+        try { 
+
+            let {id} = req.params
+            let {sobrecupo} = req.body
+            if (sobrecupo == true) {
+                await reservasModel.findByIdAndUpdate(id, {sobrecupo:true});
+            } else {
+                await reservasModel.findByIdAndUpdate(id, {sobrecupo:false});
+            }
+            res.status(200).json({
+                status:200,
+                msg:"OK"
+            })
+
+        } catch (error) {
+
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico el sobrecupo'
             });
 
         }
