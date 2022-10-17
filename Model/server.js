@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const dbConnection = require('../Database/config');
-const fileUpload = require('express-fileupload');
+//const fileUpload = require('express-fileupload');
 const https = require('https');
 const fs = require('fs');
 const hbs = require('hbs')
@@ -27,7 +27,6 @@ class Server {
         
     }
 
-
     async connectDB() {
         await dbConnection();
     }
@@ -44,7 +43,7 @@ class Server {
         this.app.use( express.json() );
         this.app.use( bodyParser.urlencoded({ extended: true }) );
         this.app.use( bodyParser.json() );
-        this.app.use(fileUpload());
+        //this.app.use(fileUpload());
         this.app.use(express.static('public'));
            
     }
@@ -67,9 +66,9 @@ class Server {
         this.app.use(this.route.routes.api.v1.mesa, require('../Route/mesa'));
         this.app.use(this.route.routes.api.v1.producto, require('../Route/producto'));
         this.app.use(this.route.routes.api.v1.bodega, require('../Route/bodega'));
-        this.app.use(this.route.routes.api.v1.bodegacocina, require('../Route/bodegaCocina'));
         this.app.use(this.route.routes.api.v1.plato, require('../Route/plato'));
         this.app.use(this.route.routes.api.v1.reservas, require('../Route/reserva'));
+        this.app.use(this.route.routes.api.v1.menu, require('../Route/menu'));
     }
 
     listen() {

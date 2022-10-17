@@ -68,7 +68,6 @@ class Reserva
                 descripcion:'Ha ocurrido un error en el servidor, no se encontraron mesas'
             }); 
         }
-
     }
     //Genera una nueva reserva en la mesa
     postReserva = async ( req=request, res=response ) => {
@@ -87,7 +86,6 @@ class Reserva
                 status: 201,
                 msg: 'Mesa reservada' 
             });
-            
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -96,13 +94,11 @@ class Reserva
                 descripcion:'Ha ocurrido un error en el servidor, no se reservo mesa'
             });
         }
-    
     }
     //Modifica reserva según mongoID
     putReserva = async ( req=request, res=response ) => {
         
         try {
-
             let {id} = req.params
             let {fechaIngreso, mesa, fechaSalida, sobrecupo, ...update} = req.body
             update.fechaSalida= await formatoFecha(new Date())
@@ -113,18 +109,14 @@ class Reserva
                 status:200,
                 msg:"OK"
             })
-
         } catch (error) {
-
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
                 descripcion:'Ha ocurrido un error en el servidor, no se modifico la reserva'
             });
-
         }
-
     }
     //habilitar o deshabilitar sobrecupos
     putSobrecupo = async ( req=request, res=response ) => {
@@ -142,7 +134,6 @@ class Reserva
                 status:200,
                 msg:"OK"
             })
-
         } catch (error) {
 
             console.log(error)
@@ -153,9 +144,7 @@ class Reserva
             });
 
         }
-
     }
-
 }
 
 module.exports = Reserva;

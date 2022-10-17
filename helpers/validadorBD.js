@@ -6,6 +6,7 @@ const producto = require('../Model/producto');
 const accesRol = require('../Model/accesoRol');
 const plato = require('../Model/plato');
 const reser= require('../Model/reservas');
+const menu = require('../Model/menu');
 
 //validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {

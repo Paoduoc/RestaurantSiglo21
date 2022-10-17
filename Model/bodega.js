@@ -1,6 +1,10 @@
 const { Schema, model } = require('mongoose');
 
 const bodegaSchema = Schema({
+
+    /* productos: {
+        type: Array
+    } */
     //con helpers se pueden controlar que sea unico y que sea requerido
     nombreProducto: {
         type: String
@@ -9,14 +13,11 @@ const bodegaSchema = Schema({
         type: Boolean,
         default: true
     },
-    gramosDispo:{
-        type: String
+    cantidad:{
+        type: Number
     },
-    gramosMin: {
-        type: String
-    }, 
-    gramosMax: {
-        type: String
+    cantidadMin: {
+        type: Number
     }
 });
 
