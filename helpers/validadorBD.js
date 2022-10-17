@@ -5,6 +5,7 @@ const mesa = require('../Model/mesa');
 const producto = require('../Model/producto');
 const accesRol = require('../Model/accesoRol');
 const plato = require('../Model/plato');
+const reser= require('../Model/reservas');
 
 //validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {
@@ -99,6 +100,13 @@ const platoRepetidoValidador = async ( nombrePlato = '' ) => {
     }
 }
 
+const reservaValidador = async ( mesa = '' ) => {
+
+    const reservado = await reser.findOne( {mesa:mesa, reservada:true})
+    if( reservado ){
+        throw new Error(`Esta mesa ya esta en uso, debe generar un sobrecupo`);
+    }
+}
 module.exports = { 
     idUsuarioValidador, 
     correoUsuarioValidador,
@@ -110,5 +118,6 @@ module.exports = {
     estatusValidador,
     accesoRolValidador,
     productoRepetidoValidador,
-    platoRepetidoValidador
+    platoRepetidoValidador,
+    reservaValidador
 };

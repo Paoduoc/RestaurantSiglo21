@@ -107,6 +107,7 @@ class Reserva
             let {fechaIngreso, mesa, fechaSalida, sobrecupo, ...update} = req.body
             update.fechaSalida= await formatoFecha(new Date())
             update.reservada = false 
+            update.sobrecupo = false 
             await reservasModel.findByIdAndUpdate(id, update);
             res.status(200).json({
                 status:200,

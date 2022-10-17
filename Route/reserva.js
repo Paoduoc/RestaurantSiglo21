@@ -4,7 +4,7 @@ const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
 const Reserva = require('../Controller/reservas');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');
-const { mesaValidador } = require('../helpers/validadorBD');
+const { reservaValidador } = require('../helpers/validadorBD');
 const reserva = new Reserva();
 
 router.use(validaAccesoToken)
@@ -17,19 +17,18 @@ router.get('/:id',[
     ],( req , res ) =>{ reserva.getReserva( req, res ) });
 
 router.post('/',[
+    check('mesa','El número de mesa es requerido').not().isEmpty(),
+    check('mesa').custom( reservaValidador ),
     validadorCampos
     ],( req , res ) =>{ reserva.postReserva( req, res ) });
-
-//esta mal que vaya con mongo id, es decir, en los post esta validacion no va
 
 router.put('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
     ],( req , res ) =>{ reserva.putReserva( req, res ) });
 
-/* router.delete('/:id',[
+router.put('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ reserva.delete( req, res ) }); */
-
+    ],( req , res ) =>{ reserva.putSobrecupo( req, res ) });
 module.exports = router;
