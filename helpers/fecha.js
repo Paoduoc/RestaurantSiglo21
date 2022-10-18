@@ -31,7 +31,6 @@ const formatoFecha = async (fecha) => {
         horas = horas.replace(' ', '');
         //obtenemos el dia 
         let day = formatFullDate.slice(0,2)
-        console.log(`${year}-${month}-${day}${horas} hola`);
     
         return `${year}-${month}-${day}${horas}`
     } catch (error) {

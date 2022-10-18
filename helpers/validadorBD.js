@@ -108,6 +108,13 @@ const reservaValidador = async ( mesa = '' ) => {
         throw new Error(`Esta mesa ya esta en uso, debe generar un sobrecupo`);
     }
 }
+const sobrecupoValidador = async ( id = '' ) => {
+
+    const sCupo = await reser.findOne( {_id:id, sobrecupo: true})
+    if( sCupo ){
+        throw new Error(`Debe estar vigente la reserva para generar un sobrecupo`);
+    }
+}
 module.exports = { 
     idUsuarioValidador, 
     correoUsuarioValidador,
@@ -120,5 +127,7 @@ module.exports = {
     accesoRolValidador,
     productoRepetidoValidador,
     platoRepetidoValidador,
-    reservaValidador
+    reservaValidador,
+    sobrecupoValidador,
+
 };

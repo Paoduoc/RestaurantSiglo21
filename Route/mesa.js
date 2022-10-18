@@ -23,8 +23,8 @@ router.post('/',[
     validadorCampos
     ],( req , res ) =>{ mesa.postMesa( req, res ) });
 
-router.put('/:id',[
-    check('id','no es un id mongodb').isMongoId(),
+router.put('/:numMesa',[
+    check('numMesa','no es un id mongodb').isMongoId(),
     validadorCampos
     ],( req , res ) =>{ mesa.putMesa( req, res ) });
 

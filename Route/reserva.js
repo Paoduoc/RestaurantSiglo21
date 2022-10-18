@@ -4,12 +4,15 @@ const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
 const Reserva = require('../Controller/reservas');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');
-const { reservaValidador } = require('../helpers/validadorBD');
+const { reservaValidador, sobrecupoValidador } = require('../helpers/validadorBD');
 const reserva = new Reserva();
 
 router.use(validaAccesoToken)
 
-router.get('/',( req , res ) =>{ reserva.getAllReserva( req, res ) });
+router.get('/',[
+
+    validadorCampos
+    ],( req , res ) =>{ reserva.getAllReserva( req, res ) });
 
 router.get('/:id',[
     check('id','no es un id mongodb').isMongoId(),
@@ -27,8 +30,9 @@ router.put('/:id',[
     validadorCampos
     ],( req , res ) =>{ reserva.putReserva( req, res ) });
 
-router.put('/:id',[
+router.put('/sobrecupo/:id',[
     check('id','no es un id mongodb').isMongoId(),
+    check('id').custom(sobrecupoValidador),
     validadorCampos
     ],( req , res ) =>{ reserva.putSobrecupo( req, res ) });
 module.exports = router;

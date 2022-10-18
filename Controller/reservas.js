@@ -49,7 +49,6 @@ class Reserva
                     let day = date.getDate();
                     const month = date.getMonth() + 1;
                     const year = date.getFullYear();
-                    // Sunday - Saturday : 0 - 6
                     let fecha = `${year}-${month}-${day}`
                     if (fecha == fechaIngreso) {
                         listaReservas.push(element)
