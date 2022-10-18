@@ -110,9 +110,11 @@ const reservaValidador = async ( mesa = '' ) => {
 }
 const sobrecupoValidador = async ( id = '' ) => {
 
+    console.log(id)
+
     const sCupo = await reser.findOne( {_id:id, sobrecupo: true})
     if( sCupo ){
-        throw new Error(`Debe estar vigente la reserva para generar un sobrecupo`);
+        // throw new Error(`Debe estar vigente la reserva para generar un sobrecupo`);
     }
 }
 module.exports = { 
