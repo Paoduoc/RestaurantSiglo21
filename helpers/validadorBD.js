@@ -5,6 +5,7 @@ const mesa = require('../Model/mesa');
 const producto = require('../Model/producto');
 const accesRol = require('../Model/accesoRol');
 const plato = require('../Model/plato');
+const reser= require('../Model/reservas');
 const menu = require('../Model/menu');
 
 //validador de que le usuario exista según mongoID
@@ -100,15 +101,20 @@ const platoRepetidoValidador = async ( nombrePlato = '' ) => {
     }
 }
 
-//MENUS
-//validador de duplicidad de menus
-const menuRepetidoValidador = async ( nombreMenu = '' ) => {
-    const validaMenu = await menu.findOne( {nombreMenu} );
-    if( validaMenu ){
-        throw new Error(`El menu ${nombreMenu} ya esta registrado`);
+const reservaValidador = async ( mesa = '' ) => {
+
+    const reservado = await reser.findOne( {mesa:mesa, reservada:true})
+    if( reservado ){
+        throw new Error(`Esta mesa ya esta en uso, debe generar un sobrecupo`);
     }
 }
+const sobrecupoValidador = async ( id = '' ) => {
 
+    const sCupo = await reser.findOne( {_id:id, sobrecupo: true})
+    if( sCupo ){
+        throw new Error(`Debe estar vigente la reserva para generar un sobrecupo`);
+    }
+}
 module.exports = { 
     idUsuarioValidador, 
     correoUsuarioValidador,
@@ -121,5 +127,7 @@ module.exports = {
     accesoRolValidador,
     productoRepetidoValidador,
     platoRepetidoValidador,
-    menuRepetidoValidador
+    reservaValidador,
+    sobrecupoValidador,
+
 };
