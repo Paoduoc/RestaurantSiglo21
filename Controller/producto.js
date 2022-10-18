@@ -8,8 +8,6 @@ class Producto
     getProducto = async ( req=request, res=response ) => {
 
         try {
-            /* let {id} = req.params
-            const producto = await productoModel.findById(id); */
             let {nombreProducto} = req.params
             const producto = await productoModel.findOne({nombreProducto:nombreProducto});
             res.status(200).json({
@@ -47,10 +45,9 @@ class Producto
         
         try {
 
-            let {nombreProducto, estado, tipo, gramosDispo, gramosMin, gramosMax} = req.body
+            let {nombreProducto, estado, tipo, cantidad, cantidadMin} = req.body
             let producto = new productoModel({nombreProducto, estado, tipo})
-
-            let bodega = new bodegaModel({nombreProducto, gramosDispo, gramosMin, gramosMax})
+            let bodega = new bodegaModel({nombreProducto, cantidad, cantidadMin})
             await producto.save();
             await bodega.save();
             res.status( 200 ).json({
