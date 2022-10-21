@@ -15,14 +15,7 @@ class Auth{
             if ( !usuario ) {
                 return res.status( 400 ).json({
                     status: 400,
-                    msg: 'Usuario y/o contraseña incorrecta'
-                });
-            }
-            //Segunda validación, si el estado del usuario es false, no podrá ingresar
-            if ( !usuario.estatus ) {
-                return res.status( 400 ).json({
-                    status: 400,
-                    msg: 'Usuario y/o contraseña incorrecta'
+                    msg: 'Usuario no encontrado'
                 });
             }
 
@@ -33,6 +26,14 @@ class Auth{
                     status: 400,
                     msg: 'Usuario y/o contraseña incorrecta'
                 });
+            }
+            else {
+                if ( !usuario.estatus ) {
+                    return res.status( 400 ).json({
+                        status: 400,
+                        msg: 'Usuario no habilitado'
+                    });
+                }
             }
             //Si el usuario puede ingresar con exito se generara el token
             const token = await generarJWT( usuario.id );
