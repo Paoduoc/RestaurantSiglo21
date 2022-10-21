@@ -1,6 +1,7 @@
 const { response, request } = require('express');
 const productoModel = require("../Model/producto");
 const bodegaModel = require("../Model/bodega");
+const bodega = require('../Model/bodega');
 
 class Producto
 {
@@ -45,17 +46,24 @@ class Producto
         
         try {
 
-            let {nombreProducto, estado, tipo, cantidad, cantidadMin} = req.body
-            let producto = new productoModel({nombreProducto, estado, tipo})
-            let bodega = new bodegaModel({nombreProducto, cantidad, cantidadMin})
+            let {tipo, ...update} = req.body
+            let producto = new productoModel({tipo, ...update})
+
+            let id = '6350a1994ad665993500c5e9'
+            let bodegaId = await bodegaModel.findById(id)
+            let aux = []
+            bodegaId.productosBodega.forEach(element => {
+                aux.push(element)
+            });
+            aux.push(update)
+            await bodegaModel.findByIdAndUpdate(id, {productosBodega:aux});
+
             await producto.save();
-            await bodega.save();
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Producto creado'
             });
         } catch (error) {
-            
             console.log(error)
             res.status(500).json({
                 status:500,
@@ -67,12 +75,16 @@ class Producto
     putProducto = async ( req=request, res=response ) => {
         
         try {
-
-            let {nombreProducto} = req.params
-            let {estado, gramosDispo, ...update} = req.body
-            // los tres puntos es para desestructurar los datos
-            await productoModel.findOneAndUpdate(nombreProducto, update);
-            await bodegaModel.findOneAndUpdate(nombreProducto, update);
+            let {id} = req.params
+            let {...update} = req.body
+            let bodegaId = await bodegaModel.findById(id)
+            let aux = []
+            bodegaId.productosBodega.forEach(element => {
+                aux.push(element)
+            });
+            aux.push(update)
+            console.log(aux)
+            await bodegaModel.findByIdAndUpdate(id, {productosBodega:aux});
             res.status(200).json({
                 status:200,
                 msg:"OK"

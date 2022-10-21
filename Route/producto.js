@@ -29,7 +29,7 @@ router.post('/',[
     validadorCampos
     ],( req , res ) =>{ producto.putProducto( req, res ) }); */
 
-router.put('/:nombreProducto', [validadorCampos] ,( req , res ) =>{ producto.putProducto( req, res ) });
+router.put('/:id', [validadorCampos] ,( req , res ) =>{ producto.putProducto( req, res ) });
     
 
 /* router.delete('/:id',[
