@@ -1,24 +1,22 @@
 const { Schema, model } = require('mongoose');
 
-const bodegaSchema = Schema({
-
-    /* productos: {
-        type: Array
-    } */
-    //con helpers se pueden controlar que sea unico y que sea requerido
+const productosBodega = Schema({
     nombreProducto: {
         type: String
     },
     estado: {
-        type: Boolean,
-        default: true
+        type: Boolean
     },
-    cantidad:{
+    cantidad: {
         type: Number
     },
     cantidadMin: {
         type: Number
     }
+})
+
+const bodegaSchema = Schema({
+    productosBodega: []
 });
 
 module.exports = model( 'Bodega', bodegaSchema );

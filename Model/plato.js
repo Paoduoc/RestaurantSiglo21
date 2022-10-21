@@ -17,8 +17,8 @@ const platoSchema = Schema({
     preparacion: {
         type: String
     },
-    tiempoPreparacion: {
-        type: String
+    minutosPreparacion: {
+        type: Number
     },
     precio: {
         type: Number
