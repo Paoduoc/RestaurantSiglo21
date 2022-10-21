@@ -19,13 +19,12 @@ router.get('/:id',[
 router.post('/',[
     check('numMesa','El campo número de mesa es requerido').not().isEmpty(),
     check('numMesa').custom(mesaValidador),
+    check('cantSillas','La cantidad de sillas es requerida').not().isEmpty(),
     validadorCampos
     ],( req , res ) =>{ mesa.postMesa( req, res ) });
 
-//esta mal que vaya con mongo id, es decir, en los post esta validacion no va
-
-router.put('/:id',[
-    check('id','no es un id mongodb').isMongoId(),
+router.put('/:numMesa',[
+    check('numMesa','no es un id mongodb').isMongoId(),
     validadorCampos
     ],( req , res ) =>{ mesa.putMesa( req, res ) });
 

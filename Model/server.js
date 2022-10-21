@@ -67,6 +67,7 @@ class Server {
         this.app.use(this.route.routes.api.v1.producto, require('../Route/producto'));
         this.app.use(this.route.routes.api.v1.bodega, require('../Route/bodega'));
         this.app.use(this.route.routes.api.v1.plato, require('../Route/plato'));
+        this.app.use(this.route.routes.api.v1.reservas, require('../Route/reserva'));
         this.app.use(this.route.routes.api.v1.menu, require('../Route/menu'));
     }
 

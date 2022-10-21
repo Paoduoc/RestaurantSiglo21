@@ -9,6 +9,7 @@
                 "accesos": "/api/v1/accesos",
                 "accesoRol": "/api/v1/accesoRol",
                 "mesa": "/api/v1/mesas",
+                "reservas": "/api/v1/reserva",
                 "producto": "/api/v1/productos",
                 "bodega": "/api/v1/bodega",
                 "plato": "/api/v1/platos",

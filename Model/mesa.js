@@ -2,14 +2,14 @@ const { Schema, model } = require('mongoose');
 
 const mesaSchema = Schema({
     numMesa: {
-        type: String
+        type: Number
     },
     estado: {
         type: Boolean,
         default: true
     },
     cantSillas: {
-        type: String
+        type: Number
     }
 });
 
