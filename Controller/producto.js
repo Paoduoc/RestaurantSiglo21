@@ -5,7 +5,6 @@ const bodega = require('../Model/bodega');
 
 class Producto
 {
-    
     getProducto = async ( req=request, res=response ) => {
 
         try {
@@ -40,25 +39,31 @@ class Producto
                 descripcion:'Ha ocurrido un error en el servidor, no se encontraron productos'
             }); 
         }
-
     }
     postProducto = async ( req=request, res=response ) => {
         
         try {
-
             let {tipo, ...update} = req.body
             let producto = new productoModel({tipo, ...update})
 
-            let id = '6350a1994ad665993500c5e9'
-            let bodegaId = await bodegaModel.findById(id)
-            let aux = []
-            bodegaId.productosBodega.forEach(element => {
-                aux.push(element)
+            //traer id
+            const bodega = await bodegaModel.find();
+            
+            bodega[0].productosBodega.forEach(element => {
+                if (element.nombreProducto == update.nombreProducto){
+                    res.status(500).json({
+                        status:500,
+                        msg:'Duplicidad producto',
+                        descripcion:'El nombre del producto ya existe'
+                    });
+                }
             });
-            aux.push(update)
-            await bodegaModel.findByIdAndUpdate(id, {productosBodega:aux});
+            let aux = bodega[0].productosBodega;
+            aux.push(update);
 
+            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux});
             await producto.save();
+
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Producto creado'
@@ -72,61 +77,83 @@ class Producto
             });
         }
     }
+    //debe ser normal y editar el tipo
     putProducto = async ( req=request, res=response ) => {
-        
         try {
-            let {id} = req.params
-            let {...update} = req.body
-            let bodegaId = await bodegaModel.findById(id)
-            let aux = []
-            bodegaId.productosBodega.forEach(element => {
-                aux.push(element)
+            let {nombreProducto} = req.params
+            let {tipo, cantidadMin} = req.body
+
+            //producto
+            await productoModel.findOneAndUpdate(nombreProducto, {tipo:tipo});
+
+            //bodega
+            //traer nombre prod-bodega
+            const bodega = await bodegaModel.find();
+            console.log(nombreProducto);
+            let auxElemento = false
+            bodega[0].productosBodega.forEach(element => {
+                if (element.nombreProducto == nombreProducto){
+                    element.cantidadMin = cantidadMin;
+                    console.log(cantidadMin);
+                    auxElemento = true;
+                }
             });
-            aux.push(update)
-            console.log(aux)
-            await bodegaModel.findByIdAndUpdate(id, {productosBodega:aux});
-            res.status(200).json({
-                status:200,
-                msg:"OK"
-            })
-
+            if(auxElemento){
+                let aux = bodega[0].productosBodega;
+                await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux});
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: 'Producto modificado'
+                });
+            } else {
+                res.status(500).json({
+                    status:500,
+                    msg:'Producto no existente',
+                    descripcion:'El producto no existe'
+                });
+            }
         } catch (error) {
-
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
                 descripcion:'Ha ocurrido un error en el servidor, no se modifico el producto'
             });
-
         }
-
     }
-    deleteProducto = async ( req=request, res=response ) => {
-        //este delete deberia ser en cada modelo, esto porque el id de productos y el de bodega opr ej, son diferentes
-        //asi que no se puede hacer en la misma request el delete para los 3 (bodega, bcocina y prod)
-        try {
-            let {nombreProducto} = req.params
-            let update = {}
-            let est
-            let {estado = false} = req.query
-            if (estado == "true") {
-                update = {estado:true}
-                est = true
-            } else {
-                update = {estado:false}
-                est = false
-            }
-            let producto = await productoModel.findOneAndUpdate(nombreProducto, update);
-            let productoBodega = await bodegaModel.findOneAndUpdate(nombreProducto, update);
-            producto.estado = est
-            productoBodega.estado = est
-            res.status(200).json({
-                status:200,
-                msg:"OK"
-            })
 
-        } catch (error) {
+    deleteProducto = async ( req=request, res=response ) => {
+        try {
+            let {nombreProducto} = req.params;
+            let {estado} = req.query;
+            let update = estado=='true'?true:false;
+
+            await productoModel.findOneAndUpdate({nombreProducto:nombreProducto}, {estado:update});
+            const bodega = await bodegaModel.find();
+
+            let auxElemento = false
+            bodega[0].productosBodega.forEach(element => {
+                if (element.nombreProducto == nombreProducto){
+                    element.estado = update;
+                    auxElemento = true;
+                }
+            });
+            if(auxElemento){
+                let aux = bodega[0].productosBodega;
+                await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux});
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: update?'Producto habilitado':'Producto deshabilitado'
+                });
+            } else {
+            res.status(500).json({
+                status:500,
+                msg:'Producto no existente',
+                descripcion:'El producto no existe'
+            });
+            }
+        }
+        catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,

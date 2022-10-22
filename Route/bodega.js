@@ -10,13 +10,10 @@ router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ bodega.getAllBodega( req, res ) });
 
-router.get('/:id',[
-    check('id', 'No es un id mongoDB').isMongoId(),
-    validadorCampos
-    ],( req , res ) =>{ bodega.getBodega( req, res ) });
+router.get('/:nombreProducto',[validadorCampos],( req , res ) =>{ bodega.getBodega( req, res ) });
 
-router.put('/:id',[
-    check('id','No es un id mongoDB').isMongoId(),
+router.put('/:nombreProducto',[
+    //check('id','No es un id mongoDB').isMongoId(),
     validadorCampos
     ],( req , res ) =>{ bodega.putBodega( req, res ) });
 

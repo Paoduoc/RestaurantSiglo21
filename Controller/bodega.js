@@ -7,12 +7,28 @@ class Bodega
     getBodega = async ( req=request, res=response ) => {
 
         try {
-            let {id} = req.params
-            const bodega = await bodegaModel.findById(id);
-            res.status(200).json({
-                status:200,
-                msg:bodega
-            })
+            let {nombreProducto} = req.params
+            const bodega = await bodegaModel.find();
+            let auxElemento = false
+            let productoBodega
+            bodega[0].productosBodega.forEach(element => {
+                if (element.nombreProducto == nombreProducto){
+                    productoBodega = element
+                    auxElemento = true;
+                }
+            });
+            if(auxElemento){
+                res.status(200).json({
+                    status:200,
+                    msg:productoBodega
+                })
+            } else {
+                res.status(500).json({
+                    status:500,
+                    msg:'Producto no existente',
+                    descripcion:'El producto no existe'
+                });
+            }
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -28,7 +44,7 @@ class Bodega
             const bodega = await bodegaModel.find();
             res.status(200).json({
                 status:200,
-                msg:bodega
+                msg:bodega[0].productosBodega
             })
         } catch (error) {
             console.log(error)
@@ -39,37 +55,44 @@ class Bodega
             }); 
         }
     }
-    /* postProducto = async ( req=request, res=response ) => {
-        
-        try {
 
-            let {nombre, estado, cantidad, tipo} = req.body
-            let producto = new productoModel({nombre, estado, cantidad, tipo})
-            await producto.save();
-            res.status( 200 ).json({
-                status: 201,
-                msg: 'Producto creado'
-            });
-        } catch (error) {
-            
-            console.log(error)
-            res.status(500).json({
-                status:500,
-                msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se añadio el producto'
-            });
-        }
-    } */
     putBodega = async ( req=request, res=response ) => {
         
         try {
-            let {id} = req.params
-            let {nombreProducto, gramosDispo, gramosMin, gramosMax} = req.body
-            let bodega = await bodegaModel.findByIdAndUpdate(id, {nombreProducto}, {gramosDispo}, {gramosMin}, {gramosMin});
-            res.status(200).json({
-                status:200,
-                msg: "OK"
-            })
+            //en bodega solo se puede editar la cantidad y cantidadmin
+            let {nombreProducto} = req.params
+            let {...update} = req.body
+
+            //traer nombre prod-bodega
+            const bodega = await bodegaModel.find();
+
+            let auxElemento = false
+            bodega[0].productosBodega.forEach(element => {
+                if (element.nombreProducto == nombreProducto){
+                    element.cantidad = update.cantidad;
+                    element.cantidadMin = update.cantidadMin;
+                    auxElemento = true;
+                }
+            });
+            if(auxElemento){
+                let aux = bodega[0].productosBodega;
+                await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux});
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: 'Producto en bodega modificado'
+                });
+            } else {
+                res.status(500).json({
+                    status:500,
+                    msg:'Producto no existente',
+                    descripcion:'El producto no existe'
+                });
+            }
+            res.status(500).json({
+                status:500,
+                msg:'Producto no existente',
+                descripcion:'El producto no existe'
+            });
         } catch (error) {
             console.log(error)
             res.status(500).json({
