@@ -65,7 +65,7 @@ class Reserva
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron mesas'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron mesas reservadas'
             }); 
         }
     }

@@ -6,16 +6,14 @@ const pedidoSchema = Schema({
     },
     estado: {
         type: Boolean,
-        default: true
+        default: false
     },
-    fechaPedido:{
-        type: Date
-    },
-    horaPedido: {
+    fechaIP:{
         type: String
     },
-    horaEntrega: {
-        type: String
+    fechaTP: {
+        type: String,
+        default: 'Pendiente'
     },
     reserva: {
         type: Schema.ObjectId,
@@ -25,12 +23,16 @@ const pedidoSchema = Schema({
         type: Schema.ObjectId,
         ref: 'Usuario'
     },
-    comentarios: {
+    comentariosPlato: {
+        type: String
+    },
+    comentariosDevolucion: {
         type: String
     },
     totalPedido: {
-        type: Number
+        type: Number,
+        default: 0
     }
 });
 
-module.exports = model( 'Bodega', pedidoSchema );
+module.exports = model( 'Pedido', pedidoSchema );
