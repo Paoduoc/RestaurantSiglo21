@@ -32,7 +32,7 @@ router.put('/:id',[
 
 router.put('/sobrecupo/:id',[
     check('id','no es un id mongodb').isMongoId(),
-    check('id').custom(sobrecupoValidador),
+    //check('id').custom(sobrecupoValidador),
     validadorCampos
     ],( req , res ) =>{ reserva.putSobrecupo( req, res ) });
 module.exports = router;
