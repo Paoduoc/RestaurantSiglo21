@@ -26,7 +26,7 @@ class Pedido
     getAllPedido = async ( req=request, res=response ) => {
         
         try {
-            let {fechaIP} = req.query
+            let {fechaIP} = req.body
             console.log(fechaIP)
             
             const pedido = await pedidoModel.find();
@@ -63,14 +63,18 @@ class Pedido
     postPedido = async ( req=request, res=response ) => {
         
         try {
-            let {platos, fechaIP, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion} = req.body
-            let pedido = new pedidoModel({platos, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion})
+            let {platos, fechaIP, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido} = req.body
+            let pedido = new pedidoModel({platos, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido})
             pedido.estado = true
             await pedido.save();
             if ( !fechaIP ) {
-
                 fechaIP= await formatoFecha(new Date())
                 await pedidoModel.findByIdAndUpdate(pedido.id, {fechaIP:fechaIP});
+            }
+            let suma = 0
+            for (let n of preciosU) {
+                suma +=n;
+                await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma});
             }
             res.status( 200 ).json({
                 status: 201,
@@ -98,7 +102,16 @@ class Pedido
                 plt.push(element)
             });
             plt.push(update.platos)
-            await pedidoModel.findByIdAndUpdate(id, update, {platos:plt});
+            await pedidoModel.findByIdAndUpdate(id, {platos:plt});
+            let newprecios = []
+            let suma = 0
+            pedidoId.preciosU.forEach(element1 => {
+                newprecios.push(element1)
+            });
+            newprecios.push(update.preciosU)
+            suma = update.preciosU + pedidoId.totalPedido;
+            await pedidoModel.findByIdAndUpdate(id, {preciosU:newprecios, totalPedido:suma, comentariosPlato:update.comentariosPlato, comentariosDevolucion:update.comentariosDevolucion });
+            
             res.status(200).json({
                 status:200,
                 msg:"OK"
@@ -121,7 +134,7 @@ class Pedido
         try { 
 
             let {id} = req.params
-            let {fechaIP, fechaTP, mesa, garzon, platos, comentariosPlato, comentariosDevolucion,...update} = req.body
+            let {fechaIP, fechaTP, mesa, garzon, platos, comentariosPlato, comentariosDevolucion, totalPedido,...update} = req.body
             update.fechaTP= await formatoFecha(new Date())
             update.estado = false
             await pedidoModel.findByIdAndUpdate(id, update);
@@ -140,7 +153,7 @@ class Pedido
 
         }
     }
-    /* deletePedido = async ( req=request, res=response ) => {
+    deletePedido = async ( req=request, res=response ) => {
        try {
             let {id} = req.params
             let update = {}
@@ -169,7 +182,7 @@ class Pedido
                 descripcion:'Ha ocurrido un error en el servidor, no se elimino el pedido'
             });
         }
-    } */
+    }
 }
 
 module.exports = Pedido;
