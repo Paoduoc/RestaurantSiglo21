@@ -45,6 +45,7 @@ class Producto
         try {
             let {tipo, ...update} = req.body
             let producto = new productoModel({tipo, ...update})
+            let auxElemento = false;
 
             //traer id
             const bodega = await bodegaModel.find();
@@ -56,8 +57,11 @@ class Producto
                         msg:'Duplicidad producto',
                         descripcion:'El nombre del producto ya existe'
                     });
+                } else{
+                    auxElemento = true;
                 }
             });
+            if(auxElemento){
             let aux = bodega[0].productosBodega;
             aux.push(update);
 
@@ -68,6 +72,7 @@ class Producto
                 status: 201,
                 msg: 'Producto creado'
             });
+            }
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -77,7 +82,6 @@ class Producto
             });
         }
     }
-    //debe ser normal y editar el tipo
     putProducto = async ( req=request, res=response ) => {
         try {
             let {nombreProducto} = req.params

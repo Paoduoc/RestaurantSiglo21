@@ -4,22 +4,59 @@ const fs = require('fs');
 const path = require('path');
 
 class Plato
-{
-    getPlato = async ( req=request, res=response ) => {
+{   
+    postPlato = async ( req=request, res=response )=> {
+        
         try {
-            let {nombrePlato} = req.params
-            const plato = await platoModel.findOne({nombrePlato:nombrePlato});
-            res.status(200).json({
-                status:200,
-                msg:plato
-            })
+            let {recetas} = req.body
+            let plato = new platoModel(recetas)
+            await plato.save();
+            res.status( 200 ).json({
+                status: 201,
+                msg: 'Plato creado'
+            });
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontro el plato'
+                descripcion:'Ha ocurrido un error en el servidor, no se añadio el producto'
             });
+            
+        }
+    }
+
+    getReceta = async ( req=request, res=response ) => {
+        try {
+            let {nombrePlato} = req.params
+            const plato = await platoModel.find();
+            let auxElemento = false
+            let recetas
+            plato[0].recetas.forEach(element => {
+                if (element.nombrePlato == nombrePlato){
+                    recetas = element
+                    auxElemento = true;
+                }
+            });
+            if(auxElemento){
+                res.status(200).json({
+                    status:200,
+                    msg:recetas
+                })
+            } else {
+                res.status(500).json({
+                    status:500,
+                    msg:'Receta no existente',
+                    descripcion:'La receta no existe'
+                });
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro la receta'
+            }); 
         }
     }
     getAllPlato = async ( req=request, res=response ) => {
@@ -28,42 +65,59 @@ class Plato
             const plato = await platoModel.find();
             res.status(200).json({
                 status:200,
-                msg:plato
+                msg:plato[0].recetas
             })
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron platos'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron recetas'
             }); 
         }
     }
 
     //revisar
-    postPlato = async ( req=request, res=response )=> {
+    postReceta = async ( req=request, res=response )=> {
         
         try {
             var obj = {
-                nombrePlato: req.body.nombrePlato,
-                estado: req.body.estado,
-                mostrar: req.bodey.mostrar,
-                categoria: req.body.categoria,
-                ingredientes: req.body.ingredientes,
-                preparacion: req.body.preparacion,
-                tiempoPreparacion: req.body.tiempoPreparacion,
-                precio: req.body.precio,
                 imagen: {
                     data: req.file.filename,
                     contentType: 'image/png'
                 }
             }
+            console.log(obj);
+            let update = req.body
+            let imagen = {
+                data: req.file.filename,
+                contentType: 'image/png'
+            }
+            let auxElemento = false;
 
-            platoModel.create(obj)
-            res.status( 200 ).json({
-                status: 201,
-                msg: 'Plato creado'
+            const plato = await platoModel.find();
+            plato[0].recetas.forEach(element => {
+                if (element.nombrePlato == update.nombrePlato){
+                    res.status(500).json({
+                        status:500,
+                        msg:'Duplicidad plato',
+                        descripcion:'El nombre del plato ya existe'
+                    });
+                } else{
+                    auxElemento = true;
+                }
             });
+            if(auxElemento){
+                let aux = plato[0].recetas;
+                aux.push({...update, imagen});
+
+                await platoModel.findByIdAndUpdate(plato[0].id, {recetas:aux});
+
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: 'Plato creado'
+                });
+            }
 
         } catch (error) {
             
