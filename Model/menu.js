@@ -7,7 +7,12 @@ const menuSchema = Schema({
         type: String
     },
     platos: {
-        type: Array
+        type: Schema.ObjectId,
+        ref: 'Plato'
+    },
+    bodega: {
+        type: Schema.ObjectId,
+        ref: 'Bodega'
     },
     estado: {
         type: Boolean,

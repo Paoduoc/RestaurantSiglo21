@@ -17,8 +17,8 @@ router.get('/:id',[
     ],( req , res ) =>{ menu.getMenu( req, res ) });
 
 router.post('/',[
-    check('nombreMenu','El nombre del menu es requerido').not().isEmpty(),
-    check('nombreMenu').custom(menuRepetidoValidador),
+    /* check('nombreMenu','El nombre del menu es requerido').not().isEmpty(),
+    check('nombreMenu').custom(menuRepetidoValidador), */
     validadorCampos
     ],( req , res ) =>{ menu.postMenu( req, res ) });
 

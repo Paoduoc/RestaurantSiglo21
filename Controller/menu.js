@@ -3,6 +3,26 @@ const menuModel = require("../Model/menu");
 
 class Menu {
 
+    getMenu = async(req=request, res=response)=>{
+        try {
+            let{id} = req.params
+            const menu = await menuModel.find()
+            .populate({path:"platos"})
+            .populate({path:"bodega"})
+            let aux = false
+            menu.forEach(element => {
+                console.log(element);
+                
+            });
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro el menú'
+            }); 
+        }
+    }
     getAllMenuInterno = async ( req=request, res=response ) => {
         
         try {
@@ -41,8 +61,8 @@ class Menu {
         
         try {
 
-            let {nombreMenu, platos, estado} = req.body
-            let menu = new menuModel({nombreMenu, platos, estado})
+            let {nombreMenu, platos, bodega, estado} = req.body
+            let menu = new menuModel({nombreMenu, platos, bodega, estado})
             await menu.save();
             res.status( 200 ).json({ 
                 status: 201,
