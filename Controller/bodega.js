@@ -70,7 +70,6 @@ class Bodega
             bodega[0].productosBodega.forEach(element => {
                 if (element.nombreProducto == nombreProducto){
                     element.cantidad = update.cantidad;
-                    element.cantidadMin = update.cantidadMin;
                     auxElemento = true;
                 }
             });
@@ -88,11 +87,6 @@ class Bodega
                     descripcion:'El producto no existe'
                 });
             }
-            res.status(500).json({
-                status:500,
-                msg:'Producto no existente',
-                descripcion:'El producto no existe'
-            });
         } catch (error) {
             console.log(error)
             res.status(500).json({

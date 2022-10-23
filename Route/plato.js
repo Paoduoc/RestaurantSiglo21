@@ -6,10 +6,9 @@ const { platoRepetidoValidador } = require('../helpers/validadorBD');
 const router = Router();
 const Plato = require('../Controller/plato');
 const plato = new Plato();
+const multer = require('multer');
 
-var multer = require('multer');
-
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images')
     },
@@ -17,22 +16,17 @@ var storage = multer.diskStorage({
         cb(null, file.originalname)
     }
 });
-var upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ plato.getAllPlato( req, res ) });
 
-router.get('/:id',[
-    check('id','No es un id mongoDB').isMongoId(),
-    validadorCampos
-    ],( req , res ) =>{ plato.getPlato( req, res ) });
+router.get('/:nombrePlato', [validadorCampos],( req , res ) =>{ plato.getReceta( req, res ) });
 
-router.post('/', upload.single('imagen'), [
-    check('nombrePlato','El nombre del plato es requerido').not().isEmpty(),
-    check('nombrePlato').custom(platoRepetidoValidador),
-    validadorCampos
-    ],( req , res ) =>{ plato.postPlato( req, res ) });
+router.post('/recetas', upload.single('imagen'), ( req , res ) =>{ plato.postReceta( req, res ) });
+
+router.post('/', ( req , res ) =>{ plato.postPlato( req, res ) });
 
 router.put('/:id',[
     check('id','No es un id mongoDB').isMongoId(),
