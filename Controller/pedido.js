@@ -1,5 +1,6 @@
 const { response, request } = require('express');
 const pedidoModel = require("../Model/pedido");
+const { formatoFecha } = require('../helpers/fecha');
 
 class Pedido
 {
@@ -25,29 +26,56 @@ class Pedido
     getAllPedido = async ( req=request, res=response ) => {
         
         try {
-
+            let {fechaIP} = req.body
+            console.log(fechaIP)
+            
             const pedido = await pedidoModel.find();
+
+            let listaPedidos = [];
+
+            pedido.forEach( (element, index) => {
+                
+                if (element.fechaIP) {
+                    
+                    const date = new Date(String(element.fechaIP));
+                    let day = date.getDate();
+                    const month = date.getMonth() + 1;
+                    const year = date.getFullYear();
+                    let fecha = `${year}-${month}-${day}`
+                    if (fecha == fechaIP) {
+                        listaPedidos.push(element)
+                    }
+                }
+            });
             res.status(200).json({
                 status:200,
-                msg:pedido
+                msg:{pedido: listaPedidos}
             })
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron pedidos'
-            });
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron pedidos para ese dia'
+            }); 
         }
-
     }
     postPedido = async ( req=request, res=response ) => {
         
         try {
-
-            let {platos, estado, fechaPedido, horaPedido, horaEntrega, mesa, garzon, comentarios} = req.body
-            let pedido = new pedidoModel({platos, estado, fechaPedido, horaPedido, horaEntrega, mesa, garzon, comentarios})
+            let {platos, fechaIP, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido} = req.body
+            let pedido = new pedidoModel({platos, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido})
+            pedido.estado = true
             await pedido.save();
+            if ( !fechaIP ) {
+                fechaIP= await formatoFecha(new Date())
+                await pedidoModel.findByIdAndUpdate(pedido.id, {fechaIP:fechaIP});
+            }
+            let suma = 0
+            for (let n of preciosU) {
+                suma +=n;
+                await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma});
+            }
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Pedido creado'
@@ -67,8 +95,23 @@ class Pedido
         try {
 
             let {id} = req.params
-            let {platos, estado, fechaPedido, horaPedido, horaEntrega, ...update} = req.body
-            await pedidoModel.findByIdAndUpdate(id, update);
+            let {estado, fechaIP, fechaTP, mesa, garzon, ...update} = req.body
+            let pedidoId = await pedidoModel.findById(id);
+            let plt = []
+            pedidoId.platos.forEach(element => {
+                plt.push(element)
+            });
+            plt.push(update.platos)
+            await pedidoModel.findByIdAndUpdate(id, {platos:plt});
+            let newprecios = []
+            let suma = 0
+            pedidoId.preciosU.forEach(element1 => {
+                newprecios.push(element1)
+            });
+            newprecios.push(update.preciosU)
+            suma = update.preciosU + pedidoId.totalPedido;
+            await pedidoModel.findByIdAndUpdate(id, {preciosU:newprecios, totalPedido:suma, comentariosPlato:update.comentariosPlato, comentariosDevolucion:update.comentariosDevolucion });
+            
             res.status(200).json({
                 status:200,
                 msg:"OK"
@@ -85,6 +128,30 @@ class Pedido
 
         }
 
+    }
+    putPedidoTerminado = async ( req=request, res=response ) => {
+        
+        try { 
+
+            let {id} = req.params
+            let {fechaIP, fechaTP, mesa, garzon, platos, comentariosPlato, comentariosDevolucion, totalPedido,...update} = req.body
+            update.fechaTP= await formatoFecha(new Date())
+            update.estado = false
+            await pedidoModel.findByIdAndUpdate(id, update);
+            res.status(200).json({
+                status:200,
+                msg:"OK"
+            })
+        } catch (error) {
+
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se genero la devolución'
+            });
+
+        }
     }
     deletePedido = async ( req=request, res=response ) => {
        try {

@@ -35,7 +35,8 @@ class Reserva
     getAllReserva = async ( req=request, res=response ) => {
         
         try {
-            let {fechaIngreso} = req.body
+            let {fechaIngreso} = req.query
+            console.log(fechaIngreso)
             
             const reserva = await reservasModel.find();
 
@@ -64,7 +65,7 @@ class Reserva
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron mesas'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron mesas reservadas'
             }); 
         }
     }
@@ -86,7 +87,7 @@ class Reserva
                 msg: 'Mesa reservada' 
             });
         } catch (error) {
-            console.log(error)
+            console.log('error', error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
