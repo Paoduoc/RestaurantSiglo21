@@ -3,10 +3,10 @@ const menuModel = require("../Model/menu");
 
 class Menu {
 
-    getMenu = async ( req=request, res=response ) => {
+    getAllMenuInterno = async ( req=request, res=response ) => {
+        
         try {
-            let {id} = req.params
-            const menu = await menuModel.findById(id);
+            const menu = await menuModel.find();
             res.status(200).json({
                 status:200,
                 msg:menu
@@ -16,8 +16,8 @@ class Menu {
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontro el menu'
-            });
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron menus'
+            }); 
         }
     }
     getAllMenu = async ( req=request, res=response ) => {

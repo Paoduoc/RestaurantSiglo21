@@ -11,11 +11,6 @@ router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ producto.getAllProducto( req, res ) });
 
-/* router.get('/:id',[
-    check('id', 'No es un id mongoDB').isMongoId(),
-    validadorCampos
-    ],( req , res ) =>{ producto.getProducto( req, res ) }); */
-    
 router.get('/:nombreProducto', [validadorCampos], ( req , res ) =>{ producto.getProducto( req, res ) });
 
 router.post('/',[
@@ -24,18 +19,7 @@ router.post('/',[
     validadorCampos
     ],( req , res ) =>{ producto.postProducto( req, res ) });
 
-/* router.put('/:id',[
-    check('id','No es un id mongoDB').isMongoId(),
-    validadorCampos
-    ],( req , res ) =>{ producto.putProducto( req, res ) }); */
-
-router.put('/:id', [validadorCampos] ,( req , res ) =>{ producto.putProducto( req, res ) });
-    
-
-/* router.delete('/:id',[
-    check('id','No es un id mongoDB').isMongoId(),
-    validadorCampos
-    ],( req , res ) =>{ producto.deleteProducto( req, res ) }); */
+router.put('/:nombreProducto', [validadorCampos] ,( req , res ) =>{ producto.putProducto( req, res ) });
 
 router.delete('/:nombreProducto', [validadorCampos] ,( req , res ) =>{ producto.deleteProducto( req, res ) });
 

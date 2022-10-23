@@ -7,8 +7,6 @@ class Plato
 {
     getPlato = async ( req=request, res=response ) => {
         try {
-            /* let {id} = req.params
-            const plato = await platoModel.findById(id); */
             let {nombrePlato} = req.params
             const plato = await platoModel.findOne({nombrePlato:nombrePlato});
             res.status(200).json({
@@ -41,12 +39,15 @@ class Plato
             }); 
         }
     }
+
+    //revisar
     postPlato = async ( req=request, res=response )=> {
         
         try {
             var obj = {
                 nombrePlato: req.body.nombrePlato,
                 estado: req.body.estado,
+                mostrar: req.bodey.mostrar,
                 categoria: req.body.categoria,
                 ingredientes: req.body.ingredientes,
                 preparacion: req.body.preparacion,
@@ -57,11 +58,7 @@ class Plato
                     contentType: 'image/png'
                 }
             }
-            //let {nombrePlato, estado, categoria, ingredientes, preparacion, tiempoPreparacion, precio} = req.body
-            //let {imagen} = req
-            //let plato = new platoModel({nombrePlato, estado, categoria, ingredientes, preparacion, tiempoPreparacion, precio, 
-            //    imagen})
-            //await plato.save();
+
             platoModel.create(obj)
             res.status( 200 ).json({
                 status: 201,
