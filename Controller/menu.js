@@ -11,13 +11,53 @@ class Menu {
             .populate({path:"bodega"})
             console.log(menu)
             let aux = false
-            menu[0].platos.recetas.forEach(element => {
-                //console.log(element);
-                element.ingredientes.forEach(element1 => {
-                    console.log(element1);
-                });
+            const productosBodega = {}
+            menu[0].bodega.productosBodega.forEach(producto => {
+                // aqui obtenemos el nombre del producto
+                // que sera nuestra llave
+                const llave = producto.nombreProducto
+                if (productosBodega[llave]) {
+                    // aqui tenemos que sumar el producto
+                    productosBodega[llave] += 1
+                } else {
+                    // aqui entramos solo si la llave no existe
+                    // la llave es el nombre del producto
+                    productosBodega[llave] = producto.cantidad
+                }
             });
-            
+            console.log(productosBodega)
+
+            const platosCocinables = []
+            const productosPlatos = {}
+            menu[0].platos.recetas.forEach(receta => {
+                let esCocinable = true
+                // aqui vemos si es cocinable
+                receta.ingredientes.forEach(ingrediente => {
+                    const llave = ingrediente
+                    if (productosBodega[llave]) {
+                        if (productosBodega[llave] >= 1) {
+                            // entramos aqui solo si tiene el producto
+                            // productosBodega[llave] -= 1
+                        } else {
+                            esCocinable = false
+                        }
+                    } else {
+                        // entramos aqui si no tiene el producto en bodega
+                        esCocinable = false
+                    }
+                });
+                 // si es cocinable descontamos los productos
+                if (esCocinable) {
+                    receta.ingredientes.forEach(ingrediente => {
+                        const llave = ingrediente
+                        if (productosBodega[llave]) {
+                            productosBodega[llave] -= 1
+                        }
+                    });
+                    platosCocinables.push(receta.nombrePlato)
+                }
+            });
+            console.log(platosCocinables)
         } catch (error) {
             console.log(error)
             res.status(500).json({
