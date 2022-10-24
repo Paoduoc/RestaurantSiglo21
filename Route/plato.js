@@ -1,4 +1,6 @@
 const { Router, response } = require('express');
+const express = require("express");
+const app = express();
 const { check } = require('express-validator');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');
 const { validadorCampos } = require('../middlewares/validadorCampos');
@@ -6,8 +8,8 @@ const { platoRepetidoValidador } = require('../helpers/validadorBD');
 const router = Router();
 const Plato = require('../Controller/plato');
 const plato = new Plato();
+//
 const multer = require('multer');
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images')
@@ -17,7 +19,7 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-
+//
 router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ plato.getAllPlato( req, res ) });
@@ -28,14 +30,8 @@ router.post('/recetas', upload.single('imagen'), ( req , res ) =>{ plato.postRec
 
 router.post('/', ( req , res ) =>{ plato.postPlato( req, res ) });
 
-router.put('/:id',[
-    check('id','No es un id mongoDB').isMongoId(),
-    validadorCampos
-    ],( req , res ) =>{ plato.putPlato( req, res ) });
+router.put('/:nombrePlato', upload.single('imagen'), ( req , res ) =>{ plato.putReceta( req, res ) });
 
-router.delete('/:id',[
-    check('id','No es un id mongoDB').isMongoId(),
-    validadorCampos
-    ],( req , res ) =>{ plato.deletePlato( req, res ) });
+router.delete('/:nombrePlato',( req , res ) =>{ plato.deleteReceta( req, res ) });
 
 module.exports = router;

@@ -129,16 +129,48 @@ class Plato
             });
         }
     }
-    putPlato = async ( req=request, res=response ) => {
+    putReceta = async ( req=request, res=response ) => {
         
         try {
+            //en bodega solo se puede editar la cantidad y cantidadmin
             let {nombrePlato} = req.params
-            let {estado, ...update} = req.body
-            let plato = await platoModel.findOneAndUpdate(nombrePlato, update);
-            res.status(200).json({
-                status:200,
-                msg:"OK"
-            })
+            let update = req.body
+            let imagen = {
+                data: req.file.filename,
+                contentType: 'image/png'
+            }
+            console.log(imagen);
+            
+            //traer nombre prod-bodega
+            const plato = await platoModel.find();
+
+            let auxElemento = false
+            plato[0].recetas.forEach(element => {
+                if (element.nombrePlato == nombrePlato){
+                    element.nombrePlato = update.nombrePlato;
+                    element.categoria = update.categoria;
+                    element.ingredientes = update.ingredientes;
+                    element.minutosPreparacion = update.minutosPreparacion;
+                    element.precio = update.precio;
+                    element.imagen = imagen;
+                    element.mostrar = update.mostrar
+                    auxElemento = true;
+                }
+            });
+            if(auxElemento){
+                let aux = plato[0].recetas;
+                await platoModel.findByIdAndUpdate(plato[0].id, {recetas:aux});
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: 'Receta modificada'
+                });
+            } else {
+                res.status(500).json({
+                    status:500,
+                    msg:'Receta no existente',
+                    descripcion:'El producto no existe'
+                });
+             }
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -149,26 +181,36 @@ class Plato
         }
 
     }
-    deletePlato = async ( req=request, res=response ) => {
+    deleteReceta = async ( req=request, res=response ) => {
         
         try {
-            let {nombrePlato} = req.params
-            let update = {}
-            let est
-            let {estado = false} = req.query
-            if (estado == "true") {
-                update = {estado:true}
-                est = true
+            let {nombrePlato} = req.params;
+            let {estado} = req.query;
+            let update = estado=='true'?true:false;
+
+            const plato = await platoModel.find();
+
+            let auxElemento = false
+            plato[0].recetas.forEach(element => {
+                if (element.nombrePlato == nombrePlato){
+                    element.estado = update;
+                    auxElemento = true;
+                }
+            });
+            if(auxElemento){
+                let aux = plato[0].recetas;
+                await platoModel.findByIdAndUpdate(plato[0].id, {recetas:aux});
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: update?'Plato habilitado':'Plato deshabilitado'
+                });
             } else {
-                update = {estado:false}
-                est = false
+            res.status(500).json({
+                status:500,
+                msg:'Plato no existente',
+                descripcion:'El plato no existe'
+            });
             }
-            let plato = await platoModel.findOneAndUpdate(nombrePlato, update);
-            plato.estado = est
-            res.status(200).json({
-                status:200,
-                msg:plato
-            })
 
         } catch (error) {
             console.log(error)
