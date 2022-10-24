@@ -96,37 +96,6 @@ class Bodega
             });
         }
     }
-    deleteBodega = async ( req=request, res=response ) => {
-        
-        try {
-            let {id} = req.params
-            let update = {}
-            let est
-            let {estado = false} = req.query
-            if (estado == "true") {
-                update = {estado:true}
-                est = true
-            } else {
-                update = {estado:false}
-                est = false
-            }
-            let bodega = await bodegaModel.findByIdAndUpdate(id, update);
-            bodega.estado = est
-            res.status(200).json({
-                status:200,
-                msg:bodega
-            })
-
-        } catch (error) {
-            
-            console.log(error)
-            res.status(500).json({
-                status:500,
-                msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el producto en bodega'
-            });
-        }
-    }
 }
 
 module.exports = Bodega;
