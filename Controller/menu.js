@@ -9,7 +9,7 @@ class Menu {
             const menu = await menuModel.find()
             .populate({path:"platos"})
             .populate({path:"bodega"})
-            console.log(menu)
+            //console.log(menu)
             let aux = false
             const productosBodega = {}
             menu[0].bodega.productosBodega.forEach(producto => {
@@ -25,7 +25,7 @@ class Menu {
                     productosBodega[llave] = producto.cantidad
                 }
             });
-            console.log(productosBodega)
+            //console.log(productosBodega)
 
             const platosCocinables = []
             const productosPlatos = {}
@@ -54,10 +54,14 @@ class Menu {
                             productosBodega[llave] -= 1
                         }
                     });
-                    platosCocinables.push(receta.nombrePlato)
+                    platosCocinables.push(receta.nombrePlato, receta.categoria, receta.ingredientes, receta.precio, receta.imagen)
                 }
+                
             });
-            console.log(platosCocinables)
+            res.status( 200 ).json({
+                status: 201,
+                msg: platosCocinables
+            });
         } catch (error) {
             console.log(error)
             res.status(500).json({
