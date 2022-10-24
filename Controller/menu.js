@@ -9,11 +9,15 @@ class Menu {
             const menu = await menuModel.find()
             .populate({path:"platos"})
             .populate({path:"bodega"})
+            console.log(menu)
             let aux = false
-            menu.forEach(element => {
-                console.log(element);
-                
+            menu[0].platos.recetas.forEach(element => {
+                //console.log(element);
+                element.ingredientes.forEach(element1 => {
+                    console.log(element1);
+                });
             });
+            
         } catch (error) {
             console.log(error)
             res.status(500).json({
