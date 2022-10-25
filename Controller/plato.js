@@ -9,7 +9,9 @@ class Plato
         
         try {
             let {recetas} = req.body
+            console.log(recetas)
             let plato = new platoModel(recetas)
+            console.log(plato)
             await plato.save();
             res.status( 200 ).json({
                 status: 201,
