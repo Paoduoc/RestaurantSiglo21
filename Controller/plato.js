@@ -81,13 +81,6 @@ class Plato
     postReceta = async ( req=request, res=response )=> {
         
         try {
-            var obj = {
-                imagen: {
-                    data: req.file.filename,
-                    contentType: 'image/png'
-                }
-            }
-            console.log(obj);
             let update = req.body
             let imagen = {
                 data: req.file.filename,
@@ -96,6 +89,7 @@ class Plato
             let auxElemento = false;
 
             const plato = await platoModel.find();
+            console.log("SAdasdsa")
             plato[0].recetas.forEach(element => {
                 if (element.nombrePlato == update.nombrePlato){
                     res.status(500).json({
@@ -105,6 +99,7 @@ class Plato
                     });
                 } else{
                     auxElemento = true;
+                    console.log("aasadasdsa");
                 }
             });
             if(auxElemento){
