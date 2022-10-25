@@ -54,7 +54,7 @@ class Menu {
                             productosBodega[llave] -= 1
                         }
                     });
-                    platosCocinables.push(receta.nombrePlato, receta.categoria, receta.ingredientes, receta.precio, receta.imagen)
+                    platosCocinables.push(receta)
                 }
                 
             });
