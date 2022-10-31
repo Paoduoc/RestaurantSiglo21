@@ -6,6 +6,7 @@ const { platoRepetidoValidador } = require('../helpers/validadorBD');
 const router = Router();
 const Plato = require('../Controller/plato');
 const plato = new Plato();
+
 //
 const multer = require('multer');
 const cors = require('cors');
@@ -21,25 +22,36 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-//router.use("/images", express.static('images'));
 router.use(cors({
     origin: 'http://localhost:8080'
 }));
-
 //
+
 //router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ plato.getAllPlato( req, res ) });
 
-router.get('/:nombrePlato', [validadorCampos],( req , res ) =>{ plato.getReceta( req, res ) });
+router.get('/:id', [
+    check('id','no es un id mongodb').isMongoId(),
+    validadorCampos
+    ],( req , res ) =>{ plato.getPlato( req, res ) });
 
-router.post('/recetas', upload.single('imagen'), ( req , res ) =>{ plato.postReceta( req, res ) });
+router.post('/', upload.single('imagen'), [
+    check('nombrePlato','El campo nombre de plato es requerido').not().isEmpty(),
+    //check('numMesa').custom(mesaValidador),
+    //check('precio','La cantidad de sillas es requerida').not().isEmpty(),
+    validadorCampos
+    ], ( req , res ) =>{ plato.postPlato( req, res ) });
 
-router.post('/', ( req , res ) =>{ plato.postPlato( req, res ) });
+router.put('/:id', upload.single('imagen'), [
+    check('id','no es un id mongodb').isMongoId(),
+    validadorCampos
+    ], ( req , res ) =>{ plato.putPlato( req, res ) });
 
-router.put('/:nombrePlato', upload.single('imagen'), ( req , res ) =>{ plato.putReceta( req, res ) });
-
-router.delete('/:nombrePlato',( req , res ) =>{ plato.deleteReceta( req, res ) });
+router.delete('/:id', [
+    check('id','no es un id mongodb').isMongoId(),
+    validadorCampos
+    ], ( req , res ) =>{ plato.deletePlato( req, res ) });
 
 router.use("/images", express.static('images'));
 

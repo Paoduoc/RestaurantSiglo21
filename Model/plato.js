@@ -1,12 +1,15 @@
 const { Schema, model } = require('mongoose');
 
-const recetas = Schema({
+const platoSchema = Schema({
     nombrePlato: {
         type: String
     },
     estado: {
         type: Boolean,
         default: true
+    },
+    descripcion: {
+        type: String
     },
     categoria: {
         type: String
@@ -24,17 +27,8 @@ const recetas = Schema({
         type: Number
     },
     imagen: {
-        data: Buffer,
-        contentType: String
-    },
-    mostrar: {
-        type: Boolean,
-        default: false
+        type: String
     }
 });
-
-const platoSchema = Schema({
-    recetas: []
-})
 
 module.exports = model( 'Plato', platoSchema );
