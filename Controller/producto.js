@@ -8,8 +8,8 @@ class Producto
     getProducto = async ( req=request, res=response ) => {
 
         try {
-            let {nombreProducto} = req.params
-            const producto = await productoModel.findOne({nombreProducto:nombreProducto});
+            let {id} = req.params
+            const producto = await productoModel.findOne({id});
             res.status(200).json({
                 status:200,
                 msg:producto
@@ -84,11 +84,11 @@ class Producto
     }
     putProducto = async ( req=request, res=response ) => {
         try {
-            let {nombreProducto} = req.params
-            let {tipo, cantidadMin} = req.body
-
+            let {id} = req.params
+            let {nombreProducto, tipo, cantidadMin} = req.body //agregar nombre
+            
             //producto
-            await productoModel.findOneAndUpdate(nombreProducto, {tipo:tipo});
+            await productoModel.findOneAndUpdate(id, {nombreProducto, tipo});
 
             //bodega
             //traer nombre prod-bodega
@@ -128,11 +128,11 @@ class Producto
 
     deleteProducto = async ( req=request, res=response ) => {
         try {
-            let {nombreProducto} = req.params;
+            let {id} = req.params;
             let {estado} = req.query;
             let update = estado=='true'?true:false;
 
-            await productoModel.findOneAndUpdate({nombreProducto:nombreProducto}, {estado:update});
+            await productoModel.findOneAndUpdate({id}, {estado:update});
             const bodega = await bodegaModel.find();
 
             let auxElemento = false
@@ -150,11 +150,11 @@ class Producto
                     msg: update?'Producto habilitado':'Producto deshabilitado'
                 });
             } else {
-            res.status(500).json({
-                status:500,
-                msg:'Producto no existente',
-                descripcion:'El producto no existe'
-            });
+                res.status(500).json({
+                    status:500,
+                    msg:'Producto no existente',
+                    descripcion:'El producto no existe'
+                });
             }
         }
         catch (error) {
