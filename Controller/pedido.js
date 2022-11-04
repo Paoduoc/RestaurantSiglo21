@@ -67,8 +67,8 @@ class Pedido
             let {platos, fechaIP, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido} = req.body
             let pedido = new pedidoModel({platos, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido})
             pedido.estado = true
-            let cocina = new cocinaModel({platos})
-            await cocina.save();
+            //let cocina = new cocinaModel({platos})
+            //await cocina.save();
             await pedido.save();
             if ( !fechaIP ) {
                 fechaIP= await formatoFecha(new Date())

@@ -7,7 +7,7 @@ const productosBodega = Schema({
     estado: {
         type: Boolean
     },
-    cantidad: {
+    gramos: {
         type: Array
     },
     cantidadMin: {

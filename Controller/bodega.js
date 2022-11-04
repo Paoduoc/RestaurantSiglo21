@@ -55,7 +55,29 @@ class Bodega
             }); 
         }
     }
+    postBodega = async ( req=request, res=response ) => {
+        
+        try {
 
+            let {productosBodega} = req.body
+            let bodega = new bodegaModel({productosBodega})
+            await bodega.save();
+            res.status(200).json({ 
+                status: 201,
+                msg: 'Bodega creada' 
+            });
+            
+        } catch (error) {
+
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion:'Ha ocurrido un error en el servidor, no se añadio la bodega'
+            });
+        }
+    
+    }
     putBodega = async ( req=request, res=response ) => {
         
         try {
@@ -69,7 +91,7 @@ class Bodega
             let auxElemento = false
             bodega[0].productosBodega.forEach(element => {
                 if (element.nombreProducto == nombreProducto){
-                    element.cantidad = update.cantidad;
+                    element.gramos = update.gramos;
                     auxElemento = true;
                 }
             });
