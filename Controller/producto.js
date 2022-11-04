@@ -45,11 +45,11 @@ class Producto
         try {
             let {tipo, ...update} = req.body
             let producto = new productoModel({tipo, ...update})
-            let auxElemento = true;
+            let auxElemento = false;
 
             //traer id
             const bodega = await bodegaModel.find();
-            bodega.forEach(element => {
+            bodega[0].productosBodega.forEach(element => {
                 if (element.nombreProducto == update.nombreProducto){
                     res.status(500).json({
                         status:500,
@@ -87,17 +87,16 @@ class Producto
             let {nombreProducto, tipo, cantidadMin} = req.body //agregar nombre
             
             //producto
-            await productoModel.findOneAndUpdate(id, {nombreProducto, tipo});
-
+            
+            let modelP = await productoModel.findOneAndUpdate(id, {nombreProducto, tipo});
+            console.log(modelP);
             //bodega
             //traer nombre prod-bodega
             const bodega = await bodegaModel.find();
-            console.log(nombreProducto);
             let auxElemento = false
             bodega[0].productosBodega.forEach(element => {
-                if (element.nombreProducto == nombreProducto){
+                if (element.nombreProducto == modelP.nombreProducto){
                     element.cantidadMin = cantidadMin;
-                    console.log(cantidadMin);
                     auxElemento = true;
                 }
             });

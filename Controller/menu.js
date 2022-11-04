@@ -11,7 +11,6 @@ class Menu {
             const productoBodega = {}
             bodega.forEach(producto => {
                 producto.productosBodega.forEach(element => {
-                    console.log(element);
                     const llave = element.nombreProducto
                     if (productoBodega[llave]) {
                         productoBodega[llave] += 1
@@ -23,11 +22,14 @@ class Menu {
             //console.log(productoBodega)
             const platosCocinables = []
             platos.forEach(recetas => {
-                console.log(recetas);
                 let esCocinable = true
                 recetas.ingredientes.forEach(ingre => {
-                    const llave = ingre
-                    console.log(llave);
+                    const nom = ingre.nom
+                    console.log(nom);
+                    const cant = ingre.cant
+                    console.log(cant);
+                    const llave = nom
+                    console.log(llave); 
                     if (productoBodega[llave]) {
                         if (productoBodega[llave] >= 1) {
                             productoBodega[llave] -= 1
