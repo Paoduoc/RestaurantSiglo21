@@ -87,9 +87,10 @@ class Bodega
 
             //traer nombre prod-bodega
             const bodega = await bodegaModel.find();
-
+            console.log(bodega);
             let auxElemento = false
             bodega[0].productosBodega.forEach(element => {
+                console.log(element);
                 if (element.nombreProducto == nombreProducto){
                     element.gramos = update.gramos;
                     auxElemento = true;
