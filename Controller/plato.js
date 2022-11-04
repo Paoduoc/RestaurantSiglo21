@@ -43,8 +43,7 @@ class Plato
         
         try {
             let update = req.body
-            let imagen = 'http://localhost:8080/api/v1/platos/images/' + req.file.filename
-            let plato = new platoModel({...update, imagen})
+            let plato = new platoModel({...update})
             await plato.save();
             res.status( 200 ).json( { 
                 status: 201,

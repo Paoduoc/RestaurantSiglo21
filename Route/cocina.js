@@ -2,37 +2,34 @@ const { Router, response } = require('express');
 const { check } = require('express-validator');
 const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
-const Pedidos = require('../Controller/pedido');
+const Cocina = require('../Controller/cocina');
 const { validaAccesoToken } = require('../middlewares/jwtValidador');
-const pedido = new Pedidos();
+const cocina = new Cocina();
 
+//Se añade el token a esta ruta
 router.use(validaAccesoToken)
 
-router.get('/',( req , res ) =>{ pedido.getAllPedido( req, res ) });
+router.get('/',( req , res ) =>{ cocina.getAllComandas( req, res ) });
 
+//se añade validacion de que el ID sea un mongoID
 router.get('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ pedido.getPedido( req, res ) });
+    ],( req , res ) =>{ cocina.getComanda( req, res ) });
 
-
+//Se validan los campos requeridos
 router.post('/',[
-    check('garzon','El garzón es requerido').not().isEmpty(),
-    check('mesa','La mesa es requerida').not().isEmpty(),
-    check('platos','Los platos son requeridos').not().isEmpty(),
-    check('preciosU','Los precios son requeridos').not().isEmpty(),
     validadorCampos
-    ],( req , res ) =>{ pedido.postPedido( req, res ) });
-
+    ],( req , res ) =>{ cocina.postComanda( req, res ) });
 
 router.put('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ pedido.putPedido( req, res ) });
+    ],( req , res ) =>{ cocina.putComanda( req, res ) });
 
 router.delete('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ pedido.deletePedido( req, res ) });
+    ],( req , res ) =>{ cocina.deleteComanda( req, res ) });
 
 module.exports = router;

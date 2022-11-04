@@ -45,12 +45,11 @@ class Producto
         try {
             let {tipo, ...update} = req.body
             let producto = new productoModel({tipo, ...update})
-            let auxElemento = false;
+            let auxElemento = true;
 
             //traer id
             const bodega = await bodegaModel.find();
-            
-            bodega[0].productosBodega.forEach(element => {
+            bodega.forEach(element => {
                 if (element.nombreProducto == update.nombreProducto){
                     res.status(500).json({
                         status:500,
@@ -65,14 +64,14 @@ class Producto
             let aux = bodega[0].productosBodega;
             aux.push(update);
 
-            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux});
+            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux}); 
             await producto.save();
 
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Producto creado'
             });
-            }
+        }
         } catch (error) {
             console.log(error)
             res.status(500).json({
