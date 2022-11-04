@@ -19,20 +19,17 @@ class Menu {
                     }
                 });
             });
-            //console.log(productoBodega)
+            console.log(productoBodega)
             const platosCocinables = []
             platos.forEach(recetas => {
                 let esCocinable = true
                 recetas.ingredientes.forEach(ingre => {
                     const nom = ingre.nom
-                    console.log(nom);
                     const cant = ingre.cant
-                    console.log(cant);
                     const llave = nom
-                    console.log(llave); 
-                    if (productoBodega[llave]) {
-                        if (productoBodega[llave] >= 1) {
-                            productoBodega[llave] -= 1
+                    if (productoBodega[llave] >= 1) {
+                        if (productoBodega[llave] >= cant) {
+                            console.log(productoBodega[llave]);
                         } else {
                             esCocinable = false
                         }
@@ -40,18 +37,9 @@ class Menu {
                         esCocinable = false
                     }
                 });
-                
-                 // si es cocinable descontamos los productos
                 if (esCocinable) {
-                    recetas.ingredientes.forEach(ingre => {
-                        const llave = ingre
-                        if (productoBodega[llave]) {
-                            productoBodega[llave] -= 1
-                        }
-                    });
                     platosCocinables.push(recetas.nombrePlato, recetas.descripcion, recetas.categoria, recetas.ingredientes, recetas.precio, recetas.imagen)
                 } 
-                
             });
             res.status( 200 ).json({
                 status: 201,
