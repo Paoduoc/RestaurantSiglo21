@@ -7,21 +7,21 @@ class Bodega
     getBodega = async ( req=request, res=response ) => {
 
         try {
-            let {nombreProducto} = req.params
+            let {id} = req.params
             const bodega = await bodegaModel.find();
-            let auxElemento = false
             let productoBodega
+            let auxElemento = false
             bodega[0].productosBodega.forEach(element => {
-                if (element.nombreProducto == nombreProducto){
+                if (element.id == id){
                     productoBodega = element
-                    auxElemento = true;
+                    auxElemento = true
                 }
             });
-            if(auxElemento){
-                res.status(200).json({
-                    status:200,
-                    msg:productoBodega
-                })
+            if (auxElemento){
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: productoBodega
+                });
             } else {
                 res.status(500).json({
                     status:500,
@@ -81,18 +81,15 @@ class Bodega
     putBodega = async ( req=request, res=response ) => {
         
         try {
-            //en bodega solo se puede editar la cantidad y cantidadmin
-            let {nombreProducto} = req.params
-            let {...update} = req.body
+            let {id} = req.params
+            let {gramos, cantidadMin} = req.body
 
-            //traer nombre prod-bodega
             const bodega = await bodegaModel.find();
-            console.log(bodega);
             let auxElemento = false
             bodega[0].productosBodega.forEach(element => {
-                console.log(element);
-                if (element.nombreProducto == nombreProducto){
-                    element.gramos = update.gramos;
+                if (element.id == id){
+                    element.gramos = gramos;
+                    element.cantidadMin = cantidadMin;
                     auxElemento = true;
                 }
             });
