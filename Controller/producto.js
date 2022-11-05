@@ -1,7 +1,6 @@
 const { response, request } = require('express');
 const productoModel = require("../Model/producto");
 const bodegaModel = require("../Model/bodega");
-const bodega = require('../Model/bodega');
 
 class Producto
 {
@@ -43,35 +42,22 @@ class Producto
     postProducto = async ( req=request, res=response ) => {
         
         try {
-            let {tipo, ...update} = req.body
-            let producto = new productoModel({tipo, ...update})
-            let auxElemento = false;
+            //let {tipo, ...update} = req.body
+            let {nombreProducto, estado, tipo, gramos, cantidadMin} = req.body
+            let producto = new productoModel({nombreProducto, estado, tipo})
+            let id = producto.id
 
-            //traer id
             const bodega = await bodegaModel.find();
-            bodega[0].productosBodega.forEach(element => {
-                if (element.nombreProducto == update.nombreProducto){
-                    res.status(500).json({
-                        status:500,
-                        msg:'Duplicidad producto',
-                        descripcion:'El nombre del producto ya existe'
-                    });
-                } else{
-                    auxElemento = true;
-                }
-            });
-            if(auxElemento){
             let aux = bodega[0].productosBodega;
-            aux.push(update);
 
-            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux}); 
+            aux.push({id, nombreProducto, estado, gramos, cantidadMin});
             await producto.save();
+            await bodegaModel.findByIdAndUpdate(bodega[0].id, ({productosBodega:aux})); 
 
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Producto creado'
             });
-        }
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -84,19 +70,14 @@ class Producto
     putProducto = async ( req=request, res=response ) => {
         try {
             let {id} = req.params
-            let {nombreProducto, tipo, cantidadMin} = req.body //agregar nombre
+            let {nombreProducto, tipo} = req.body
             
-            //producto
-            
-            let modelP = await productoModel.findOneAndUpdate(id, {nombreProducto, tipo});
-            console.log(modelP);
-            //bodega
-            //traer nombre prod-bodega
+            let producto = await productoModel.findByIdAndUpdate(id, {nombreProducto, tipo});
             const bodega = await bodegaModel.find();
             let auxElemento = false
             bodega[0].productosBodega.forEach(element => {
-                if (element.nombreProducto == modelP.nombreProducto){
-                    element.cantidadMin = cantidadMin;
+                if (element.id == id){
+                    element.nombreProducto = nombreProducto;
                     auxElemento = true;
                 }
             });
@@ -130,12 +111,11 @@ class Producto
             let {estado} = req.query;
             let update = estado=='true'?true:false;
 
-            await productoModel.findOneAndUpdate({id}, {estado:update});
             const bodega = await bodegaModel.find();
 
             let auxElemento = false
             bodega[0].productosBodega.forEach(element => {
-                if (element.nombreProducto == nombreProducto){
+                if (element.id == id){
                     element.estado = update;
                     auxElemento = true;
                 }
@@ -143,6 +123,7 @@ class Producto
             if(auxElemento){
                 let aux = bodega[0].productosBodega;
                 await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:aux});
+                await productoModel.findByIdAndUpdate(id, {estado:update});
                 res.status( 200 ).json({
                     status: 201,
                     msg: update?'Producto habilitado':'Producto deshabilitado'
