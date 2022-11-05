@@ -70,6 +70,7 @@ class Server {
         this.app.use(this.route.routes.api.v1.reservas, require('../Route/reserva'));
         this.app.use(this.route.routes.api.v1.menu, require('../Route/menu'));
         this.app.use(this.route.routes.api.v1.pedido, require('../Route/pedido'));
+        this.app.use(this.route.routes.api.v1.proveedor, require('../Route/provedor'));
     }
 
     listen() {

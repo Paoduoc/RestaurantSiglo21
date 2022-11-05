@@ -14,7 +14,8 @@
                 "bodega": "/api/v1/bodega",
                 "plato": "/api/v1/platos",
                 "menu": "/api/v1/menus",
-                "pedido": "/api/v1/pedidos"
+                "pedido": "/api/v1/pedidos",
+                "proveedor": "/api/v1/proveedores"
             }
         }
     }

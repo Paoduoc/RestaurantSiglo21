@@ -3,10 +3,7 @@ const { check } = require('express-validator');
 const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
 const Pedidos = require('../Controller/pedido');
-const { validaAccesoToken } = require('../middlewares/jwtValidador');
 const pedido = new Pedidos();
-
-router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ pedido.getAllPedido( req, res ) });
 
