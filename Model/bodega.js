@@ -1,6 +1,9 @@
 const { Schema, model } = require('mongoose');
 
 const productosBodega = Schema({
+    id: {
+        type: String
+    },
     nombreProducto: {
         type: String
     },
@@ -16,7 +19,7 @@ const productosBodega = Schema({
 })
 
 const bodegaSchema = Schema({
-    productosBodega: []
+    productosBodega: [] 
 });
 
 module.exports = model( 'Bodega', bodegaSchema );
