@@ -38,8 +38,7 @@ router.get('/:id', [
 
 router.post('/', upload.single('imagen'), [
     check('nombrePlato','El campo nombre de plato es requerido').not().isEmpty(),
-    //check('numMesa').custom(mesaValidador),
-    //check('precio','La cantidad de sillas es requerida').not().isEmpty(),
+    check('nombrePlato').custom(platoRepetidoValidador),
     validadorCampos
     ], ( req , res ) =>{ plato.postPlato( req, res ) });
 
