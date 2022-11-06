@@ -1,22 +1,16 @@
 const { response, request } = require('express');
-const cocinaModel = require("../Model/cocina");
+const proveeModel = require("../Model/proveedor");
 
-class Cocina
+class Proveedor
 {
-    //maneras de obtener datos del request
-    //1 - una manera es con request.body
-    //2 - request.params (URL)
-    //3 - request.query (URL) 
-
-    //obtiene una comanda mediante mongoID
-    getComanda = async ( req=request, res=response ) => {
+    getProv = async ( req=request, res=response ) => {
 
         try {
             let {id} = req.params
-            const comanda = await cocinaModel.findById(id);
+            const proveedor = await proveeModel.findById(id);
             res.status(200).json({
                 status:200,
-                msg:comanda
+                msg:proveedor
             })
 
         } catch (error) {
@@ -24,39 +18,39 @@ class Cocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontro la comanda'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontro proveedor'
             }); 
         }
 
     }
-    //Obtiene todos los accesos
-    getAllComandas = async ( req=request, res=response ) => {
+    getAllProv = async ( req=request, res=response ) => {
         
         try {
-            const comanda = await cocinaModel.find();
+            const proveedor = await proveeModel.find();
             res.status(200).json({
                 status:200,
-                msg:comanda
+                msg:proveedor
             })
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se encontraron comandas'
+                descripcion:'Ha ocurrido un error en el servidor, no se encontraron proveedores'
             }); 
         }
 
     }
-    //Genera nuevos accesos
-    postComanda = async ( req=request, res=response ) => {
+    postProv = async ( req=request, res=response ) => {
         
         try {
-            let {} = req.body
-            await comanda.save();
+            let {nombreProvee,estado,tipoProd,ncontacto,correo, direccion} = req.body
+            let proveedor = new proveeModel({nombreProvee, estado, tipoProd, ncontacto, correo, direccion})
+
+            await proveedor.save();
             res.status( 200 ).json( { 
                 status: 201,
-                msg: 'Acceso creado' 
+                msg: 'Proveedor creado' 
             });
             
         } catch (error) {
@@ -64,23 +58,21 @@ class Cocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se añadieron accesos'
+                descripcion:'Ha ocurrido un error en el servidor, no se añadieron proveedores'
             });
         }
     
     }
-    //Modifica los accesos mediante mongoID
-    putComanda = async ( req=request, res=response ) => {
+    putProv = async ( req=request, res=response ) => {
         
         try {
 
             let {id} = req.params
-            let {ruta} = req.body
-            let acceso = await accesoModel.findByIdAndUpdate(id, {ruta});
-            acceso.ruta = ruta
+            let {estado,...update} = req.body
+            let proveedor = await proveeModel.findByIdAndUpdate(id, ...update);
             res.status(200).json({
                 status:200,
-                msg:acceso
+                msg:proveedor
             })
             //Se envia msg acceso solo para ver el que el acceso haya cambiado realmente, evidencias para BACK
 
@@ -90,14 +82,13 @@ class Cocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se modifico el acceso'
+                descripcion:'Ha ocurrido un error en el servidor, no se modifico el proveedor'
             });
 
         }
 
     }
-    //Deshabilita el acceso mediante mongo ID
-    deleteComanda = async ( req=request, res=response ) => {
+    deleteProv = async ( req=request, res=response ) => {
         
         try {
             
@@ -113,8 +104,8 @@ class Cocina
                 update = {estado:false}
                 est= false
             }
-            let acceso = await accesoModel.findByIdAndUpdate(id, update);
-            acceso.estado = est
+            let proveedor = await proveeModel.findByIdAndUpdate(id, update);
+            proveedor.estado = est
             res.status(200).json({
                 status:200,
                 msg:estado
@@ -125,7 +116,7 @@ class Cocina
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el acceso'
+                descripcion:'Ha ocurrido un error en el servidor, no se elimino el proveedor'
             });
         }
 
@@ -133,4 +124,4 @@ class Cocina
 
 }
 
-module.exports = Cocina;
+module.exports = Proveedor;

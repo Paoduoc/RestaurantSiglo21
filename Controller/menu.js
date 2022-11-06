@@ -19,7 +19,7 @@ class Menu {
                     }
                 });
             });
-            console.log(productoBodega)
+            //console.log(productoBodega)
             const platosCocinables = []
             platos.forEach(recetas => {
                 let esCocinable = true
@@ -29,7 +29,7 @@ class Menu {
                     const llave = nom
                     if (productoBodega[llave] >= 1) {
                         if (productoBodega[llave] >= cant) {
-                            console.log(productoBodega[llave]);
+                            //console.log(productoBodega[llave]);
                         } else {
                             esCocinable = false
                         }

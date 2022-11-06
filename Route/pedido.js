@@ -3,10 +3,7 @@ const { check } = require('express-validator');
 const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
 const Pedidos = require('../Controller/pedido');
-const { validaAccesoToken } = require('../middlewares/jwtValidador');
 const pedido = new Pedidos();
-
-router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ pedido.getAllPedido( req, res ) });
 
@@ -18,9 +15,8 @@ router.get('/:id',[
 
 router.post('/',[
     check('garzon','El garzón es requerido').not().isEmpty(),
-    check('mesa','La mesa es requerida').not().isEmpty(),
-    check('platos','Los platos son requeridos').not().isEmpty(),
-    check('preciosU','Los precios son requeridos').not().isEmpty(),
+    check('reserva','La mesa es requerida').not().isEmpty(),
+    check('platosID','Los platos son requeridos').not().isEmpty(),
     validadorCampos
     ],( req , res ) =>{ pedido.postPedido( req, res ) });
 

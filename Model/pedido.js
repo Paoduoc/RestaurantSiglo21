@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const pedidoSchema = Schema({
-    platos: {
+    platosID: {
         type: Array
     },
     estado: {
@@ -28,9 +28,6 @@ const pedidoSchema = Schema({
     },
     comentariosDevolucion: {
         type: String
-    },
-    preciosU: {
-        type: Array
     },
     totalPedido: {
         type: Number,
