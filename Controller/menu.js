@@ -38,7 +38,7 @@ class Menu {
                     }
                 });
                 if (esCocinable) {
-                    platosCocinables.push(recetas.nombrePlato, recetas.descripcion, recetas.categoria, recetas.ingredientes, recetas.precio, recetas.imagen)
+                    platosCocinables.push(recetas)
                 } 
             });
             res.status( 200 ).json({
