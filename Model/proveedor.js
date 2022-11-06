@@ -16,6 +16,9 @@ const proveedorSchema = Schema({
     },
     correo:{
         type: String
+    },
+    direccion:{
+        type: String
     }
 });
 

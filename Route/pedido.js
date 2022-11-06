@@ -15,9 +15,8 @@ router.get('/:id',[
 
 router.post('/',[
     check('garzon','El garzón es requerido').not().isEmpty(),
-    check('mesa','La mesa es requerida').not().isEmpty(),
-    check('platos','Los platos son requeridos').not().isEmpty(),
-    check('preciosU','Los precios son requeridos').not().isEmpty(),
+    check('reserva','La mesa es requerida').not().isEmpty(),
+    check('platosID','Los platos son requeridos').not().isEmpty(),
     validadorCampos
     ],( req , res ) =>{ pedido.postPedido( req, res ) });
 

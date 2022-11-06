@@ -2,6 +2,8 @@ const { response, request } = require('express');
 const pedidoModel = require("../Model/pedido");
 const { formatoFecha } = require('../helpers/fecha');
 const cocinaModel = require("../Model/cocina");
+const platosModel = require("../Model/plato");
+const bodegaModel = require("../Model/bodega");
 
 class Pedido
 {
@@ -64,8 +66,8 @@ class Pedido
     postPedido = async ( req=request, res=response ) => {
         
         try {
-            let {platos, fechaIP, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido} = req.body
-            let pedido = new pedidoModel({platos, estado, fechaTP, mesa, garzon, comentariosPlato, comentariosDevolucion, preciosU, totalPedido})
+            let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido} = req.body
+            let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido})
             pedido.estado = true
             //let cocina = new cocinaModel({platos})
             //await cocina.save();
@@ -74,11 +76,33 @@ class Pedido
                 fechaIP= await formatoFecha(new Date())
                 await pedidoModel.findByIdAndUpdate(pedido.id, {fechaIP:fechaIP});
             }
+            const platosBD = await platosModel.find()
             let suma = 0
-            for (let n of preciosU) {
-                suma +=n;
-                await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma});
-            }
+            let precio = 0
+            let ingP 
+            let plat = pedido.platosID
+            const bodega = await bodegaModel.find()
+            const productoBodega = bodega[0].productosBodega[0]
+            console.log(plat);
+            pedido.platosID.forEach( (pl, index) => {
+                platosBD.forEach(plbd => {
+                    if (pl.id == plbd._id) {
+                        precio = plbd.precio
+                        suma += precio;
+                        ingP = plbd.ingredientes
+                        ingP.forEach(ingre => {
+                            productoBodega[ingre.nom] = Number(productoBodega[ingre.nom])-Number(ingre.cant)
+                        });
+                    }
+                    pl.flag = true
+                });
+                plat[index].flag = true;
+                console.log(pl.flag)
+            });
+            console.log(productoBodega);
+            await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma, platosID:plat});
+            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
+            console.log(productoBodega);
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Pedido creado'

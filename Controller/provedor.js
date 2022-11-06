@@ -44,8 +44,8 @@ class Proveedor
     postProv = async ( req=request, res=response ) => {
         
         try {
-            let {nombreProvee,estado,tipoProd,ncontacto,correo} = req.body
-            let proveedor = new proveeModel({nombreProvee, estado, tipoProd, ncontacto, correo})
+            let {nombreProvee,estado,tipoProd,ncontacto,correo, direccion} = req.body
+            let proveedor = new proveeModel({nombreProvee, estado, tipoProd, ncontacto, correo, direccion})
 
             await proveedor.save();
             res.status( 200 ).json( { 
