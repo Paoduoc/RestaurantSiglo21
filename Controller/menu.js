@@ -9,11 +9,14 @@ class Menu {
             const platos = await platoModel.find()
             const bodega = await bodegaModel.find()
             const productoBodega = {}
+            let cantP = 0
+            let min = 0
             bodega.forEach(producto => {
                 producto.productosBodega.forEach(element => {
-                    const llave = element.nombreProducto
+                    min = element.cantidadMin
+                    let llave = element.nombreProducto
                     if (productoBodega[llave]) {
-                        productoBodega[llave] += 1
+                        productoBodega[llave] += element.gramos
                     } else {
                         productoBodega[llave] = element.gramos
                     }
@@ -21,15 +24,31 @@ class Menu {
             });
             //console.log(productoBodega)
             const platosCocinables = []
+            let num =0
+            
             platos.forEach(recetas => {
+                let receta = {
+                    nombrePlato:"",
+                    descripcion:"",
+                    categoria:"",
+                    ingredientes:"",
+                    precio:"",
+                    imagen:"",
+                    cantP:"" 
+                }
+                let productoBodega1 = []
+                let cantidadIng=[]
+                console.log(receta);
                 let esCocinable = true
                 recetas.ingredientes.forEach(ingre => {
                     const nom = ingre.nom
                     const cant = ingre.cant
                     const llave = nom
-                    if (productoBodega[llave] >= 1) {
+                    if (productoBodega[llave] >= min) {
                         if (productoBodega[llave] >= cant) {
-                            //console.log(productoBodega[llave]);
+                            productoBodega1.push(Number(productoBodega[llave]))
+                            cantP = Number(productoBodega[llave])/Number(cant)
+                            cantidadIng.push(cantP)
                         } else {
                             esCocinable = false
                         }
@@ -38,9 +57,18 @@ class Menu {
                     }
                 });
                 if (esCocinable) {
-                    platosCocinables.push(recetas)
+                    num=Math.min(...cantidadIng);
+                    receta.nombrePlato = recetas.nombrePlato
+                    receta.descripcion = recetas.descripcion
+                    receta.categoria = recetas.categoria
+                    receta.ingredientes = recetas.ingredientes
+                    receta.precio = recetas.precio
+                    receta.imagen = recetas.imagen
+                    receta.cantP = num
+                    platosCocinables.push(receta)
                 } 
             });
+            
             res.status( 200 ).json({
                 status: 201,
                 msg: platosCocinables
