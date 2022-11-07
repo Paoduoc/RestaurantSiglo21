@@ -1,3 +1,4 @@
+const { parse } = require('dotenv');
 const { response, request } = require('express');
 const platoModel = require("../Model/plato");
 
@@ -44,6 +45,9 @@ class Plato
         try {
             let update = req.body
             let plato = new platoModel({...update})
+            plato.ingredientes.forEach(element => {
+                element.cant = parseInt(element.cant)
+            });
             await plato.save();
             res.status( 200 ).json( { 
                 status: 201,
