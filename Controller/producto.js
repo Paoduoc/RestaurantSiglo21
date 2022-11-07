@@ -8,7 +8,7 @@ class Producto
 
         try {
             let {id} = req.params
-            const producto = await productoModel.findOne({id});
+            const producto = await productoModel.findById(id);
             res.status(200).json({
                 status:200,
                 msg:producto

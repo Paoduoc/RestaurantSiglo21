@@ -94,7 +94,12 @@ const productoRepetidoValidador = async ( nombreProducto = '' ) => {
 
 //PLATOS
 //validador de duplicidad de platos
-
+const platoRepetidoValidador = async ( nombrePlato = '' ) => {
+    const validaPlato = await plato.findOne( {nombrePlato} );
+    if( validaPlato ){
+        throw new Error(`El plato ${nombrePlato} ya esta registrado`);
+    }
+}
 
 const reservaValidador = async ( mesa = '' ) => {
 
@@ -123,6 +128,7 @@ module.exports = {
     estatusValidador,
     accesoRolValidador,
     productoRepetidoValidador,
+    platoRepetidoValidador,
     reservaValidador,
     sobrecupoValidador,
 
