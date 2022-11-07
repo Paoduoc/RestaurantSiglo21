@@ -82,27 +82,26 @@ class Pedido
             let ingP 
             let plat = pedido.platosID
             const bodega = await bodegaModel.find()
-            const productoBodega = bodega[0].productosBodega[0]
-            console.log(plat);
+            const productoBodega = bodega[0].productosBodega
+            console.log(productoBodega);
             pedido.platosID.forEach( (pl, index) => {
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
                         precio = plbd.precio
                         suma += precio;
                         ingP = plbd.ingredientes
-                        ingP.forEach(ingre => {
+                        //console.log(ingP);
+                        /* ingP.forEach(ingre => {
                             productoBodega[ingre.nom] = Number(productoBodega[ingre.nom])-Number(ingre.cant)
-                        });
+                        }); */
                     }
                     pl.flag = true
                 });
                 plat[index].flag = true;
-                console.log(pl.flag)
             });
-            console.log(productoBodega);
+
             await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma, platosID:plat});
             await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
-            console.log(productoBodega);
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Pedido creado'
