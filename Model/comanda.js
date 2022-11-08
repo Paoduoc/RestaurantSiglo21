@@ -1,10 +1,6 @@
 const { Schema, model } = require('mongoose');
 
 const comandaSchema = Schema({
-    platos: {
-        type: Schema.ObjectId,
-        ref: 'Plato'
-    },
     estado:{
         type: Boolean,
         default: true
@@ -15,8 +11,4 @@ const comandaSchema = Schema({
     }
 });
 
-const cocinaSchema = Schema({
-    comandaSchema: []
-});
-
-module.exports = model( 'Cocina', cocinaSchema );
+module.exports = model( 'Comanda', comandaSchema );

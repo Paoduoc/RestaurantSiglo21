@@ -1,7 +1,7 @@
 const { response, request } = require('express');
 const pedidoModel = require("../Model/pedido");
 const { formatoFecha } = require('../helpers/fecha');
-const cocinaModel = require("../Model/cocina");
+const cocinaModel = require("../Model/comanda");
 const platosModel = require("../Model/plato");
 const bodegaModel = require("../Model/bodega");
 
@@ -69,8 +69,7 @@ class Pedido
             let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido} = req.body
             let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido})
             pedido.estado = true
-            //let cocina = new cocinaModel({platos})
-            //await cocina.save();
+            
             await pedido.save();
             if ( !fechaIP ) {
                 fechaIP= await formatoFecha(new Date())
@@ -83,7 +82,8 @@ class Pedido
             let plat = pedido.platosID
             const bodega = await bodegaModel.find()
             const productoBodega = bodega[0].productosBodega
-            console.log(productoBodega);
+            let ingBD
+            let nomBD
             pedido.platosID.forEach( (pl, index) => {
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
@@ -91,17 +91,30 @@ class Pedido
                         suma += precio;
                         ingP = plbd.ingredientes
                         //console.log(ingP);
-                        /* ingP.forEach(ingre => {
+                        ingP.forEach(ingre => {
+                            //console.log(ingre);
+                            productoBodega.forEach(element => {
+                                ingBD = element.gramos
+                                nomBD = element.nombreProducto
+                                if (productoBodega[nomBD]) {
+                                    //productoBodega[nomBD] += element.gramos
+                                } else {
+                                    productoBodega[nomBD] = element.gramos
+                                }
+                                
+                            });
                             productoBodega[ingre.nom] = Number(productoBodega[ingre.nom])-Number(ingre.cant)
-                        }); */
+                        });
                     }
                     pl.flag = true
                 });
                 plat[index].flag = true;
             });
-
+            console.log(productoBodega);
             await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma, platosID:plat});
-            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
+            //await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
+            //let cocina = new cocinaModel({platos})
+            //await cocina.save();
             res.status( 200 ).json({
                 status: 201,
                 msg: 'Pedido creado'

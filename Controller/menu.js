@@ -25,7 +25,6 @@ class Menu {
             //console.log(productoBodega)
             const platosCocinables = []
             let num =0
-            
             platos.forEach(recetas => {
                 let receta = {
                     _id: '',
@@ -39,7 +38,7 @@ class Menu {
                 }
                 let productoBodega1 = []
                 let cantidadIng=[]
-                console.log(receta);
+                //console.log(receta);
                 let esCocinable = true
                 recetas.ingredientes.forEach(ingre => {
                     const nom = ingre.nom
@@ -70,7 +69,6 @@ class Menu {
                     platosCocinables.push(receta)
                 } 
             });
-            
             res.status( 200 ).json({
                 status: 201,
                 msg: platosCocinables
