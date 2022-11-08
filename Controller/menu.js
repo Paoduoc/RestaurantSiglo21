@@ -28,6 +28,7 @@ class Menu {
             
             platos.forEach(recetas => {
                 let receta = {
+                    _id: '',
                     nombrePlato:"",
                     descripcion:"",
                     categoria:"",
@@ -65,6 +66,7 @@ class Menu {
                     receta.precio = recetas.precio
                     receta.imagen = recetas.imagen
                     receta.cantP = num
+                    receta._id = recetas._id
                     platosCocinables.push(receta)
                 } 
             });
