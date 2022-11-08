@@ -44,7 +44,8 @@ class Plato
         
         try {
             let update = req.body
-            let plato = new platoModel({...update})
+            let imagen = 'http://localhost:8080/api/v1/platos/images/' + req.file.filename
+            let plato = new platoModel({...update, imagen})
             plato.ingredientes.forEach(element => {
                 element.cant = parseInt(element.cant)
             });
@@ -69,8 +70,8 @@ class Plato
         try {
             let {id} = req.params
             let {estado, ...update} = req.body
-            let imagen = 'http://localhost:8080/api/v1/platos/images/' + req.file.filename
-            await platoModel.findByIdAndUpdate(id, {...update, imagen});
+            // let imagen = 'http://localhost:8080/api/v1/platos/images/' + req.file.filename
+            await platoModel.findByIdAndUpdate(id, {...update});
             res.status(200).json({
                 status:200,
                 msg:"Plato editado"

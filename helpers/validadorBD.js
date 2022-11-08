@@ -85,9 +85,11 @@ const accesoRolValidador = async ( rol = '' ) => {
 
 //PRODUCTOS
 //validador de duplicidad de producto
-const productoRepetidoValidador = async ( nombreProducto = '' ) => {
-    const validaProducto = await producto.findOne( {nombreProducto} );
-    if( validaProducto ){
+const productoRepetidoValidador = async ( nombreProducto = '', { req }) => {
+    const mongoId = req.params.id;
+    let productos = await producto.find( {nombreProducto} );
+    productos = productos.filter(p => p._id.toString() !== mongoId);
+    if( productos.length === 1 ){
         throw new Error(`El producto ${nombreProducto} ya esta registrado`);
     }
 }

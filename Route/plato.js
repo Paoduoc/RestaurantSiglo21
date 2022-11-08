@@ -9,7 +9,6 @@ const plato = new Plato();
 
 //
 const multer = require('multer');
-const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -22,12 +21,6 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-router.use(cors({
-    origin: 'http://localhost:8080'
-}));
-//
-
-//router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ plato.getAllPlato( req, res ) });
 
