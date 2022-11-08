@@ -44,7 +44,8 @@ class Plato
         
         try {
             let update = req.body
-            let plato = new platoModel({...update})
+            let imagen = 'http://localhost:8080/api/v1/platos/images/' + req.file.filename
+            let plato = new platoModel({...update, imagen})
             plato.ingredientes.forEach(element => {
                 element.cant = parseInt(element.cant)
             });
