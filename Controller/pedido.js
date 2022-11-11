@@ -27,21 +27,17 @@ class Pedido
         }
     }
     getAllPedido = async ( req=request, res=response ) => {
-        
         try {
             let {fechaIP} = req.body
-            console.log(fechaIP)
-            
             const pedido = await pedidoModel.find();
-
             let listaPedidos = [];
-
-            pedido.forEach( (element, index) => {
-                
+            pedido.forEach( element => {
                 if (element.fechaIP) {
-                    
                     const date = new Date(String(element.fechaIP));
                     let day = date.getDate();
+                    if (day < 10) {
+                        day = "0"+day
+                    }
                     const month = date.getMonth() + 1;
                     const year = date.getFullYear();
                     let fecha = `${year}-${month}-${day}`
@@ -96,23 +92,18 @@ class Pedido
                             productoBodega.forEach(element => {
                                 ingBD = element.gramos
                                 nomBD = element.nombreProducto
-                                if (productoBodega[nomBD]) {
-                                    //productoBodega[nomBD] += element.gramos
-                                } else {
-                                    productoBodega[nomBD] = element.gramos
+                                if (ingre.nom === nomBD) {
+                                    element.gramos = element.gramos - ingre.cant
                                 }
-                                
                             });
-                            productoBodega[ingre.nom] = Number(productoBodega[ingre.nom])-Number(ingre.cant)
                         });
                     }
                     pl.flag = true
                 });
                 plat[index].flag = true;
             });
-            console.log(productoBodega);
             await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma, platosID:plat});
-            //await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
+            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
             //let cocina = new cocinaModel({platos})
             //await cocina.save();
             res.status( 200 ).json({
@@ -134,23 +125,48 @@ class Pedido
         try {
 
             let {id} = req.params
-            let {estado, fechaIP, fechaTP, mesa, garzon, ...update} = req.body
+            let {estado, fechaIP, fechaTP, mesa, garzon, totalPedido, ...update} = req.body
             let pedidoId = await pedidoModel.findById(id);
+            const platosBD = await platosModel.find()
+            const bodega = await bodegaModel.find()
+            const productoBodega = bodega[0].productosBodega
+            let ingP 
             let plt = []
-            pedidoId.platos.forEach(element => {
-                plt.push(element)
-            });
-            plt.push(update.platos)
-            await pedidoModel.findByIdAndUpdate(id, {platos:plt});
-            let newprecios = []
             let suma = 0
-            pedidoId.preciosU.forEach(element1 => {
-                newprecios.push(element1)
+            let ingBD
+            let nomBD
+            pedidoId.platosID.forEach(pl => {
+                plt.push(pl)
             });
-            newprecios.push(update.preciosU)
-            suma = update.preciosU + pedidoId.totalPedido;
-            await pedidoModel.findByIdAndUpdate(id, {preciosU:newprecios, totalPedido:suma, comentariosPlato:update.comentariosPlato, comentariosDevolucion:update.comentariosDevolucion });
+            plt.push(...update.platosID)
+            plt.forEach(pl => {
+                platosBD.forEach(plbd => {
+                    if (pl.id == plbd._id) {
+                        suma += plbd.precio;
+                        ingP = plbd.ingredientes
+                        ingP.forEach(ingre => {
+                            productoBodega.forEach(element => {
+                                ingBD = element.gramos
+                                nomBD = element.nombreProducto
+                                console.log(ingre.nom);
+                                console.log(nomBD);
+                                console.log(pl.flag);
+                                if (pl.flag == false) {
+                                    if (ingre.nom === nomBD) {
+                                        element.gramos = element.gramos - ingre.cant
+                                        
+                                    }
+                                }
+                            });
+                        }); 
+                    }
+                });
+                pl.flag = true
+            });
             
+            console.log(productoBodega);
+            await pedidoModel.findByIdAndUpdate(id, {platosID:plt, totalPedido:suma, comentariosPlato:update.comentariosPlato, comentariosDevolucion:update.comentariosDevolucion });
+            await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
             res.status(200).json({
                 status:200,
                 msg:"OK"
@@ -164,16 +180,16 @@ class Pedido
                 msg:'Internal Server Error',
                 descripcion:'Ha ocurrido un error en el servidor, no se modifico el pedido'
             });
-
+        
         }
-
+    
     }
     putPedidoTerminado = async ( req=request, res=response ) => {
         
         try { 
 
             let {id} = req.params
-            let {fechaIP, fechaTP, mesa, garzon, platos, comentariosPlato, comentariosDevolucion, totalPedido,...update} = req.body
+            let {fechaIP, fechaTP, mesa, garzon, platosID, comentariosPlato, comentariosDevolucion, totalPedido,...update} = req.body
             update.fechaTP= await formatoFecha(new Date())
             update.estado = false
             await pedidoModel.findByIdAndUpdate(id, update);
@@ -190,36 +206,6 @@ class Pedido
                 descripcion:'Ha ocurrido un error en el servidor, no se genero la devolución'
             });
 
-        }
-    }
-    deletePedido = async ( req=request, res=response ) => {
-       try {
-            let {id} = req.params
-            let update = {}
-            let est
-            let {estado = false} = req.query
-            if (estado == "true") {
-                update = {estado:true}
-                est = true
-            } else {
-                update = {estado:false}
-                est = false
-            }
-            let pedido = await pedidoModel.findByIdAndUpdate(id, update);
-            pedido.estado = est
-            res.status(200).json({
-                status:200,
-                msg:"OK"
-            })
-
-        } catch (error) {
-            
-            console.log(error)
-            res.status(500).json({
-                status:500,
-                msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se elimino el pedido'
-            });
         }
     }
 }
