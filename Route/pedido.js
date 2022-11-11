@@ -12,7 +12,6 @@ router.get('/:id',[
     validadorCampos
     ],( req , res ) =>{ pedido.getPedido( req, res ) });
 
-
 router.post('/',[
     check('garzon','El garzón es requerido').not().isEmpty(),
     check('reserva','La mesa es requerida').not().isEmpty(),
@@ -26,9 +25,9 @@ router.put('/:id',[
     validadorCampos
     ],( req , res ) =>{ pedido.putPedido( req, res ) });
 
-router.delete('/:id',[
+router.put('/termino/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos
-    ],( req , res ) =>{ pedido.deletePedido( req, res ) });
+    ],( req , res ) =>{ pedido.putPedidoTerminado( req, res ) });
 
 module.exports = router;
