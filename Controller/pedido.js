@@ -4,6 +4,7 @@ const { formatoFecha } = require('../helpers/fecha');
 const cocinaModel = require("../Model/comanda");
 const platosModel = require("../Model/plato");
 const bodegaModel = require("../Model/bodega");
+const comandaModel = require("../Model/comanda");
 
 class Pedido
 {
@@ -64,6 +65,8 @@ class Pedido
         try {
             let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido} = req.body
             let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido})
+            let comanda = new comandaModel({plato:pedido.id, comentariosPlato});
+
             pedido.estado = true
             
             await pedido.save();
@@ -104,6 +107,7 @@ class Pedido
             });
             await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma, platosID:plat});
             await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
+            await comanda.save();
             //let cocina = new cocinaModel({platos})
             //await cocina.save();
             res.status( 200 ).json({
