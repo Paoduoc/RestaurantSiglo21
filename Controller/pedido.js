@@ -1,9 +1,12 @@
 const { response, request } = require('express');
 const pedidoModel = require("../Model/pedido");
+//llamar fecha
 const { formatoFecha } = require('../helpers/fecha');
 const cocinaModel = require("../Model/comanda");
 const platosModel = require("../Model/plato");
 const bodegaModel = require("../Model/bodega");
+const comandaModel = require("../Model/comanda");
+const { pluralize } = require('mongoose');
 
 class Pedido
 {
@@ -64,23 +67,30 @@ class Pedido
         try {
             let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido} = req.body
             let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido})
+            //let comanda = new comandaModel({plato:pedido.id, comentariosPlato});
+
             pedido.estado = true
             
             await pedido.save();
+            //guardar fecha
             if ( !fechaIP ) {
                 fechaIP= await formatoFecha(new Date())
                 await pedidoModel.findByIdAndUpdate(pedido.id, {fechaIP:fechaIP});
             }
             const platosBD = await platosModel.find()
+            const bodega = await bodegaModel.find()
+            const comanda = await comandaModel.find()
+            const productoBodega = bodega[0].productosBodega
+            const platosComanda = comanda[0].platosComanda
             let suma = 0
             let precio = 0
             let ingP 
             let plat = pedido.platosID
-            const bodega = await bodegaModel.find()
-            const productoBodega = bodega[0].productosBodega
             let ingBD
             let nomBD
             pedido.platosID.forEach( (pl, index) => {
+                //pedido deberia tener un comentario por plato mas que por pedido (por ahora cada plato en la comanda tendra el comentario del pedido en si)
+                platosComanda.push({pedidoId:pedido.id, plato:pl.id, comentarioPlato:comentariosPlato});
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
                         precio = plbd.precio
@@ -104,6 +114,7 @@ class Pedido
             });
             await pedidoModel.findByIdAndUpdate(pedido.id, {totalPedido:suma, platosID:plat});
             await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
+            await comandaModel.findByIdAndUpdate(comanda[0].id, ({platosComanda:platosComanda})); 
             //let cocina = new cocinaModel({platos})
             //await cocina.save();
             res.status( 200 ).json({
