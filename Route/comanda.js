@@ -12,6 +12,8 @@ router.get('/',( req , res ) =>{ comanda.getAllComandas( req, res ) });+
 
 router.get('/:id',[validadorCampos],( req , res ) =>{ comanda.getComanda( req, res ) });
 
+router.post('/',( req , res ) =>{ comanda.postComanda( req, res ) });
+
 router.put('/:id',[
     //check('id','No es un id mongoDB').isMongoId(),
     validadorCampos

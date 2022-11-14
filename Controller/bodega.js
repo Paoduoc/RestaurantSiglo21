@@ -78,7 +78,6 @@ class Bodega
                 descripcion:'Ha ocurrido un error en el servidor, no se añadio la bodega'
             });
         }
-    
     }
     putBodega = async ( req=request, res=response ) => {
         
@@ -133,7 +132,6 @@ class Bodega
                 msg: productosBajo
             });
         } catch (error) {
-
             console.log(error)
             res.status(500).json({
                 status:500,

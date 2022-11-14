@@ -10,6 +10,7 @@ router.use(validaAccesoToken)
 
 router.get('/',( req , res ) =>{ bodega.getAllBodega( req, res ) });
 
+router.get('/bajos',( req , res ) =>{ bodega.getBajoProducto( req, res ) });
 
 router.get('/:id',[validadorCampos],( req , res ) =>{ bodega.getBodega( req, res ) });
 
@@ -25,7 +26,7 @@ router.delete('/:id',[
     validadorCampos
     ],( req , res ) =>{ bodega.deleteBodega( req, res ) });
 
-router.get('/bajos',( req , res ) =>{ bodega.getBajoProducto( req, res ) });
+
 
 router.get('/bajos/provee/:id',( req , res ) =>{ bodega.getProveedorProducto( req, res ) });
 
