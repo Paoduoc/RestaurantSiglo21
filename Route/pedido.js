@@ -3,6 +3,7 @@ const { check } = require('express-validator');
 const { validadorCampos } = require('../middlewares/validadorCampos');
 const router = Router();
 const Pedidos = require('../Controller/pedido');
+const { garzonValidador } = require('../helpers/validadorBD');
 const pedido = new Pedidos();
 
 router.get('/',( req , res ) =>{ pedido.getAllPedido( req, res ) });
@@ -16,6 +17,7 @@ router.post('/',[
     check('garzon','El garzón es requerido').not().isEmpty(),
     check('reserva','La mesa es requerida').not().isEmpty(),
     check('platosID','Los platos son requeridos').not().isEmpty(),
+    check('garzon').custom(garzonValidador),
     validadorCampos
     ],( req , res ) =>{ pedido.postPedido( req, res ) });
 

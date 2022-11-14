@@ -7,6 +7,7 @@ const accesRol = require('../Model/accesoRol');
 const plato = require('../Model/plato');
 const reser= require('../Model/reservas');
 const menu = require('../Model/menu');
+const pedido = require('../Model/pedido');
 
 //validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {
@@ -119,6 +120,16 @@ const sobrecupoValidador = async ( id = '' ) => {
         // throw new Error(`Debe estar vigente la reserva para generar un sobrecupo`);
     }
 }
+
+//PEDIDO
+const garzonValidador = async ( rol = '' ) => {
+    const rolV = await roles.findById( rol );
+    
+    if (rolV.nombre != "Garzon") {
+        throw new Error("El usuario debe ser un garzón");
+    }
+    
+}
 module.exports = { 
     idUsuarioValidador, 
     correoUsuarioValidador,
@@ -133,5 +144,5 @@ module.exports = {
     platoRepetidoValidador,
     reservaValidador,
     sobrecupoValidador,
-
+    garzonValidador
 };
