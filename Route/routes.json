@@ -16,7 +16,8 @@
                 "menu": "/api/v1/menus",
                 "pedido": "/api/v1/pedidos",
                 "proveedor": "/api/v1/proveedores",
-                "comanda": "/api/v1/comandas"
+                "comanda": "/api/v1/comandas",
+                "boleta": "/api/v1/boletas"
             }
         }
     }
