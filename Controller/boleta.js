@@ -40,11 +40,9 @@ class Boleta
                     usuario.forEach(usuarioM => {
                         console.log(usuarioM.rol);
                         console.log(npedido.garzon);
-                        if (usuarioM.rol === npedido.garzon) {
-                            console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                        } else {
-                            console.log(usuarioM.nombre);
-                        }
+                        if (String(usuarioM.rol).toString == String(npedido.garzon).toString) {
+                            garzonB = usuarioM.nombre
+                        } 
                     });
                     npedido.platosID.forEach( (platosP, index) => {
                         plato.forEach(platosM => {
