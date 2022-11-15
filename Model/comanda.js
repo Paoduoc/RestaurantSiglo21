@@ -11,6 +11,9 @@ const platoComanda = Schema({
         type: Schema.ObjectId,
         ref: 'Plato'
     },
+    fechaIP: {
+        type: String
+    },
     estadoPedido:{
         type: String,
         default: "Pendiente"
@@ -18,11 +21,14 @@ const platoComanda = Schema({
     comentarioPlato: {
         type: String
     },
+    fechaTP: {
+        type: String,
+        default: "Pendiente"
+    },
     estado:{
         type: Boolean,
         default: true
     }
-    
 }, { _id : false });
 
 const comandaSchema = Schema({

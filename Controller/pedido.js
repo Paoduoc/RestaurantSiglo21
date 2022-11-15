@@ -67,8 +67,7 @@ class Pedido
         try {
             let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido} = req.body
             let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido})
-            //let comanda = new comandaModel({plato:pedido.id, comentariosPlato});
-
+            const comanda = await comandaModel.find()
             pedido.estado = true
             
             await pedido.save();
@@ -76,10 +75,10 @@ class Pedido
             if ( !fechaIP ) {
                 fechaIP= await formatoFecha(new Date())
                 await pedidoModel.findByIdAndUpdate(pedido.id, {fechaIP:fechaIP});
+                await comandaModel.findByIdAndUpdate(comanda[0].id, ({fechaIP:fechaIP}));
             }
             const platosBD = await platosModel.find()
-            const bodega = await bodegaModel.find()
-            const comanda = await comandaModel.find()
+            const bodega = await bodegaModel.find() 
             const productoBodega = bodega[0].productosBodega
             const platosComanda = comanda[0].platosComanda
             let suma = 0
@@ -90,7 +89,7 @@ class Pedido
             let nomBD
             pedido.platosID.forEach( (pl, index) => {
                 //pedido deberia tener un comentario por plato mas que por pedido (por ahora cada plato en la comanda tendra el comentario del pedido en si)
-                platosComanda.push({pedidoId:pedido.id, plato:pl.id, comentarioPlato:comentariosPlato});
+                platosComanda.push({pedidoId:pedido.id, plato:pl.id, fechaIP:fechaIP, comentarioPlato:comentariosPlato});
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
                         precio = plbd.precio
@@ -138,9 +137,11 @@ class Pedido
             let {id} = req.params
             let {estado, fechaIP, fechaTP, mesa, garzon, totalPedido, ...update} = req.body
             let pedidoId = await pedidoModel.findById(id);
+            const comanda = await comandaModel.find()
             const platosBD = await platosModel.find()
             const bodega = await bodegaModel.find()
             const productoBodega = bodega[0].productosBodega
+            const platosComanda = comanda[0].platosComanda
             let ingP 
             let plt = []
             let suma = 0
@@ -150,6 +151,7 @@ class Pedido
                 plt.push(pl)
             });
             plt.push(...update.platosID)
+            platosComanda.push({pedidoId:pedidoId.id, plato:{...update.platosID}, fechaIP:fechaIP, comentarioPlato:{...update.comentariosPlato}});
             plt.forEach(pl => {
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
@@ -178,6 +180,7 @@ class Pedido
             console.log(productoBodega);
             await pedidoModel.findByIdAndUpdate(id, {platosID:plt, totalPedido:suma, comentariosPlato:update.comentariosPlato, comentariosDevolucion:update.comentariosDevolucion });
             await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
+            await comandaModel.findByIdAndUpdate(comanda[0].id, ({platosComanda:platosComanda})); 
             res.status(200).json({
                 status:200,
                 msg:"OK"
