@@ -65,8 +65,8 @@ class Pedido
     postPedido = async ( req=request, res=response ) => {
         
         try {
-            let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido} = req.body
-            let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentariosPlato, comentariosDevolucion, totalPedido})
+            let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentarioDevolucion, totalPedido} = req.body
+            let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentarioDevolucion, totalPedido})
             //let comanda = new comandaModel({plato:pedido.id, comentariosPlato});
 
             pedido.estado = true
@@ -90,7 +90,7 @@ class Pedido
             let nomBD
             pedido.platosID.forEach( (pl, index) => {
                 //pedido deberia tener un comentario por plato mas que por pedido (por ahora cada plato en la comanda tendra el comentario del pedido en si)
-                platosComanda.push({pedidoId:pedido.id, plato:pl.id, comentarioPlato:comentariosPlato});
+                platosComanda.push({pedidoId:pedido.id, plato:pl});
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
                         precio = plbd.precio
@@ -176,7 +176,7 @@ class Pedido
             });
             
             console.log(productoBodega);
-            await pedidoModel.findByIdAndUpdate(id, {platosID:plt, totalPedido:suma, comentariosPlato:update.comentariosPlato, comentariosDevolucion:update.comentariosDevolucion });
+            await pedidoModel.findByIdAndUpdate(id, {platosID:plt, totalPedido:suma, comentariosDevolucion:update.comentariosDevolucion });
             await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
             res.status(200).json({
                 status:200,
@@ -200,7 +200,7 @@ class Pedido
         try { 
 
             let {id} = req.params
-            let {fechaIP, fechaTP, mesa, garzon, platosID, comentariosPlato, comentariosDevolucion, totalPedido,...update} = req.body
+            let {fechaIP, fechaTP, mesa, garzon, platosID,comentariosDevolucion, totalPedido,...update} = req.body
             update.fechaTP= await formatoFecha(new Date())
             update.estado = false
             await pedidoModel.findByIdAndUpdate(id, update);

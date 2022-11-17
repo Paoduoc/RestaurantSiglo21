@@ -40,11 +40,9 @@ class Boleta
                     usuario.forEach(usuarioM => {
                         console.log(usuarioM.rol);
                         console.log(npedido.garzon);
-                        if (usuarioM.rol === npedido.garzon) {
-                            console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                        } else {
-                            console.log(usuarioM.nombre);
-                        }
+                        if (String(usuarioM.rol).toString == String(npedido.garzon).toString) {
+                            garzonB = usuarioM.nombre
+                        } 
                     });
                     npedido.platosID.forEach( (platosP, index) => {
                         plato.forEach(platosM => {
@@ -93,10 +91,30 @@ class Boleta
     getAllBoletas = async ( req=request, res=response ) => {
         
         try {
+            let {fechaB} = req.body
             const boleta = await boletaModel.find();
+            let listaBoletas = []
+            console.log(fechaB); 
+            boleta.forEach(element => {
+                if (element.fechaB) {
+                    const date = new Date(String(element.fechaB));
+                    let day = date.getDate();
+                    if (day < 10 ) {
+                        day = "0"+day
+                    }
+                    const month = date.getMonth() +1;
+                    const year = date.getFullYear();
+                    let fecha = `${year}-${month}-${day}`
+                    if (fecha == fechaB) {
+                        listaBoletas.push(element)
+                    }
+                }
+            });
+            
+            //console.log(listaBoletas);
             res.status(200).json({
                 status:200,
-                msg:boleta
+                msg:{boleta:listaBoletas}
             })
         } catch (error) {
             console.log(error)
