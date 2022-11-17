@@ -23,9 +23,6 @@ const pedidoSchema = Schema({
         type: Schema.ObjectId,
         ref: 'Usuario'
     },
-    comentariosPlato: {
-        type: String
-    },
     comentariosDevolucion: {
         type: String
     },
