@@ -24,7 +24,7 @@ class Boleta
             let precioU
             let sumaCant =[]
             let detalle= {
-                nboleta: '',
+                numpedido: '',
                 fecha: '',
                 garzon: '',
                 cantidad: [],
@@ -63,7 +63,7 @@ class Boleta
                     });
                 }
 
-                detalle.nboleta = boleta._id
+                detalle.numpedido = boleta._id
                 detalle.fecha= boleta.fechaB
                 detalle.garzon = garzonB
                 detalle.cantidad = sumaCant

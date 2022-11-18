@@ -17,7 +17,8 @@
                 "pedido": "/api/v1/pedidos",
                 "proveedor": "/api/v1/proveedores",
                 "comanda": "/api/v1/comandas",
-                "boleta": "/api/v1/boletas"
+                "boleta": "/api/v1/boletas",
+                "caja": "/api/v1/cajas"
             }
         }
     }
