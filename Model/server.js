@@ -73,6 +73,7 @@ class Server {
         this.app.use(this.route.routes.api.v1.proveedor, require('../Route/provedor'));
         this.app.use(this.route.routes.api.v1.comanda, require('../Route/comanda'));
         this.app.use(this.route.routes.api.v1.boleta, require('../Route/boleta'));
+        this.app.use(this.route.routes.api.v1.caja, require('../Route/caja'));
     }
 
     listen() {

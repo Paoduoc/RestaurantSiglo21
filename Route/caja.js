@@ -9,16 +9,15 @@ const caja = new Caja();
 //Se añade el token a esta ruta
 router.use(validaAccesoToken)
 
-router.get('/',( req , res ) =>{ caja.getAllAccesos( req, res ) });
+router.get('/',( req , res ) =>{ caja.getAlltransaccion( req, res ) });
 
 //se añade validacion de que el ID sea un mongoID
-router.get('/:id',( req , res ) =>{ caja.getAcceso( req, res ) });
+router.get('/:id',( req , res ) =>{ caja.gettransaccion( req, res ) });
 
 //Se validan los campos requeridos
-router.post('/',( req , res ) =>{ caja.postAcceso( req, res ) });
+router.post('/',( req , res ) =>{ caja.posttransaccion( req, res ) });
 
-router.put('/:id',( req , res ) =>{ caja.putAcceso( req, res ) });
+router.put('/:id',( req , res ) =>{ caja.puttransaccion( req, res ) });
 
-router.delete('/:id',( req , res ) =>{ caja.deleteAcceso( req, res ) });
 
 module.exports = router;
