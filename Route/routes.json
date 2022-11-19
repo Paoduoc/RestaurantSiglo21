@@ -18,7 +18,8 @@
                 "proveedor": "/api/v1/proveedores",
                 "comanda": "/api/v1/comandas",
                 "boleta": "/api/v1/boletas",
-                "resumenProvee": "/api/v1/resumenProvee"
+                "resumenProvee": "/api/v1/resumenProvee",
+                "caja": "/api/v1/cajas"
             }
         }
     }
