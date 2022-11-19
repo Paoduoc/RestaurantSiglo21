@@ -52,8 +52,8 @@ class Caja
     posttransaccion = async ( req=request, res=response ) => {
         
         try {
-            let {boleta,pagado,total,metodo} = req.body
-            let caja = new cajaModel({boleta,pagado,total,metodo})
+            let {boleta,estatus,total,metodo} = req.body
+            let caja = new cajaModel({boleta,estatus,total,metodo})
 
             await caja.save();
             res.status( 200 ).json( { 
@@ -77,12 +77,11 @@ class Caja
         try {
 
             let {id} = req.params
-            let {ruta} = req.body
-            let acceso = await accesoModel.findByIdAndUpdate(id, {ruta});
-            acceso.ruta = ruta
+            let {total,metodo} = req.body
+            await cajaModel.findByIdAndUpdate(id, {total,metodo});
             res.status(200).json({
                 status:200,
-                msg:acceso
+                msg:"OK"
             })
             //Se envia msg acceso solo para ver el que el acceso haya cambiado realmente, evidencias para BACK
 
@@ -92,11 +91,10 @@ class Caja
             res.status(500).json({
                 status:500,
                 msg:'Internal Server Error',
-                descripcion:'Ha ocurrido un error en el servidor, no se modifico el acceso'
+                descripcion:'Ha ocurrido un error en el servidor, no se modificó la transacción'
             });
 
         }
-
     }
     
 
