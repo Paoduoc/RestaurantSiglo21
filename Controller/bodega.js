@@ -169,6 +169,34 @@ class Bodega
             });
         }
     }
+
+    getResumenCompra = async ( req=request, res=response ) => {
+        
+        try {
+            //el id se lo tiene que pasar el front a este get en base al get de arriba
+            let {id} = req.params
+            const producto = await productoModel.findById(id);
+            const provee = await proveeModel.findOne({tipoProd:producto.tipo});
+            if (provee!=null) {
+                res.status( 200 ).json({
+                    status: 201,
+                    msg: provee
+                });
+            } else {
+                res.status( 404 ).json({
+                    status: 404,
+                    Error: 'No se encontraron proveedores para ese producto'
+                });
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                status:500,
+                msg:'Internal Server Error',
+                descripcion: 'Ha ocurrido un error en el servidor, no se encontraron proveedores para este producto'
+            });
+        }
+    }
 }
 
 module.exports = Bodega;
