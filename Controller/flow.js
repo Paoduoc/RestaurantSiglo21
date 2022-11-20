@@ -12,7 +12,7 @@ class Transaccion
             
             const transaccionM = await transaccionModel.findById(id)
 
-            if ( transaccionM.status == 2 ) {
+            if ( transaccionM.estatus == 2 ) {
                 
                 res.status(500).json({
                     status: 500, 
