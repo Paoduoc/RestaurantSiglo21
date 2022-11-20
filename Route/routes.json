@@ -1,0 +1,26 @@
+{
+    "routes":{
+        "api":{
+            "v1": {
+                "auth":"/api/v1/auth/",
+                "user": "/api/v1/users/",
+                "main": "/",
+                "roles": "/api/v1/roles",
+                "accesos": "/api/v1/accesos",
+                "accesoRol": "/api/v1/accesoRol",
+                "mesa": "/api/v1/mesas",
+                "reservas": "/api/v1/reserva",
+                "producto": "/api/v1/productos",
+                "bodega": "/api/v1/bodega",
+                "plato": "/api/v1/platos",
+                "menu": "/api/v1/menus",
+                "pedido": "/api/v1/pedidos",
+                "proveedor": "/api/v1/proveedores",
+                "comanda": "/api/v1/comandas",
+                "boleta": "/api/v1/boletas",
+                "transaccion": "/api/v1/transacciones",
+                "flow": "/api/v1/flow"
+            }
+        }
+    }
+}
