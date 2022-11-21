@@ -5,9 +5,8 @@ const cajaSchema = Schema({
         type: Schema.ObjectId,
         ref: 'Boleta'
     },
-    pagado: {
-        type: Boolean,
-        default: false
+    estatus: {
+        type: Number
     },
     total: {
         type: Number
