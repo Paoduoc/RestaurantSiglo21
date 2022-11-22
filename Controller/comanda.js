@@ -44,15 +44,11 @@ class Comanda
     getAllComandas = async ( req=request, res=response ) => {
         
         try {
-            
-            /* const comanda = await comandaModel.find({estadoPedido:
-                ["Pendiente", "En preparación", "Listo", "Entregado"]})
-                .populate({path:'platosComanda.plato', select: 'platosID.id'}); */
             const comanda = await comandaModel.find()
-                .populate({path:'platosComanda.plato', select: 'platosID.id'});
-            /* const comanda = await comandaModel.find()
-            const comandas = comanda[0].platosComanda.populate({path:"plato",select:"platodID[0].id"}); */
-            res.status(200).json({
+                .populate({path:'platosComanda.pedido', select: 'reserva'})
+                .populate({path:'platosComanda.mesa', select: 'numMesa'})
+                .populate({path:'platosComanda.plato', select: 'id nombrePlato estado descripcion categoria ingredientes preparacion minutosPreparacion precio'})
+                res.status(200).json({
                 status:200,
                 msg:comanda[0].platosComanda
             });

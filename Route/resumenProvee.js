@@ -9,6 +9,8 @@ const resumen = new ResumenProvee();
 //Se añade el token a esta ruta
 router.use(validaAccesoToken)
 
+router.get('/fecha',( req , res ) =>{ resumen.getResumenFecha( req, res ) });
+
 //se añade validacion de que el ID sea un mongoID
 router.get('/:id',[
     check('id','no es un id mongodb').isMongoId(),
@@ -17,12 +19,14 @@ router.get('/:id',[
 
 router.get('/',( req , res ) =>{ resumen.getAllResumen( req, res ) });
 
+
+
 //Se validan los campos requeridos
 router.post('/',[
-    check('gramos','El campo de cantidad de gramos es requerido').not().isEmpty(),
+    //check('gramos','El campo de cantidad de gramos es requerido').not().isEmpty(),
     validadorCampos
     ],( req , res ) =>{ resumen.postResumen( req, res ) });
-
+    
 router.put('/:id',[
     check('id','no es un id mongodb').isMongoId(),
     validadorCampos

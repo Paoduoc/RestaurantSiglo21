@@ -65,8 +65,8 @@ class Pedido
     postPedido = async ( req=request, res=response ) => {
         
         try {
-            let {platosID, fechaIP, estado, fechaTP, reserva, garzon, comentarioDevolucion, totalPedido} = req.body
-            let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, comentarioDevolucion, totalPedido})
+            let {platosID, fechaIP, estado, fechaTP, reserva, garzon, totalPedido} = req.body
+            let pedido = new pedidoModel({platosID, estado, fechaTP, reserva, garzon, totalPedido})
             
             pedido.estado = true
             
@@ -91,9 +91,7 @@ class Pedido
             let ingBD
             let nomBD
             pedido.platosID.forEach( (pl, index) => {
-                //pedido deberia tener un comentario por plato mas que por pedido (por ahora cada plato en la comanda tendra el comentario del pedido en si)
-                //console.log(platosComanda);
-                platoComanda.push({pedidoId:pedido.id, plato:pl.id, fechaIP:fechaIP, comentarioPlato:pl.comentarioPlato});
+                platoComanda.push({pedido:pedido.id, mesa:pedido.reserva, plato:pl.id, fechaIP:fechaIP, comentarioPlato:pl.comentarioPlato, comentarioDevolucion:pl.comentarioDevolucion});
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
                         precio = plbd.precio
@@ -141,7 +139,7 @@ class Pedido
             let {id} = req.params
             let {estado, fechaIP, fechaTP, mesa, garzon, totalPedido, ...update} = req.body
             console.log(update);
-            let pedidoId = await pedidoModel.findById(id);
+            let pedido = await pedidoModel.findById(id);
             const comanda = await comandaModel.find();
             const platosBD = await platosModel.find();
             const bodega = await bodegaModel.find();
@@ -152,14 +150,13 @@ class Pedido
             let suma = 0
             let ingBD
             let nomBD
-            pedidoId.platosID.forEach(pl => {
+            pedido.platosID.forEach(pl => {
                 plt.push(pl);
             });
             plt.push(...update.platosID)
             update.platosID.forEach(element => {
-                platoComanda.push({pedidoId:pedidoId.id, plato:element.id, fechaIP:fechaIP, comentarioPlato:element.comentarioPlato});
+                platoComanda.push({pedido:pedido.id, mesa:pedido.reserva, plato:element.id, fechaIP:fechaIP, comentarioPlato:element.comentarioPlato, comentarioDevolucion:element.comentarioDevolucion});
             });
-            
             plt.forEach(pl => {
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
@@ -172,7 +169,6 @@ class Pedido
                                 if (pl.flag == false) {
                                     if (ingre.nom === nomBD) {
                                         element.gramos = element.gramos - ingre.cant
-                                        
                                     }
                                 }
                             });
@@ -183,7 +179,7 @@ class Pedido
             });
             
             //console.log(productoBodega);
-            await pedidoModel.findByIdAndUpdate(id, {platosID:plt, totalPedido:suma, comentariosDevolucion:update.comentariosDevolucion });
+            await pedidoModel.findByIdAndUpdate(id, {platosID:plt, totalPedido:suma});
             await bodegaModel.findByIdAndUpdate(bodega[0].id, {productosBodega:productoBodega});
             await comandaModel.findByIdAndUpdate(comanda[0].id, {platosComanda:platoComanda}); 
             res.status(200).json({
@@ -208,7 +204,7 @@ class Pedido
         try { 
 
             let {id} = req.params
-            let {fechaIP, fechaTP, mesa, garzon, platosID,comentariosDevolucion, totalPedido,...update} = req.body
+            let {fechaIP, fechaTP, mesa, garzon, platosID, totalPedido, ...update} = req.body
             update.fechaTP= await formatoFecha(new Date())
             update.estado = false
             await pedidoModel.findByIdAndUpdate(id, update);

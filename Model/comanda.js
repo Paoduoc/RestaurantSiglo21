@@ -4,8 +4,13 @@ const { Schema, model } = require('mongoose');
 //comentario de plato deberia ser individual al plato, es decir, deberia incluirse 
 //  al añadir +1 al plato
 const platoComanda = Schema({
-    pedidoId: {
-        type: String
+    pedido: {
+        type: Schema.ObjectId,
+        ref: 'Pedido'
+    },
+    mesa: {
+        type: Schema.ObjectId,
+        ref: 'Mesa'
     },
     plato: {
         type: Schema.ObjectId,
@@ -19,6 +24,9 @@ const platoComanda = Schema({
         default: "Pendiente"
     },
     comentarioPlato: {
+        type: String
+    },
+    comentarioDevolucion: {
         type: String
     },
     fechaTP: {

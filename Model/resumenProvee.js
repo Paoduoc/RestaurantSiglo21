@@ -1,24 +1,27 @@
 const { Schema, model } = require('mongoose');
 
 const resumenProveeSchema = Schema({
-    proveedor:{
-        type: Schema.ObjectId,
-        ref: 'Proveedor'
+    resumenes: {
+        type: Array
     },
-    estado:{
-        type: Boolean,
-        default: true
-    },
-    fecha:{
-        type: String
-    },
-    producto:{
+    /* producto:{
         type: Schema.ObjectId,
         ref: 'Producto'
     },
     gramos:{
         type: Number
-    }
+    },
+    proveedor:{
+        type: Schema.ObjectId,
+        ref: 'Proveedor'
+    }, */
+    fecha:{
+        type: String
+    },
+    estado:{
+        type: Boolean,
+        default: true
+    } 
 });
 
 module.exports = model( 'resumenProvee', resumenProveeSchema );
