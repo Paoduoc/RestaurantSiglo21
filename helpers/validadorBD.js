@@ -1,12 +1,14 @@
 const usuario = require('../Model/usuario');
 let roles = require('../Model/rol');
-const acceso = require('../Model/acceso');
+const accesos = require('../Model/acceso');
 const mesa = require('../Model/mesa');
 const producto = require('../Model/producto');
 const accesRol = require('../Model/accesoRol');
 const plato = require('../Model/plato');
 const reser= require('../Model/reservas');
 const transac= require('../Model/transaccion');
+
+var acceso = ""
 
 //validador de que le usuario exista según mongoID
 const idUsuarioValidador = async ( id = '' ) => {
@@ -38,7 +40,7 @@ const rolValidador = async ( rol = '' ) => {
 //Validador de duplicidad de ruta
 const rutaValidador = async ( ruta = '' ) => {
 
-    const rutaValida = await acceso.findOne( {ruta:ruta} );
+    const rutaValida = await accesos.findOne( {ruta:ruta} );
     if( rutaValida ){
         throw new Error(`La ruta ${ruta} ya esta registrada`);
     }
@@ -71,15 +73,6 @@ const estatusValidador = async ( estatus = '' ) => {
 
     if( estatus != '' ){
         throw new Error(`El estatus no se puede modificar en este endpoint`);
-    }
-}
-const accesoRolValidador = async ( rol = '' ) => {
-
-    const accesRolValida = await accesRol.findOne( {rol:rol} )
-    .populate({path:"rol",select:"nombre"})
-    let nombre = accesRolValida.rol.nombre
-    if( accesRolValida ){
-        throw new Error(`La ruta con el rol ${nombre} ya existe`);
     }
 }
 
@@ -155,7 +148,6 @@ module.exports = {
     mesaValidador,
     rutValidador,
     estatusValidador,
-    accesoRolValidador,
     productoRepetidoValidador,
     platoRepetidoValidador,
     reservaValidador,

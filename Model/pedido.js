@@ -23,9 +23,6 @@ const pedidoSchema = Schema({
         type: Schema.ObjectId,
         ref: 'Usuario'
     },
-    comentariosDevolucion: {
-        type: String
-    },
     totalPedido: {
         type: Number,
         default: 0
