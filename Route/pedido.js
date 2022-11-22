@@ -21,7 +21,7 @@ router.post('/',[
     check('reserva','La mesa es requerida').not().isEmpty(),
     check('reserva','no es un id mongodb').isMongoId(),
     check('platosID','Los platos son requeridos').not().isEmpty(),
-    check('platosID','no es un id mongodb').isMongoId(),
+    //check('platosID','no es un id mongodb').isMongoId(),
     check('garzon').custom(garzonValidador),
     validadorCampos
     ],( req , res ) =>{ pedido.postPedido( req, res ) });

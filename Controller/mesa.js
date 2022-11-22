@@ -18,8 +18,6 @@ class Mesa
                 status:200,
                 msg:mesa
             })
-
-
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -76,7 +74,6 @@ class Mesa
     putMesa = async ( req=request, res=response ) => {
         
         try {
-
             let {id} = req.params
             let {estado, ...update} = req.body
             await mesaModel.findByIdAndUpdate(id, update);

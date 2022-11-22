@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const pedidoSchema = Schema({
     platosID: {
         type: Array
-    },
+    }, 
     estado: {
         type: Boolean,
         default: false
@@ -22,9 +22,6 @@ const pedidoSchema = Schema({
     garzon:{
         type: Schema.ObjectId,
         ref: 'Usuario'
-    },
-    comentariosDevolucion: {
-        type: String
     },
     totalPedido: {
         type: Number,

@@ -70,9 +70,10 @@ class Server {
         this.app.use(this.route.routes.api.v1.reservas, require('../Route/reserva'));
         this.app.use(this.route.routes.api.v1.menu, require('../Route/menu'));
         this.app.use(this.route.routes.api.v1.pedido, require('../Route/pedido'));
-        this.app.use(this.route.routes.api.v1.proveedor, require('../Route/provedor'));
+        this.app.use(this.route.routes.api.v1.proveedor, require('../Route/proveedor'));
         this.app.use(this.route.routes.api.v1.comanda, require('../Route/comanda'));
         this.app.use(this.route.routes.api.v1.boleta, require('../Route/boleta'));
+        this.app.use(this.route.routes.api.v1.resumenProvee, require('../Route/resumenProvee'));
         this.app.use(this.route.routes.api.v1.caja, require('../Route/caja'));
     }
 
