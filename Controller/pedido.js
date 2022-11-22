@@ -90,7 +90,7 @@ class Pedido
             let nomBD
             pedido.platosID.forEach( (pl, index) => {
                 //pedido deberia tener un comentario por plato mas que por pedido (por ahora cada plato en la comanda tendra el comentario del pedido en si)
-                platosComanda.push({pedidoId:pedido.id, plato:pl});
+                platosComanda.push({pedidoId:pedido.id, plato:pl.id});
                 platosBD.forEach(plbd => {
                     if (pl.id == plbd._id) {
                         precio = plbd.precio
