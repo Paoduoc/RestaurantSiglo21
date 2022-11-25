@@ -15,10 +15,7 @@ router.post('/crear/:id', [
     validadorCampos
 ],( req , res ) => { flow.postFlow( req, res ) });
 
-router.get('/estatus/:secret', [ 
-    check('secret').custom(secretValidador),
-    validadorCampos
-] ,( req , res ) => { flow.getFlow( req, res ) });
+router.get('/estatus/' ,( req , res ) => { flow.getFlow( req, res ) });
 
 router.post('/estatus/:secret', [ 
     check('secret').custom(secretValidador),

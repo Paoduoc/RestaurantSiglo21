@@ -5,6 +5,6 @@ const Main = require('../Controller/main');
 const main = new Main();
 
 router.get('/',( req , res ) =>{ main.index( req, res ) });
-
+router.post('/',( req , res ) =>{ main.index( req, res ) });
 
 module.exports = router;
