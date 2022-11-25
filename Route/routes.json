@@ -19,7 +19,8 @@
                 "comanda": "/api/v1/comandas",
                 "boleta": "/api/v1/boletas",
                 "resumenProvee": "/api/v1/resumenProvee",
-                "caja": "/api/v1/cajas"
+                "caja": "/api/v1/cajas",
+                "reporte": "/api/v1/reportes"
             }
         }
     }

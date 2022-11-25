@@ -75,6 +75,7 @@ class Server {
         this.app.use(this.route.routes.api.v1.boleta, require('../Route/boleta'));
         this.app.use(this.route.routes.api.v1.resumenProvee, require('../Route/resumenProvee'));
         this.app.use(this.route.routes.api.v1.caja, require('../Route/caja'));
+        this.app.use(this.route.routes.api.v1.reporte, require('../Route/reporte'));
     }
 
     listen() {
